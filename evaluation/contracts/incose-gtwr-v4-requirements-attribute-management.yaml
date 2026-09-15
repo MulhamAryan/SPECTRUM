@@ -1,0 +1,40 @@
+skill: requirements-attribute-management
+contract_version: 1
+source_basis:
+  - "INCOSE Guide to Writing Requirements v4, INCOSE-TP-2010-006-04"
+  - "INCOSE GtWR v4 Summary Sheet, June 2023"
+required_input:
+  - target_ref
+  - attribute_inventory
+  - applicability_basis
+allowed_status:
+  - attributes_sufficient
+  - attributes_partial
+  - attributes_missing
+  - attributes_conflicting
+  - attribute_applicability_unknown
+  - not_applicable
+invariants:
+  - id: source_vs_project_obligation
+    statement: "An attribute appearing in the INCOSE inventory is not automatically mandatory for every project."
+  - id: provenance
+    statement: "Attribute values used as evidence must preserve their source or be marked as source-missing."
+  - id: applicability
+    statement: "Absence of an attribute cannot be a non-conformity finding when applicability is unknown."
+  - id: separation
+    statement: "Attribute findings must not be presented as INCOSE rules or global implementation-readiness decisions."
+  - id: relationship_boundary
+    statement: "Traceability, verification, and validation conclusions remain with their dedicated Skills."
+  - id: unmapped_attributes
+    statement: "An unmapped A1-A49 attribute is not itself an error."
+expected_output:
+  required:
+    - target_ref
+    - attributes_assessed
+    - applicability
+    - attribute_observations
+    - characteristic_relationships
+    - findings
+    - evidence_refs
+    - status
+    - downstream_impacts
