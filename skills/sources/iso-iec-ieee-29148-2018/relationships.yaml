@@ -1,0 +1,89 @@
+source:
+  id: iso-iec-ieee-29148-2018
+  step: "2.5"
+  skill_catalog: skills/sources/iso-iec-ieee-29148-2018/skills.yaml
+
+relationships:
+  - from: SPECTRUM-SK-MULTI-SOURCE
+    relation: feeds
+    to: SPECTRUM-SK-REQ-CONTEXT
+  - from: SPECTRUM-SK-REQ-CONTEXT
+    relation: feeds
+    to: SPECTRUM-SK-ELICITATION-GAP
+  - from: SPECTRUM-SK-REQ-CONTEXT
+    relation: feeds
+    to: SPECTRUM-SK-RELATIONSHIP-TRACEABILITY
+  - from: SPECTRUM-SK-REQ-CONTEXT
+    relation: feeds
+    to: SPECTRUM-SK-VERIFICATION
+  - from: SPECTRUM-SK-REQ-CONTEXT
+    relation: feeds
+    to: SPECTRUM-SK-VALIDATION
+  - from: SPECTRUM-SK-STK-SCENARIO
+    relation: feeds
+    to: SPECTRUM-SK-VALIDATION
+  - from: SPECTRUM-SK-RELATIONSHIP-TRACEABILITY
+    relation: feeds
+    to: SPECTRUM-SK-VERIFICATION
+  - from: SPECTRUM-SK-RELATIONSHIP-TRACEABILITY
+    relation: feeds
+    to: SPECTRUM-SK-VALIDATION
+  - from: SPECTRUM-SK-ELICITATION-GAP
+    relation: feeds
+    to: SPECTRUM-WF-ISO29148-READINESS
+  - from: SPECTRUM-SK-STK-SCENARIO
+    relation: feeds
+    to: SPECTRUM-WF-ISO29148-READINESS
+  - from: SPECTRUM-SK-VERIFICATION
+    relation: feeds
+    to: SPECTRUM-WF-ISO29148-READINESS
+  - from: SPECTRUM-SK-VALIDATION
+    relation: feeds
+    to: SPECTRUM-WF-ISO29148-READINESS
+  - from: SPECTRUM-SK-RE-COVERAGE
+    relation: feeds
+    to: SPECTRUM-WF-ISO29148-READINESS
+  - from: SPECTRUM-SK-CONFORMANCE
+    relation: validates
+    to: SPECTRUM-WF-ISO29148-READINESS
+
+control_to_skill:
+  ISO29148-R001: [SPECTRUM-SK-REQ-CONTEXT]
+  ISO29148-R002: [SPECTRUM-SK-REQ-CONTEXT]
+  ISO29148-R003: [SPECTRUM-SK-REQ-CONTEXT]
+  ISO29148-R004: [SPECTRUM-SK-RELATIONSHIP-TRACEABILITY]
+  ISO29148-R005: [SPECTRUM-SK-RELATIONSHIP-TRACEABILITY]
+  ISO29148-R006: [SPECTRUM-SK-RELATIONSHIP-TRACEABILITY]
+  ISO29148-R007: [SPECTRUM-SK-ELICITATION-GAP]
+  ISO29148-R008: [SPECTRUM-SK-VALIDATION]
+  ISO29148-R009: [SPECTRUM-SK-VERIFICATION]
+  ISO29148-R010: [SPECTRUM-SK-RE-COVERAGE]
+  ISO29148-R011: [SPECTRUM-SK-RE-COVERAGE]
+  ISO29148-R012: [SPECTRUM-SK-STK-SCENARIO]
+  ISO29148-R013: [SPECTRUM-SK-REQ-CONTEXT]
+  ISO29148-R014: [SPECTRUM-SK-STK-SCENARIO]
+  ISO29148-R015: [SPECTRUM-SK-REQ-CONTEXT]
+  ISO29148-R016: [SPECTRUM-SK-MULTI-SOURCE]
+  ISO29148-R017: [SPECTRUM-SK-CONFORMANCE]
+
+principles:
+  - id: shared_rule_definition
+    statement: >-
+      Les contrôles restent définis une seule fois dans rules/. Les Skills les référencent
+      par identifiant et n'en créent pas une seconde définition normative.
+  - id: explicit_conditionality
+    statement: >-
+      Les contrôles conditionnels restent conditionnels ; leur présence dans un Skill ne
+      transforme pas leur applicabilité en obligation universelle.
+  - id: evidence_propagation
+    statement: >-
+      Un finding transmis conserve les références vers les sources et evidence qui soutiennent
+      l'observation ou signale explicitement leur absence.
+  - id: no_forced_linear_path
+    statement: >-
+      Le workflow peut sélectionner ou ignorer un Skill selon le contexte ; l'architecture ne
+      suppose pas que chaque ticket exige toutes les capacités.
+  - id: decision_boundary
+    statement: >-
+      Le workflow prépare des éléments de décision mais la décision produit finale appartient
+      à la couche Decision, pas au contrôle ISO lui-même.
