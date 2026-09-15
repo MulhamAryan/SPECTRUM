@@ -21,18 +21,18 @@ coverage:
   characteristics:
     source_domain: C1-C15
     covered:
-      C1: [requirement-statement-quality, requirements-context, requirement-relationship-traceability]
+      C1: [requirement-statement-quality, requirements-context, requirement-relationship-traceability, requirements-attribute-management]
       C2: [requirement-statement-quality, requirements-context, requirement-relationship-traceability]
-      C3: [requirement-statement-quality, requirements-context]
-      C4: [requirement-statement-quality, requirements-context, requirement-relationship-traceability]
+      C3: [requirement-statement-quality, requirements-context, requirements-attribute-management]
+      C4: [requirement-statement-quality, requirements-context, requirement-relationship-traceability, requirements-attribute-management]
       C5: [requirement-statement-quality]
-      C6: [requirement-statement-quality, requirements-context]
-      C7: [requirement-statement-quality, verification-analysis, requirements-context, requirement-relationship-traceability]
-      C8: [requirement-statement-quality, requirements-context, requirement-relationship-traceability]
-      C9: [requirement-statement-quality, requirements-context]
-      C10: [requirement-set-quality, requirement-relationship-traceability]
-      C11: [requirement-set-quality, requirement-relationship-traceability]
-      C12: [requirement-set-quality]
+      C6: [requirement-statement-quality, requirements-context, requirements-attribute-management]
+      C7: [requirement-statement-quality, verification-analysis, requirements-context, requirement-relationship-traceability, requirements-attribute-management]
+      C8: [requirement-statement-quality, requirements-context, requirement-relationship-traceability, requirements-attribute-management]
+      C9: [requirement-statement-quality, requirements-context, requirements-attribute-management]
+      C10: [requirement-set-quality, requirement-relationship-traceability, requirements-attribute-management]
+      C11: [requirement-set-quality, requirement-relationship-traceability, requirements-attribute-management]
+      C12: [requirement-set-quality, requirements-attribute-management]
       C13: [requirement-set-quality]
       C14: [requirement-set-quality, requirement-relationship-traceability, verification-analysis, validation-analysis]
       C15: [requirement-set-quality, requirement-relationship-traceability]
@@ -59,7 +59,7 @@ coverage:
 
   attributes:
     source_domain: A1-A49
-    explicitly_mapped: [A1, A2, A3, A4, A12, A26, A32, A33]
+    explicitly_mapped: [A1, A2, A3, A4, A6, A8, A12, A26, A31, A32, A33, A34, A35, A36, A38, A39, A40]
     partially_observed_via_other_skills:
       - "A1 rationale"
       - "A2 trace to parent"
@@ -69,7 +69,7 @@ coverage:
       - "A26 stability/volatility"
       - "A32 trace to interface definition"
       - "A33 trace to dependent peer requirements"
-    not_yet_skill_mapped: [A5, A6, A7, A8, A9, A10, A11, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A27, A28, A29, A30, A31, A34, A35, A36, A37, A38, A39, A40, A41, A42, A43, A44, A45, A46, A47, A48, A49]
+    not_yet_skill_mapped: [A5, A7, A9, A10, A11, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A27, A28, A29, A30, A37, A41, A42, A43, A44, A45, A46, A47, A48, A49]
     result: attribute_skill_coverage_is_partial_by_design
     qualification: >-
       The official Summary Sheet provides an attribute inventory and the GtWR
@@ -123,18 +123,22 @@ consistency_checks:
     canonical_identity: "Correct Punctuation"
     conflicting_matrix_label: "Correct Condition"
     result: passed
+  attribute_skill:
+    skill_present_in_model: true
+    skill_present_in_repository: true
+    explicitly_mapped_attributes_reflected_in_audit: true
+    result: passed
 
 next_decision:
-  action: do_not_add_more_incose_skills_yet
+  action: audit_remaining_attributes_before_next_skill
   rationale: >-
-    The current six-Skill set covers C1-C15 and R1-R42 at least once, but attribute
-    coverage and NRM activity coverage remain intentionally partial. The next
-    implementation step should therefore audit the uncovered attribute/activity
-    areas and determine whether each requires a new Skill, a data-model capability,
-    a workflow concern, or no additional capability.
+    The attribute-management capability now covers a defined subset of the A1-A49
+    inventory. Remaining attributes must be classified individually as Skill,
+    Data Model, Workflow, or intentionally unimplemented before additional Skills
+    are created.
   candidate_areas_for_next_analysis:
-    - attribute_and_requirements-management
     - baseline_change_and_status
+    - requirements_identity_and_metadata
     - verification_validation_success_criteria_and_methods
     - rationale_and_source_provenance
     - stakeholder_and_operational-context
