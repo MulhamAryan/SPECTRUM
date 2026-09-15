@@ -1,0 +1,148 @@
+audit:
+  id: incose-gtwr-v4-skill-coverage-2026-09-15
+  status: completed
+  date: 2026-09-15
+  purpose: >-
+    Audit the source-backed coverage of the currently integrated INCOSE GtWR v4
+    Skills before adding new analytical Skills. This is a SPECTRUM architecture
+    audit; it is not an INCOSE certification or completeness claim about the
+    entire INCOSE body of knowledge.
+  source_basis:
+    primary:
+      - "INCOSE Guide to Writing Requirements v4, INCOSE-TP-2010-006-04"
+      - "INCOSE GtWR v4 Summary Sheet, June 2023"
+    controlled_local_sources:
+      - "knowledge/sources/incose-gtwr-v4-2023/characteristics.yaml"
+      - "knowledge/sources/incose-gtwr-v4-2023/rules.yaml"
+      - "knowledge/sources/incose-gtwr-v4-2023/matrices.yaml"
+      - "models/skill-relationships/incose-gtwr-v4.yaml"
+
+coverage:
+  characteristics:
+    source_domain: C1-C15
+    covered:
+      C1: [requirement-statement-quality, requirements-context, requirement-relationship-traceability]
+      C2: [requirement-statement-quality, requirements-context, requirement-relationship-traceability]
+      C3: [requirement-statement-quality, requirements-context]
+      C4: [requirement-statement-quality, requirements-context, requirement-relationship-traceability]
+      C5: [requirement-statement-quality]
+      C6: [requirement-statement-quality, requirements-context]
+      C7: [requirement-statement-quality, verification-analysis, requirements-context, requirement-relationship-traceability]
+      C8: [requirement-statement-quality, requirements-context, requirement-relationship-traceability]
+      C9: [requirement-statement-quality, requirements-context]
+      C10: [requirement-set-quality, requirement-relationship-traceability]
+      C11: [requirement-set-quality, requirement-relationship-traceability]
+      C12: [requirement-set-quality]
+      C13: [requirement-set-quality]
+      C14: [requirement-set-quality, requirement-relationship-traceability, verification-analysis, validation-analysis]
+      C15: [requirement-set-quality, requirement-relationship-traceability]
+    result: all_characteristics_have_at_least_one_skill_mapping
+    qualification: >-
+      Coverage means that at least one current Skill has an explicitly declared
+      source-backed scope for the characteristic. It does not mean that every
+      source activity or every possible evidence path is implemented.
+
+  rules:
+    source_domain: R1-R42
+    individual_statement_rules:
+      scope: [R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, R26, R27, R28, R30, R31, R32, R33, R34, R35, R36, R37, R38, R39, R40]
+      skill: requirement-statement-quality
+    set_related_rules:
+      scope: [R3, R4, R26, R29, R30, R33, R34, R36, R37, R38, R39, R40, R41, R42]
+      skill: requirement-set-quality
+    intentionally_excluded_from_statement_skill: [R29, R41, R42]
+    result: all_rules_have_at_least_one_skill_mapping
+    control: >-
+      Rule coverage is derived from the official Rules to Characteristics matrix;
+      set-scope inclusion occurs only where the official matrix has at least one
+      marked C10-C15 cell. No rule is added because its name sounds relevant.
+
+  attributes:
+    source_domain: A1-A49
+    explicitly_mapped: [A1, A2, A3, A4, A12, A26, A32, A33]
+    partially_observed_via_other_skills:
+      - "A1 rationale"
+      - "A2 trace to parent"
+      - "A3 trace to source"
+      - "A4 states and modes"
+      - "A12 condition of use"
+      - "A26 stability/volatility"
+      - "A32 trace to interface definition"
+      - "A33 trace to dependent peer requirements"
+    not_yet_skill_mapped: [A5, A6, A7, A8, A9, A10, A11, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A27, A28, A29, A30, A31, A34, A35, A36, A37, A38, A39, A40, A41, A42, A43, A44, A45, A46, A47, A48, A49]
+    result: attribute_skill_coverage_is_partial_by_design
+    qualification: >-
+      The official Summary Sheet provides an attribute inventory and the GtWR
+      Appendix E provides attribute-to-characteristic relationships. Detailed
+      attribute definitions are in the NRM. Unmapped attributes are not failures;
+      they identify candidate areas for future Skills or data-model support.
+
+  nrm_activities:
+    result: intentionally_partial
+    reason: >-
+      Current Skills target analytical evidence capabilities, not a one-to-one
+      implementation of every GtWR/NRM lifecycle activity. Activities are mapped
+      where they materially constrain the current analytical capability.
+    covered_activity_families:
+      - communication_and_expression_context
+      - needs_and_requirements_analysis
+      - completeness_and_consistency
+      - interdependencies_and_traceability
+      - stakeholder_agreement_context
+      - feasibility_and_risk_context
+      - requirements_definition_and_flow_down
+      - requirements_verification
+      - requirements_validation
+      - design_verification_and_validation_context
+      - baseline_and_management_context
+    result: no_claim_of_full_nrm_process_coverage
+
+consistency_checks:
+  validation_scope:
+    expected_characteristic_scope: [C14]
+    actual_model_scope: [C14]
+    actual_skill_scope: [C14]
+    result: passed
+  verification_scope:
+    expected_individual_characteristics: [C7]
+    expected_set_characteristics: [C14]
+    actual_model_scope: [C7]
+    actual_set_scope: [C14]
+    result: passed
+  naming:
+    requirements_context_canonical_name: requirements-context
+    statement_skill_handoff_uses_canonical_name: true
+    result: passed
+  individual_vs_set_separation:
+    C1_C9_individual_domain_preserved: true
+    C10_C15_set_domain_preserved: true
+    C14_not_treated_as_individual: true
+    result: passed
+  source_discrepancy:
+    R14_preserved: true
+    canonical_identity: "Correct Punctuation"
+    conflicting_matrix_label: "Correct Condition"
+    result: passed
+
+next_decision:
+  action: do_not_add_more_inco​se_skills_yet
+  rationale: >-
+    The current six-Skill set covers C1-C15 and R1-R42 at least once, but attribute
+    coverage and NRM activity coverage remain intentionally partial. The next
+    implementation step should therefore audit the uncovered attribute/activity
+    areas and determine whether each requires a new Skill, a data-model capability,
+    a workflow concern, or no additional capability.
+  candidate_areas_for_next_analysis:
+    - attribute_and_requirements-management
+    - baseline_change_and_status
+    - verification_validation_success_criteria_and_methods
+    - rationale_and_source_provenance
+    - stakeholder_and_operational-context
+    - interface_and_dependent-peer-management
+
+non_goals:
+  - no_claim_of_full_INCOSE_process_implementation
+  - no_INCOSE_compliance_certification
+  - no_creation_of_new_INCOSE_characteristics
+  - no_inference_from_unmapped_attributes_that_the_project_is_nonconformant
+  - no_invention_of_requirements_or_project_facts
