@@ -1,0 +1,79 @@
+skill: baseline-change-management
+contract_version: 1
+source_basis:
+  - "INCOSE Guide to Writing Requirements v4, INCOSE-TP-2010-006-04"
+  - "INCOSE GtWR v4 Summary Sheet, June 2023"
+  - "INCOSE Needs and Requirements Manual, version 2, December 2024, when authorized detailed guidance is required"
+
+required_input:
+  - target
+
+allowed_status:
+  - baseline_state_established
+  - baseline_state_partial
+  - baseline_state_missing
+  - change_state_conflicting
+  - change_context_missing
+  - not_applicable
+
+attribute_scope:
+  - A15
+  - A16
+  - A17
+  - A18
+  - A19
+  - A20
+  - A21
+  - A22
+  - A23
+  - A24
+  - A25
+  - A26
+  - A27
+  - A28
+  - A29
+  - A30
+  - A31
+  - A34
+  - A35
+  - A36
+  - A37
+  - A38
+  - A39
+  - A40
+
+source_activity_scope:
+  - "6.3 Baseline and Manage Design Input Requirements"
+  - "14.2.1 Baseline Needs, Requirements, and Specifications"
+
+invariants:
+  - id: inventory_not_policy
+    statement: "The INCOSE attribute inventory is not a universal project Change Control policy."
+  - id: no_invented_baseline
+    statement: "A baseline or version must not be invented when no reference state is established."
+  - id: state_separation
+    statement: "Requirement status and implementation status remain distinct."
+  - id: approval_evidence
+    statement: "An approval date or status label alone does not prove approval authority."
+  - id: provenance
+    statement: "Version, date, state, and change assertions must retain attributable evidence."
+  - id: uncertainty
+    statement: "A policy-dependent lifecycle conclusion is inconclusive when the applicable policy cannot be established."
+  - id: specialist_handoff
+    statement: "Detailed traceability, verification, validation, and wording impacts remain with their dedicated Skills."
+  - id: no_certification
+    statement: "Skill output is not an INCOSE certification or global implementation-readiness decision."
+
+expected_output:
+  required:
+    - target_ref
+    - baseline_ref
+    - current_version
+    - change_ref
+    - lifecycle_attributes
+    - state_observation
+    - authority_evidence
+    - evidence_refs
+    - findings
+    - downstream_impacts
+    - status
