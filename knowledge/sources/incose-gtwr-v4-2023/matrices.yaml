@@ -1,0 +1,45 @@
+source:
+  id: incose-gtwr-v4-2023
+  source: gtwr-v4-summary-sheet
+  source_basis: official_incose_publication
+  source_date: 2023-06
+
+phase:
+  number: 2
+  name: structured_knowledge_extraction
+  status: controlled_extraction
+
+matrices:
+  rules_to_characteristics:
+    source_location: "page 4"
+    status: identified_pending_cell_transcription
+    rows: 42
+    columns:
+      individual: [C1, C2, C3, C4, C5, C6, C7, C8, C9]
+      sets: [C10, C11, C12, C13, C14, C15]
+    rule_ids: [R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, R26, R27, R28, R29, R30, R31, R32, R33, R34, R35, R36, R37, R38, R39, R40, R41, R42]
+    control: "Transcribe X cells directly from the official table; never infer cells from names or quality-focus groups."
+
+  nrm_concepts_activities_to_characteristics:
+    source_locations: "pages 5-6"
+    status: identified_pending_cell_transcription
+    columns:
+      individual: [C1, C2, C3, C4, C5, C6, C7, C8, C9]
+      sets: [C10, C11, C12, C13, C14, C15]
+    source_sections: ["3 Information-Based Needs and Requirement Development and Management", "4 Lifecycle Concepts and Needs Definition", "5 Needs Verification and Needs Validation", "6 Design Input Requirements Definition", "7 Design Input Requirements Verification & Validation", "8 Design Verification and Design Validation", "14 Needs, Requirements, Verification, & Validation Management"]
+    control: "Transcribe X cells directly from the official tables; preserve the section/activity identifiers exactly."
+
+  attributes_to_characteristics:
+    source: gtwr-v4-full-and-summary
+    status: identified_pending_authorized_detailed_extraction
+    note: "The Summary Sheet identifies the attributes and states they are defined in the NRM. Detailed attribute-to-characteristic semantics are not reconstructed without the authorized official source."
+
+verification_policy:
+  - Verify every matrix cell against the official PDF image/table.
+  - Preserve empty cells as empty rather than assuming coverage.
+  - Keep individual and set characteristic columns distinct.
+  - Record source page for each matrix.
+  - Do not derive a SPECTRUM Skill from an unverified matrix relationship.
+
+official_reference:
+  summary_sheet: https://www.incose.org/docs/default-source/working-groups/requirements-wg/guidetowritingrequirements/incose_rwg_gtwr_v4_summary_sheet.pdf
