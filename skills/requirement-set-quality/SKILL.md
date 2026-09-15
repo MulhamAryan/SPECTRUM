@@ -11,11 +11,11 @@ This is a SPECTRUM analytical capability derived from the official INCOSE source
 Authoritative source boundary:
 
 - INCOSE Guide to Writing Requirements v4, INCOSE-TP-2010-006-04.
-- INCOSE GtWR v4 Summary Sheet, especially pages 2–4.
+- INCOSE GtWR v4 Summary Sheet, especially pages 2–6.
 - INCOSE GtWR v4 set-level rule-to-characteristic relationships in the official cross-reference matrix.
 - INCOSE GtWR v4 NRM Concepts and Activities to Characteristics matrix on pages 5–6 when contextual analysis is required.
 
-Local structured source files are read as controlled representations of those publications:
+Local structured source files are controlled representations of those publications:
 
 - `knowledge/sources/incose-gtwr-v4-2023/characteristics.yaml`
 - `knowledge/sources/incose-gtwr-v4-2023/rules.yaml`
@@ -117,22 +117,28 @@ Do not reinterpret C1–C9 as set characteristics. Individual and set characteri
 
 ### 4. Load the applicable rule relationships
 
-Read rule-to-characteristic relationships from the controlled `matrices.yaml` representation and verify against the official Summary Sheet page 4 or the corresponding official GtWR matrix.
+Read rule-to-characteristic relationships from the controlled `matrices.yaml` representation and verify them against the official Summary Sheet page 4 or the corresponding official GtWR matrix.
 
-For set analysis, the primary rule scope is the set-related portion of the official matrix:
+For this Skill, the rule scope is limited to rules for which the official matrix contains at least one marked C10–C15 cell:
 
-- R29 Classification
-- R30 Unique Expression
-- R33 Range of Values
-- R36 Consistent Terms and Units
-- R37 Acronyms
-- R38 Abbreviations
-- R39 Style Guide
-- R40 Decimal Format
-- R41 Related Needs and Requirements
-- R42 Structured Sets
+- R3 Appropriate Subject-Verb → C10, C14
+- R4 Defined Terms → C11, C13, C14, C15
+- R26 Absolutes → C12
+- R29 Classification → C10, C11
+- R30 Unique Expression → C11
+- R33 Range of Values → C11
+- R34 Measurable Performance → C12
+- R36 Consistent Terms and Units → C11, C13, C14, C15
+- R37 Acronyms → C11, C13, C14, C15
+- R38 Abbreviations → C11, C13, C14, C15
+- R39 Style Guide → C11, C13, C14, C15
+- R40 Decimal Format → C11
+- R41 Related Needs and Requirements → C10, C11, C13, C15
+- R42 Structured Sets → C10, C12, C13, C14, C15
 
-Some rules also have marked relationships to set characteristics while primarily governing individual statements, for example R3, R4, R26, R35. Apply those cells only where the official matrix shows a set-level relationship. Never infer a set relationship merely because a rule sounds relevant.
+This list is a transcription of the official matrix relationship, not a statement that these rules are generally “set rules”. For example, R3 and R4 also have individual-characteristic cells and are assessed here only for their marked set cells.
+
+Never infer a set relationship merely because a rule sounds relevant.
 
 ### 5. Test set completeness and coverage
 
@@ -149,7 +155,7 @@ Examine, as applicable:
 - relevant interfaces and externally visible behavior;
 - expected scope supported by lifecycle concepts or higher-level sources.
 
-Do not infer missing content solely from a generic checklist. A missing element becomes a supported finding when the project scope, source, model, stakeholder evidence, parent set, or governing constraint establishes its applicability.
+Do not infer missing content solely from a generic checklist. A missing element becomes a supported finding when the project scope, source, model, stakeholder evidence, parent set, or governing constraint establishes that the item belongs in the set.
 
 ### 6. Test consistency and uniqueness
 
@@ -164,7 +170,7 @@ For C11:
 - examine acronym and abbreviation consistency;
 - inspect number and decimal formatting when applicable.
 
-R30 supports uniqueness by requiring each need or requirement to be expressed once and only once. R36–R40 support uniform language and formatting across the set.
+R29 addresses classification at set level, R30 addresses unique expression, and R36–R40 address uniformity of terms, units, acronyms, abbreviations, style, and decimal format where their official matrix cells map to C11.
 
 A suspected conflict or duplicate must include evidence references to the affected members. Do not mark a contradiction merely because two expressions appear different; determine whether their scopes, conditions, entities, measures, or states actually overlap.
 
@@ -182,6 +188,8 @@ Use available:
 - architecture and allocation evidence;
 - implementation or technology maturity evidence;
 - risk analysis.
+
+The official matrix links C12 to R26, R34 and R42. Apply those relationships only in their stated source meaning.
 
 Do not infer feasibility from wording quality. If feasibility cannot be demonstrated from supplied evidence, return an inconclusive or evidence-missing result rather than a failure asserted as fact.
 
@@ -231,13 +239,13 @@ Apply R41 and R42 using project-defined organization evidence.
 
 Check whether related needs and requirements are grouped in a way supported by their relationships, and whether the set conforms to a defined structure or template where one has been established.
 
-R29 Classification may be assessed when a classification scheme or relevant organizing dimensions are supplied or established by the project context.
+Apply R29 when a classification scheme or relevant organizing dimensions are supplied or established by the project context.
 
 Do not invent a taxonomy and then report absence of that invented taxonomy as an INCOSE non-conformity.
 
 ### 12. Analyze cross-statement language consistency
 
-Apply the set-level implications of R36–R40 and any other officially related rule cells.
+Apply only the set-level matrix cells of R36–R40.
 
 Compare:
 
@@ -421,7 +429,7 @@ This Skill does not:
 Primary:
 
 - INCOSE Guide to Writing Requirements v4, `INCOSE-TP-2010-006-04`, July 2023.
-- INCOSE Guide to Writing Requirements v4 – Summary Sheet, June 2023, especially pp. 2–4.
+- INCOSE Guide to Writing Requirements v4 – Summary Sheet, June 2023, especially pp. 2–6.
 
 Supporting source representations in SPECTRUM:
 
