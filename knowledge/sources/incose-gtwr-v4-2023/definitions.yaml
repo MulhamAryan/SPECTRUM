@@ -1,0 +1,98 @@
+source:
+  id: incose-gtwr-v4-2023
+  basis: official_incose_publication
+  companion: gtwr-v4-summary-sheet
+
+phase: 2
+status: controlled_extraction
+
+purpose: >-
+  Record the foundational GtWR v4 terminology needed to interpret C1-C15,
+  R1-R42, and A1-A49. These entries are concise structured paraphrases, not
+  reproduction of the copyrighted source text.
+
+scope:
+  applies_to:
+    - needs
+    - requirement_statements
+    - needs_sets
+    - requirement_sets
+    - associated_attributes
+  source_family: INCOSE Guide to Writing Requirements v4
+
+terms:
+  - id: entity
+    source_label: Entity
+    summary: >-
+      The item, system, product, service, or other addressed object to which a
+      need or requirement applies.
+  - id: concept
+    source_label: Concept
+    summary: >-
+      A lifecycle or engineering concept used as a source or framing context
+      for developing needs and requirements.
+  - id: lifecycle_concept
+    source_label: Lifecycle Concepts
+    summary: >-
+      Concepts describing the intended lifecycle context from which needs and
+      requirements are derived or understood.
+  - id: need_statement
+    source_label: Need Statement
+    summary: >-
+      A statement expressing an identified need that provides a basis for later
+      requirements development.
+  - id: requirement_statement
+    source_label: Requirement Statement
+    summary: >-
+      A statement expressing an obligation that can be evaluated against its
+      applicable source, need, or higher-level requirement.
+  - id: need_requirement_pattern
+    source_label: Need / Requirement Pattern
+    summary: >-
+      An approved structural pattern used to formulate needs or requirements
+      consistently.
+  - id: need_set
+    source_label: Need Set
+    summary: >-
+      A defined collection of related need statements considered together.
+  - id: requirement_set
+    source_label: Requirement Set
+    summary: >-
+      A defined collection of related requirement statements considered
+      together for set-level quality characteristics.
+  - id: attribute
+    source_label: Attribute
+    summary: >-
+      Additional information associated with a need or requirement to support
+      its definition, understanding, verification, validation, or management.
+  - id: need_expression
+    source_label: Need Expression
+    summary: >-
+      The expression used to represent a need in an approved form.
+  - id: requirement_expression
+    source_label: Requirement Expression
+    summary: >-
+      The expression used to represent a requirement in an approved form.
+
+interpretation_boundary:
+  source_fact: >-
+    A structured representation supported by an identified official INCOSE
+    publication.
+  derived_behavior: >-
+    Any machine-checking procedure or Skill behavior is deferred to later
+    SPECTRUM phases.
+  no_ai_source: true
+
+provenance_requirements:
+  every_term_records:
+    - source_id
+    - source_label
+    - source_version
+    - source_location_when_verified
+    - interpretation_level
+
+next_extraction:
+  - verify_source_locations_for_each_term
+  - verify_rule_to_characteristic_cells
+  - verify_nrm_activity_to_characteristic_cells
+  - obtain_detailed_attribute_semantics_from_authorized_official_NRM_material
