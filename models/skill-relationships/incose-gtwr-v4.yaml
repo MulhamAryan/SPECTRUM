@@ -225,6 +225,38 @@ skills:
       tests, thresholds, results, or acceptance criteria, and it does not execute
       verification activities.
 
+  validation-analysis:
+    purpose: >-
+      Analyser la base permettant d'établir qu'un besoin, une exigence ou un
+      ensemble correspond à l'utilisation prévue, aux objectifs et aux attentes
+      applicables.
+    characteristic_scope: [C14]
+    rule_scope: []
+    source_activity_scope:
+      - "3.2.1.7 System Verification and System Validation"
+      - "5.2 Needs Validation"
+      - "5.2.2 Perform Needs Validation"
+      - "7.2 Design Input Requirements Validation"
+      - "7.2.2 Perform Design Input Requirements Validation"
+      - "8.5 Design Validation"
+      - "14.2.9 Managing System Verification and System Validation"
+    source_basis:
+      characteristics: knowledge/sources/incose-gtwr-v4-2023/characteristics.yaml
+      relationships: knowledge/sources/incose-gtwr-v4-2023/matrices.yaml
+      official_matrix: "INCOSE GtWR v4 Summary Sheet pages 2, 5-6"
+      supporting_guide: "INCOSE Guide to Verification and Validation, INCOSE-TP-2021-004-01"
+    qualification: >-
+      C14 is a set-level characteristic in the GtWR v4. The validation activity
+      mapping is source-backed; validation reference construction, evidence
+      linkage, statuses, and coverage model are SPECTRUM-derived behavior. The
+      supporting GtVV is treated as an official supporting guide, not as a silent
+      replacement for the GtWR/NRM source mapping.
+    derived_behavior_boundary: >-
+      The Skill evaluates intended use, objectives, validation references,
+      criteria, evidence linkage, and coverage for the declared target. It does
+      not invent stakeholder objectives or validation results, and it does not
+      replace validation execution or elicitation.
+
 source_discrepancy:
   id: R14-label
   canonical_rule_identity: Correct Punctuation
