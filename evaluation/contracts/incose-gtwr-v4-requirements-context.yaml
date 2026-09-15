@@ -1,0 +1,58 @@
+skill: requirements-context
+source_basis: incose-gtwr-v4-2023
+
+contract:
+  input_required:
+    - requirement_expression_or_set
+    - available_context_evidence
+  input_optional:
+    - entity_definition
+    - abstraction_or_architecture_level
+    - source_or_parent_reference
+    - lifecycle_concept_reference
+    - project_glossary
+    - project_data_dictionary
+    - architecture_model
+    - conditions_of_use
+    - states_and_modes
+    - constraints_and_risk
+    - stakeholder_evidence
+    - traceability_evidence
+    - prior_findings
+    - style_guide
+    - interface_definitions
+    - allocation_data
+    - validation_basis
+    - verification_basis
+  output_type: requirements_context_observation
+  status_values:
+    - context_established
+    - context_partially_established
+    - context_missing
+    - context_conflicting
+    - not_applicable
+  characteristics_scope: [C1, C2, C3, C4, C6, C7, C8, C9]
+  attribute_scope: [A1, A2, A3, A4, A12]
+  evidence_requirements:
+    - preserve_candidate_expression_or_set
+    - identify_analysis_scope
+    - preserve_entity_and_level_evidence
+    - preserve_source_or_parent_evidence
+    - preserve_condition_state_mode_evidence_when_applicable
+    - preserve_constraint_and_risk_evidence_for_feasibility_analysis
+    - preserve_project_terminology_evidence
+    - preserve_stakeholder_or_agreement_evidence_when_used
+    - preserve_official_INCOSE_source_reference
+  prohibitions:
+    - invent_project_context
+    - infer_missing_business_facts
+    - treat_missing_artifact_as_proof_of_nonconformity
+    - infer_C1_without_source_or_lifecycle_basis
+    - infer_C2_without_entity_and_level_basis
+    - infer_C6_without_constraint_and_risk_basis
+    - infer_C8_without_source_or_transformation_basis
+    - create_new_INCOSE_characteristics
+    - redefine_INCOSE_attributes
+    - claim_formal_INCOSE_certification
+    - decide_implementation_readiness
+    - silently_resolve_conflicting_authoritative_project_sources
