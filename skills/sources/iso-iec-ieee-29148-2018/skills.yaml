@@ -36,18 +36,14 @@ skills:
     inputs:
       required: [ticket, available_context]
       optional: [prior_findings, prior_decisions]
-    preconditions:
-      - ticket_or_requirement_available
+    preconditions: [ticket_or_requirement_available]
     operations:
       - identify_item_of_interest
       - identify_requirement_context
       - distinguish_conditions_constraints_states
       - determine_requirement_level_when_relevant
     rule_refs: [ISO29148-R001, ISO29148-R002, ISO29148-R013, ISO29148-R015]
-    outputs:
-      - requirement_context
-      - requirement_level_observation
-      - findings
+    outputs: [requirement_context, requirement_level_observation, findings]
     findings:
       - missing_item_of_interest
       - requirement_context_incomplete
@@ -59,13 +55,8 @@ skills:
     dependencies: []
     relations:
       feeds: [SPECTRUM-SK-ELICITATION-GAP, SPECTRUM-SK-RELATIONSHIP-TRACEABILITY]
-    exit_conditions:
-      - completed
-      - completed_with_gaps
-      - not_applicable
-    non_goals:
-      - no_requirement_invention
-      - no_formal_conformance_claim
+    exit_conditions: [completed, completed_with_gaps, not_applicable]
+    non_goals: [no_requirement_invention, no_formal_conformance_claim]
     evaluation_refs: [nominal, missing_context, not_applicable, regression]
 
   - id: SPECTRUM-SK-ELICITATION-GAP
@@ -89,8 +80,7 @@ skills:
     inputs:
       required: [requirement_context, available_sources]
       optional: [prior_findings]
-    preconditions:
-      - requirement_context_available
+    preconditions: [requirement_context_available]
     operations:
       - detect_unestablished_required_information
       - classify_gap
@@ -102,7 +92,7 @@ skills:
     dependencies: [SPECTRUM-SK-REQ-CONTEXT]
     relations:
       validates: [SPECTRUM-SK-REQ-CONTEXT]
-      feeds: [SPECTRUM-SK-READINESS-WORKFLOW]
+      feeds: [SPECTRUM-WF-ISO29148-READINESS]
     exit_conditions: [completed, not_applicable, blocked_on_missing_context]
     non_goals: [no_gap_filling_by_inference]
     evaluation_refs: [missing_context, evidence_insufficient, regression]
@@ -138,10 +128,51 @@ skills:
     evidence_requirements: source_refs_for_stakeholder_and_scenario_claims
     dependencies: [SPECTRUM-SK-REQ-CONTEXT]
     relations:
-      feeds: [SPECTRUM-SK-VALIDATION, SPECTRUM-SK-READINESS-WORKFLOW]
+      feeds: [SPECTRUM-SK-VALIDATION, SPECTRUM-WF-ISO29148-READINESS]
     exit_conditions: [completed, completed_with_gaps, not_applicable]
     non_goals: [no_role_invention, no_scenario_invention]
     evaluation_refs: [nominal, missing_context, not_applicable, regression]
+
+  - id: SPECTRUM-SK-REQUIREMENT-EXPRESSION
+    name: requirement-expression-analysis
+    type: component
+    role: quality_analysis
+    trigger: >-
+      Activer lorsqu'un ticket ou une exigence contient une formulation
+      normative qui doit être examinée pour sa spécificité, sa précision ou
+      son absence d'ambiguïté.
+    objective: >-
+      Examiner l'expression de l'exigence et signaler les formulations qui ne
+      sont pas suffisamment spécifiques, précises ou non ambiguës pour être
+      interprétées de manière stable.
+    scope:
+      includes:
+        - analyse de la spécificité de la formulation
+        - analyse de la précision de la formulation
+        - détection d'ambiguïtés ou d'interprétations concurrentes
+      excludes:
+        - réécriture automatique imposée de l'exigence
+        - décision finale READY / NOT READY
+        - invention du contenu métier attendu
+    inputs:
+      required: [requirement]
+      optional: [requirement_context, available_context, prior_findings]
+    preconditions: [requirement_expression_available]
+    operations:
+      - assess_requirement_specificity
+      - assess_requirement_precision
+      - detect_ambiguity
+      - report_expression_quality_findings
+    rule_refs: [ISO29148-R003]
+    outputs: [requirement_expression_observation, findings]
+    findings: [requirement_expression_unclear]
+    evidence_requirements: source_ref_for_requirement_text_and_supporting_context
+    dependencies: [SPECTRUM-SK-REQ-CONTEXT]
+    relations:
+      feeds: [SPECTRUM-SK-VERIFICATION, SPECTRUM-WF-ISO29148-READINESS]
+    exit_conditions: [completed, completed_with_gaps, not_applicable]
+    non_goals: [no_invented_requirement_content, no_final_readiness_decision]
+    evaluation_refs: [nominal, missing_context, contradictory_context, insufficient_evidence, regression]
 
   - id: SPECTRUM-SK-RELATIONSHIP-TRACEABILITY
     name: requirement-relationship-traceability
@@ -172,14 +203,11 @@ skills:
       - report_orphans_or_missing_links
     rule_refs: [ISO29148-R004, ISO29148-R005, ISO29148-R006]
     outputs: [relationship_records, traceability_findings]
-    findings:
-      - derived_requirement_relationship_missing
-      - traceability_relationship_missing
-      - incomplete_traceability_artifact
+    findings: [derived_requirement_relationship_missing, traceability_relationship_missing, incomplete_traceability_artifact]
     evidence_requirements: trace_source_and_target_for_each_reported_relationship
     dependencies: [SPECTRUM-SK-REQ-CONTEXT]
     relations:
-      feeds: [SPECTRUM-SK-VERIFICATION, SPECTRUM-SK-VALIDATION, SPECTRUM-SK-READINESS-WORKFLOW]
+      feeds: [SPECTRUM-SK-VERIFICATION, SPECTRUM-SK-VALIDATION, SPECTRUM-WF-ISO29148-READINESS]
     exit_conditions: [completed, completed_with_gaps, not_applicable]
     non_goals: [no_artificial_trace_creation, no_universal_rtm_requirement]
     evaluation_refs: [nominal, missing_context, contradictory_context, regression]
@@ -212,9 +240,9 @@ skills:
     outputs: [verification_observations, findings]
     findings: [verification_basis_unavailable]
     evidence_requirements: objective_evidence_refs_when_claimed
-    dependencies: [SPECTRUM-SK-REQ-CONTEXT, SPECTRUM-SK-RELATIONSHIP-TRACEABILITY]
+    dependencies: [SPECTRUM-SK-REQ-CONTEXT, SPECTRUM-SK-RELATIONSHIP-TRACEABILITY, SPECTRUM-SK-REQUIREMENT-EXPRESSION]
     relations:
-      feeds: [SPECTRUM-SK-READINESS-WORKFLOW]
+      feeds: [SPECTRUM-WF-ISO29148-READINESS]
     exit_conditions: [completed, completed_with_gaps, not_applicable, blocked_on_missing_context]
     non_goals: [no_unproven_verification_claim]
     evaluation_refs: [nominal, evidence_insufficient, missing_context, regression]
@@ -249,7 +277,7 @@ skills:
     evidence_requirements: system_and_usage_evidence_refs_when_available
     dependencies: [SPECTRUM-SK-REQ-CONTEXT, SPECTRUM-SK-STK-SCENARIO]
     relations:
-      feeds: [SPECTRUM-SK-READINESS-WORKFLOW]
+      feeds: [SPECTRUM-WF-ISO29148-READINESS]
     exit_conditions: [completed, completed_with_gaps, not_applicable, blocked_on_missing_context]
     non_goals: [no_unproven_validation_claim]
     evaluation_refs: [nominal, missing_context, evidence_insufficient, regression]
@@ -284,7 +312,7 @@ skills:
     evidence_requirements: context_refs_for_each_activity_judged_relevant
     dependencies: []
     relations:
-      feeds: [SPECTRUM-SK-READINESS-WORKFLOW]
+      feeds: [SPECTRUM-WF-ISO29148-READINESS]
     exit_conditions: [completed, completed_with_gaps, not_applicable]
     non_goals: [no_forced_lifecycle]
     evaluation_refs: [nominal, missing_context, not_applicable, regression]
@@ -358,7 +386,7 @@ skills:
     evidence_requirements: explicit_assessment_scope_and_evidence
     dependencies: []
     relations:
-      validates: [SPECTRUM-SK-READINESS-WORKFLOW]
+      validates: [SPECTRUM-WF-ISO29148-READINESS]
     exit_conditions: [completed, completed_with_gaps, not_applicable]
     non_goals: [no_formal_conformance_from_selected_controls]
     evaluation_refs: [nominal, evidence_insufficient, not_applicable, regression]
@@ -384,6 +412,7 @@ workflows:
       conditional:
         - SPECTRUM-SK-ELICITATION-GAP
         - SPECTRUM-SK-STK-SCENARIO
+        - SPECTRUM-SK-REQUIREMENT-EXPRESSION
         - SPECTRUM-SK-RELATIONSHIP-TRACEABILITY
         - SPECTRUM-SK-VERIFICATION
         - SPECTRUM-SK-VALIDATION
