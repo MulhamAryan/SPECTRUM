@@ -1,0 +1,197 @@
+model:
+  id: spectrum-canonical-data-model
+  version: 1
+  interpretation_level: spectrum_architecture
+  purpose: >-
+    Define the canonical objects exchanged across SPECTRUM analysis, preserving
+    source provenance, evidence, relationships, observations, findings, and
+    decisions without embedding product-specific readiness policy.
+  principles:
+    - source_facts_are_not_decisions
+    - evidence_is_first_class
+    - findings_are_not_decisions
+    - references_are_explicit
+    - uncertainty_is_preserved
+    - lifecycle_state_is_distinct_from_implementation_state
+    - source_provenance_is_preserved
+
+identity:
+  id_format: "<type>:<stable-local-id>"
+  immutable_identity: true
+  rule: >-
+    Object identity remains stable across observations and revisions. Version,
+    status, and evidence are represented as attributes or related records rather
+    than by silently replacing identity.
+
+common:
+  fields:
+    - id
+    - type
+    - title
+    - description
+    - source_refs
+    - evidence_refs
+    - relationship_refs
+    - attribute_refs
+    - context_refs
+    - status
+    - created_at
+    - updated_at
+    - provenance
+
+entities:
+  Ticket:
+    purpose: Original work item under analysis.
+    required: [id, type, title]
+    references: [Requirement, RequirementSet, Artifact, Source, Context]
+
+  Requirement:
+    purpose: Individual need or requirement candidate being analyzed.
+    required: [id, type, text]
+    fields: [id, type, text, requirement_kind, source_refs, parent_refs, set_refs, context_refs, relationship_refs, evidence_refs, attribute_refs]
+    requirement_kind_values: [need, requirement, unknown]
+    characteristics: [C1, C2, C3, C4, C5, C6, C7, C8, C9]
+
+  RequirementSet:
+    purpose: Explicit collection whose set-level properties can be analyzed.
+    required: [id, type, member_refs]
+    fields: [id, type, member_refs, set_type, parent_set_refs, context_refs, relationship_refs, evidence_refs, attribute_refs]
+    characteristics: [C10, C11, C12, C13, C14, C15]
+
+  Need:
+    purpose: Semantic specialization of a Requirement object for a need.
+    canonical_representation: Requirement
+    kind: need
+
+  Source:
+    purpose: Authoritative or project source from which information is derived.
+    required: [id, type, authority_level]
+    fields: [id, type, title, authority_level, version, revision, publication_date, uri, source_basis, access_basis]
+    authority_level_values: [official, project_authoritative, project, external, unknown]
+
+  SourceFragment:
+    purpose: Addressable fragment of a Source used as evidence or provenance.
+    required: [id, type, source_ref, locator]
+    fields: [id, type, source_ref, locator, extracted_text, extraction_method]
+
+  Evidence:
+    purpose: Attributable information supporting, contradicting, or qualifying an observation.
+    required: [id, type, evidence_kind, source_refs]
+    fields: [id, type, evidence_kind, source_refs, fragment_refs, subject_refs, observation_refs, supports_refs, contradicts_refs, provenance, extraction_status]
+    evidence_kind_values: [source_fact, project_fact, project_artifact, observation_input, derived_observation, contradiction, absence]
+
+  Stakeholder:
+    purpose: Identified stakeholder or stakeholder class relevant to context or validation.
+    required: [id, type]
+
+  Entity:
+    purpose: Addressed item to which a concept, need, or requirement applies.
+    required: [id, type]
+    fields: [id, type, name, parent_refs, context_refs]
+
+  Context:
+    purpose: Explicit contextual facts required to interpret or assess a target.
+    required: [id, type]
+    fields: [id, type, subject_refs, fact_refs, constraint_refs, stakeholder_refs, scenario_refs, source_refs, evidence_refs]
+
+  Constraint:
+    purpose: Explicit limiting condition applicable to a target.
+    required: [id, type, expression]
+    fields: [id, type, expression, applicability, source_refs, evidence_refs]
+
+  Scenario:
+    purpose: Explicit usage, lifecycle, verification, or validation situation.
+    required: [id, type]
+    fields: [id, type, actors_refs, entity_refs, conditions, expected_outcomes, source_refs, evidence_refs]
+
+  Relationship:
+    purpose: Typed relation between identified objects.
+    required: [id, type, relation_type, from_ref, to_ref]
+    fields: [id, type, relation_type, from_ref, to_ref, direction, applicability, source_refs, evidence_refs]
+    relation_type_values: [parent_of, derived_from, allocated_to, depends_on, traces_to, interfaces_with, peer_dependency, validates, verifies, supports, contradicts, member_of, applies_to, supersedes]
+
+  Attribute:
+    purpose: Value or observation associated with a canonical object.
+    required: [id, type, owner_ref, attribute_code]
+    fields: [id, type, owner_ref, attribute_code, value, value_type, applicability, source_refs, evidence_refs, status]
+    attribute_code_source: INCOSE_A1_A49_or_project_defined
+
+  Baseline:
+    purpose: Explicitly identified lifecycle reference state.
+    required: [id, type, target_refs]
+    fields: [id, type, target_refs, version, effective_date, approval_evidence_refs, source_refs]
+
+  Change:
+    purpose: Explicitly identified modification to one or more targets.
+    required: [id, type, target_refs]
+    fields: [id, type, target_refs, proposal_refs, authority_refs, previous_baseline_ref, resulting_baseline_ref, impact_refs, evidence_refs]
+
+  Observation:
+    purpose: Machine- or analyst-produced observation about a target based on supplied inputs and evidence.
+    required: [id, type, target_refs, status]
+    fields: [id, type, target_refs, skill_ref, characteristic_refs, rule_refs, attribute_refs, status, statement, evidence_refs, uncertainty_refs]
+    status_values: [observed, partially_observed, not_observed, inconclusive, not_applicable]
+
+  Finding:
+    purpose: Explicit analytical issue, gap, contradiction, or positive observation derived from one or more observations.
+    required: [id, type, finding_type, target_refs, status]
+    fields: [id, type, finding_type, target_refs, severity, status, observation_refs, evidence_refs, source_refs, rationale, resolution_refs]
+    status_values: [open, resolved, accepted, deferred, inconclusive]
+    severity_values: [informational, low, medium, high, critical, unknown]
+
+  Decision:
+    purpose: Policy- or workflow-level conclusion derived from findings and applicable decision logic.
+    required: [id, type, decision_status, target_refs]
+    fields: [id, type, decision_status, target_refs, finding_refs, policy_refs, rationale, evidence_refs, decided_at, decided_by]
+    boundary: >-
+      Decision is outside Skills. A decision is valid only when the applicable
+      policy/workflow defines the decision semantics and its inputs are traceable.
+
+  Artifact:
+    purpose: External or generated object participating in analysis or handoff.
+    required: [id, type]
+    fields: [id, type, name, uri, artifact_kind, source_refs, content_hash, version]
+
+provenance:
+  required_fields: [origin, recorded_at]
+  fields:
+    origin: [source, project, derived]
+    source_refs: []
+    recorded_at: null
+    recorded_by: null
+    method: null
+    confidence: null
+  rule: >-
+    Derived information must retain links to the inputs from which it was
+    derived. Confidence does not replace evidence and cannot upgrade an
+    unsupported claim into a source fact.
+
+reference_integrity:
+  rules:
+    - every_ref_must_resolve
+    - relationship_endpoints_must_exist
+    - evidence_subjects_must_exist
+    - finding_targets_must_exist
+    - decision_findings_must_exist
+    - requirement_set_members_must_be_requirements_or_needs
+    - requirement_parent_refs_must_resolve
+    - source_fragment_source_must_resolve
+
+status_semantics:
+  observation: >-
+    Describes what was observed by a Skill; it is not a global quality or
+    readiness decision.
+  finding: >-
+    Describes an analytical issue or observation that may feed decision logic.
+  decision: >-
+    Applies explicit policy/workflow semantics to findings. It must not be
+    inferred merely from a Skill status.
+
+source_boundary:
+  INCOSE: >-
+    INCOSE identifiers such as C1-C15, R1-R42, and A1-A49 remain source-backed
+    references. This model does not create additional INCOSE characteristics or
+    rules.
+  SPECTRUM: >-
+    Object types, identifiers, evidence semantics, observation/finding structures,
+    relationship vocabulary, and decision separation are SPECTRUM architecture.
