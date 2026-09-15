@@ -1,0 +1,44 @@
+skill: requirement-set-quality
+source_basis: incose-gtwr-v4-2023
+
+contract:
+  input_required:
+    - requirement_set
+  input_optional:
+    - set_type
+    - entity_context
+    - parent_set
+    - source_set
+    - project_glossary
+    - data_dictionary
+    - architecture_model
+    - verification_and_validation_basis
+    - risk_constraints
+    - traceability_evidence
+  output_type: requirement_set_quality_observation
+  status_values:
+    - conformant_observed
+    - non_conformant_observed
+    - inconclusive_missing_context
+    - inconclusive_source_conflict
+    - not_applicable
+  characteristic_scope: [C10, C11, C12, C13, C14, C15]
+  rule_scope: [R3, R4, R26, R29, R30, R33, R34, R36, R37, R38, R39, R40, R41, R42]
+  evidence_requirements:
+    - preserve_target_set
+    - preserve_member_references
+    - cite_official_rule_or_characteristic
+    - cite_project_evidence_for_scope_claims
+    - cite_source_or_parent_evidence_for_C15
+    - cite_constraints_and_risk_evidence_for_C12
+    - cite_validation_basis_for_C14
+  prohibitions:
+    - infer_set_nonconformity_from_missing_artifact_alone
+    - invent_missing_scope
+    - invent_taxonomy
+    - infer_C12_from_wording_only
+    - infer_C15_from_wording_only
+    - infer_C14_from_individual_statement_quality
+    - create_new_INCOSE_characteristics
+    - claim_formal_INCOSE_certification
+    - silently_normalize_source_discrepancies
