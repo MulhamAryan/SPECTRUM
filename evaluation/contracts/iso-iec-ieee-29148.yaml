@@ -1,0 +1,135 @@
+source:
+  reference: ISO/IEC/IEEE 29148:2018
+  rules: rules/sources/iso-iec-ieee-29148-2018/rules.yaml
+  skills_root: skills/
+
+purpose: >-
+  Définir le contrat d'évaluation structurelle et comportementale des Skills
+  dérivés des contrôles ISO 29148 retenus pour l'analyse de readiness.
+
+case_dataset:
+  path: evaluation/cases/iso-iec-ieee-29148.yaml
+  scope: all_declared_skills
+  case_classes:
+    - nominal
+    - negative
+    - edge
+    - regression
+  minimum_cases_per_skill: 3
+  required_case_fields:
+    - id
+    - skill
+    - class
+    - scenario
+    - input
+    - expected.status
+    - expected.outputs
+    - expected.findings
+    - expected.evidence
+    - expected.assertions
+
+checks:
+  skill_unit:
+    - stable_name
+    - explicit_type
+    - explicit_role
+    - discriminating_description
+    - bounded_responsibility
+    - declared_inputs
+    - declared_preconditions
+    - bounded_operations
+    - rule_refs_present
+    - outputs_declared
+    - findings_declared
+    - evidence_expectations_defined
+    - dependencies_and_relations_defined
+    - exit_conditions_defined
+    - non_goals_defined
+    - references_defined
+    - evaluation_cases_defined
+    - procedure_is_operational
+    - analysis_logic_is_explicit
+    - output_semantics_are_explicit
+    - edge_and_failure_behavior_is_declared
+
+  integrity:
+    - every_rule_ref_exists
+    - every_skill_reference_resolves
+    - every_workflow_reference_resolves
+    - every_control_R001_to_R017_mapped
+    - no_orphan_skill_reference
+    - no_duplicate_skill_name
+    - no_platform_specific_skill_definition
+    - no_final_readiness_decision_inside_component
+    - every_skill_has_minimum_behavioral_cases
+    - every_behavioral_case_targets_existing_skill
+    - every_behavioral_case_has_expected_result
+    - every_behavioral_case_has_assertions
+    - regression_cases_exist
+
+  behavioral:
+    - inputs_respect_preconditions
+    - outputs_match_declared_contract
+    - findings_match_observed_conditions
+    - evidence_is_preserved
+    - unknowns_are_not_invented
+    - contradictions_are_not_resolved_without_authority
+    - skill_does_not_cross_non_goals
+    - handoff_contract_is_preserved
+    - workflow_does_not_decide_final_readiness
+
+negative_cases:
+  - missing_context
+  - contradictory_context
+  - insufficient_evidence
+  - not_applicable
+  - regression
+  - evidence_mismatch
+  - scope_exceeds_evidence
+
+pass_criteria:
+  structural:
+    - all_checks_under_skill_unit_pass
+    - all_integrity_checks_pass
+  behavioral:
+    - every_case_status_matches_or_is_more_conservative_than_expected
+    - every_expected_finding_is_present
+    - no_unexpected_critical_finding_is_introduced
+    - every_required_evidence_reference_is_present
+    - every_assertion_passes
+  regression:
+    - prior_expected_findings_are_not_lost_without_explicit_reason
+    - prior_evidence_links_are_not_lost_without_explicit_reason
+    - output_contract_changes_are_detected
+
+execution_policy:
+  isolation: each_case_runs_against_only_declared_input_and_authorized_context
+  determinism: same_case_same_context_must_produce_equivalent_semantics
+  provenance: every_external_fact_used_by_a_case_must_be_traceable
+  no_invention: absent_values_must_remain_unknown_or_gap
+  severity: findings_must_not_be_downplayed_to_make_a_case_pass
+
+negative_cases_required_for_each_component:
+  - one_missing_information_case
+  - one_evidence_or_contradiction_case
+  - one_boundary_or_non_goal_case
+
+workflow_specific_requirements:
+  iso29148-readiness:
+    - conditional_skill_selection_is_observable
+    - skipped_skills_have_explicit_reasons
+    - findings_and_evidence_propagate
+    - inaccessible_sources_reduce_scope_explicitly
+    - final_readiness_status_is_not_decided_by_workflow
+
+done:
+  - all_17_controls_mapped
+  - every_concrete_skill_has_SKILL_md
+  - every_skill_has_references
+  - all_relationships_resolve
+  - workflow_is_explicit
+  - decision_boundary_preserved
+  - behavioral_case_dataset_present
+  - every_skill_has_at_least_three_cases
+  - regression_coverage_present
+  - behavioral_evaluation_contract_defined
