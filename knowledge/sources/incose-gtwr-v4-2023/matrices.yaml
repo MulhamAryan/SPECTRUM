@@ -67,8 +67,71 @@ matrices:
 
   nrm_concepts_activities_to_characteristics:
     source_locations: "Summary Sheet pages 5-6"
-    status: identified_pending_cell_transcription
+    status: transcribed
     columns: [C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14, C15]
+    x_cells:
+      "3.2.1.1 Communication": [C3, C7, C14]
+      "3.2.1.2 Power of Expression": [C3, C4, C7, C13, C14]
+      "3.2.1.3 Managing Sets of Needs And Requirements": [C4, C13]
+      "3.2.1.5 Attributes": [C1, C13]
+      "3.2.1.6 Formal, Binding Agreement": [C1, C3, C4, C6, C7, C13, C14]
+      "3.2.1.7 System Verification and System Validation": [C1, C7]
+      "3.2.2.1 Analysis from Which Needs and Requirements are Derived": [C1, C6, C8, C10, C11, C12, C13, C14, C15]
+      "3.2.2.2 Completeness": [C10, C11, C13]
+      "3.2.2.3 Consistency": [C11, C13, C14]
+      "3.2.2.4 Identity and Manage Interdependencies": [C8, C11, C13, C14, C15]
+      "3.2.2.5 Support Simulations": [C7, C13, C14]
+      "3.2.2.6 Key to Understanding": [C13, C14]
+      "4.3.3 Identify External and Internal Stakeholders": [C10]
+      "4.3.6.2 Technology Maturity": [C6, C12]
+      "4.3.7.1 Classes of Risk - Development Risk": [C6, C12]
+      "4.4.3 Get Stakeholder Agreement": [C1, C3, C4, C7, C8, C10, C11, C13, C14, C15]
+      "4.4.4 Completeness": [C10]
+      "4.5 Lifecycle Concepts Analysis and Maturation": [C1, C4, C6, C7, C8, C11, C15]
+      "4.5.1 Feasibility": [C6, C12]
+      "4.5.3 User of Diagrams and Models for Analysis": [C1, C8, C10, C11, C15]
+      "4.5.4 Levels of Detail and Abstraction": [C2]
+      "4.5.7.1 Model Development, Analysis, and Maturation": [C1, C8, C10, C11, C15]
+      "4.5.7.4 Zeroing in on a Feasible Architecture and Design": [C6, C12]
+      "4.6.2.3 Organizing the Integrated Set of Needs": [C9, C10]
+      "4.6.3.1 Managing Unknowns": [C3, C4, C6, C7, C8, C15]
+      "4.6.3.2 Appropriate to Level": [C2]
+      "4.6.3.3 Completeness of the Integrated Set of Needs": [C10]
+      "4.6.3.4 Needs Feasibility and Risk": [C1, C2, C6, C12]
+      "4.7 Plan for System Validation": [C14]
+      "4.8 Baseline & Manage Lifecycle Concepts & Needs Definition Outputs": [C1, C3, C4, C6, C8, C10, C11, C12, C13, C14, C15]
+      "5.1.2 Perform Needs Verification": [C1, C3, C4, C9, C10, C11, C14]
+      "5.2 Needs Validation": [C14]
+      "5.2.2 Perform Needs Validation": [C3, C6, C8, C10, C12, C13, C14, C15]
+      "6.2 Perform Design Input Requirements Definition": [C1, C2, C7, C8, C10, C11, C12, C13, C14, C15]
+      "6.2.1 Transforming Needs into Design Input Requirements": [C1, C4, C10]
+      "6.2.1.1 Organizing Sets of Design Input Requirements": [C2, C9, C10]
+      "6.2.1.2 Considerations For Each Type Of Requirement": [C4, C7, C8, C10, C15]
+      "6.2.1.4 Appropriate to Level": [C2]
+      "6.2.1.5 Managing Unknowns": [C3, C4, C6, C7, C8, C15]
+      "6.2.2 Establish Traceability": [C1, C10, C11]
+      "6.2.2.1 Establishing Traceability Between Dependent Peer Requirements": [C11]
+      "6.2.3.6 Interface Requirements Audit": [C1, C4, C7, C8, C10, C11, C14, C15]
+      "6.2.5 Plan for System Verification": [C7]
+      "6.2.6.2 Completeness, Correctness, and Consistency": [C8, C10, C11, C15]
+      "6.2.6.3 Requirements Feasibility and Risk": [C1, C2, C6, C12]
+      "6.3 Baseline and Manage Design Input Requirements": [C1, C3, C4, C6, C8, C10, C11, C12, C13, C14, C15]
+      "6.4.3 Allocation – Flow Down of Requirements": [C2, C10, C11]
+      "6.4.4 Defining Child Requirements that Meet the Intent of the Allocated Parents": [C10]
+      "6.4.5 Budgeting of Performance, Resource, and Quality Requirements": [C10, C11]
+      "6.4.7 Use of Traceability and Allocation to Manage Requirements": [C1, C8, C10, C11, C14, C15]
+      "7.1.2 Perform Design Input Requirements Verification": [C1, C3, C4, C7, C9, C10, C11, C14]
+      "7.2 Design Input Requirements Validation": [C14]
+      "7.2.2 Perform Design Input Requirements Validation": [C1, C3, C4, C6, C8, C10, C11, C12, C13, C14, C15]
+      "8.1 Design Definition Process Overview": [C3, C4, C6, C7, C8, C10, C11, C12, C13, C14, C15]
+      "8.2 Early System Verification and System Validation": [C3, C4, C6, C7, C8, C10, C11, C12, C13, C14, C15]
+      "8.4 Design Verification": [C3, C4, C6, C7, C8, C10, C11, C12, C13]
+      "8.5 Design Validation": [C10, C11, C12, C13, C14]
+      "14.2.1 Baseline Needs, Requirements, and Specifications": [C1, C3, C4, C6, C8, C10, C11, C12, C13, C14, C15]
+      "14.2.4 Managing Unknowns": [C3, C4, C6, C7, C8, C11, C15]
+      "14.2.7 Combine Allocation and Traceability to Manage Requirements": [C1, C8, C10, C14, C15]
+      "14.2.8 Managing Interfaces": [C10, C11, C14]
+      "14.2.9 Managing System Verification and System Validation": [C7, C14]
     source_sections:
       - "3 Information-Based Needs and Requirement Development and Management"
       - "4 Lifecycle Concepts and Needs Definition"
@@ -77,7 +140,11 @@ matrices:
       - "7 Design Input Requirements Verification & Validation"
       - "8 Design Verification and Design Validation"
       - "14 Needs, Requirements, Verification, & Validation Management"
-    control: "Transcribe X cells directly from the official tables; preserve the section/activity identifiers exactly."
+    source_control: >-
+      Cell membership is transcribed from the official tables on pages 5-6;
+      section/activity identifiers are preserved and no relationship is inferred.
+    verification_sources:
+      - "INCOSE GtWR v4 Summary Sheet, pages 5-6"
 
   attributes_to_characteristics:
     source: gtwr-v4-full-and-summary
