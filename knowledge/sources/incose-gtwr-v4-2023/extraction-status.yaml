@@ -17,20 +17,26 @@ verified_inventory:
     sets: C10-C15
   writing_rules: R1-R42
   attributes: A1-A49
+  terminology: foundational_terms_structured
 
-corrections_required:
-  - id: R14
-    current_catalog_value: "Correct Punctuation"
-    required_source_value: "Correct Condition"
-    source: gtwr-v4-summary-sheet
-    status: pending_catalog_correction
+completed_controlled_extraction:
+  - foundational_terms
+  - rules_to_characteristics_matrix_cell_values
+
+source_discrepancies:
+  - id: R14-label
+    rule_identity: "Correct Punctuation"
+    detailed_gtwr_basis: "GtWR v4 section 4.3.3"
+    summary_page_3: "Correct Punctuation"
+    summary_page_4_matrix: "Correct Condition"
+    status: preserved_as_official_source_inconsistency
 
 remaining_controlled_extraction:
   - definitions_source_locations
-  - rules_to_characteristics_matrix_cell_values
   - nrm_concepts_and_activities_to_characteristics_matrix_cell_values
   - attributes_to_characteristics_matrix_cell_values
   - detailed_attribute_semantics_from_authorized_NRM_material
+  - final_summary_sheet_comparison
 
 implementation_boundary:
   no_spectrum_rules: true
