@@ -1,0 +1,69 @@
+source:
+  id: incose-gtwr-v4-2023
+  source: gtwr-v4-summary-sheet
+  source_basis: official_incose_publication
+  source_date: 2023-06
+
+phase:
+  number: 2
+  name: structured_knowledge_extraction
+  status: controlled_extraction
+
+scope:
+  description: "Inventory of the 49 attributes identified by the GtWR v4 Summary Sheet. Detailed attribute definitions are defined in the INCOSE Needs and Requirements Manual (NRM) and are not reconstructed here without an authorized official NRM source."
+
+attributes:
+  - {id: A1, name: Rationale, minimum: true, group: definition_and_intent}
+  - {id: A2, name: Trace to Parent, minimum: true, group: definition_and_intent}
+  - {id: A3, name: Trace to Source, minimum: true, group: definition_and_intent}
+  - {id: A4, name: States and Modes, minimum: false, group: definition_and_intent}
+  - {id: A5, name: Allocation/Budgeting, minimum: true, group: definition_and_intent}
+  - {id: A6, name: System Verification or System Validation Success Criteria, minimum: true, group: verification_validation}
+  - {id: A7, name: System Verification or System Validation Strategy, minimum: true, group: verification_validation}
+  - {id: A8, name: System Verification or System Validation Method, minimum: true, group: verification_validation}
+  - {id: A9, name: System Verification or System Validation Responsible Organization, minimum: true, group: verification_validation}
+  - {id: A10, name: System Verification or System Validation Level, minimum: false, group: verification_validation}
+  - {id: A11, name: System Verification or System Validation Phase, minimum: false, group: verification_validation}
+  - {id: A12, name: Condition of Use, minimum: false, group: verification_validation}
+  - {id: A13, name: System Verification or System Validation Results, minimum: false, group: verification_validation}
+  - {id: A14, name: System Verification or System Validation Status, minimum: false, group: verification_validation}
+  - {id: A15, name: Unique Identifier, minimum: true, group: lifecycle_management}
+  - {id: A16, name: Unique Name, minimum: false, group: lifecycle_management}
+  - {id: A17, name: Originator/Author, minimum: true, group: lifecycle_management}
+  - {id: A18, name: Date Requirement Entered, minimum: false, group: lifecycle_management}
+  - {id: A19, name: Owner, minimum: true, group: lifecycle_management}
+  - {id: A20, name: Stakeholders, minimum: false, group: lifecycle_management}
+  - {id: A21, name: Change Board, minimum: false, group: lifecycle_management}
+  - {id: A22, name: Change Proposed, minimum: false, group: lifecycle_management}
+  - {id: A23, name: Version Number, minimum: false, group: lifecycle_management}
+  - {id: A24, name: Approval Date, minimum: false, group: lifecycle_management}
+  - {id: A25, name: Date of Last Change, minimum: false, group: lifecycle_management}
+  - {id: A26, name: Stability/Volatility, minimum: false, group: lifecycle_management}
+  - {id: A27, name: Responsible Person, minimum: false, group: lifecycle_management}
+  - {id: A28, name: Need or Requirement Verification Status, minimum: true, group: lifecycle_management}
+  - {id: A29, name: Need or Requirement Validation Status, minimum: true, group: lifecycle_management}
+  - {id: A30, name: Status of the Need or Requirement, minimum: false, group: lifecycle_management}
+  - {id: A31, name: Status of Implementation, minimum: false, group: lifecycle_management}
+  - {id: A32, name: Trace to Interface Definition, minimum: false, group: lifecycle_management}
+  - {id: A33, name: Trace to Dependent Peer Requirements, minimum: false, group: lifecycle_management}
+  - {id: A34, name: Priority, minimum: true, group: lifecycle_management}
+  - {id: A35, name: Criticality or Essentiality, minimum: true, group: lifecycle_management}
+  - {id: A36, name: Risk (of Implementation), minimum: true, group: lifecycle_management}
+  - {id: A37, name: Risk (Mitigation), minimum: false, group: lifecycle_management}
+  - {id: A38, name: Key Driving Need or Requirement (KDN/KDR), minimum: false, group: lifecycle_management}
+  - {id: A39, name: Additional Comments, minimum: false, group: lifecycle_management}
+  - {id: A40, name: Type/Category, minimum: false, group: lifecycle_management}
+  - {id: A41, name: Applicability, minimum: false, group: applicability_reuse}
+  - {id: A42, name: Region, minimum: false, group: applicability_reuse}
+  - {id: A43, name: Country, minimum: false, group: applicability_reuse}
+  - {id: A44, name: State/Province, minimum: false, group: applicability_reuse}
+  - {id: A45, name: Market Segment, minimum: false, group: applicability_reuse}
+  - {id: A46, name: Business Unit, minimum: false, group: applicability_reuse}
+  - {id: A47, name: Product Line, minimum: false, group: product_line_management}
+  - {id: A48, name: Product Line Common Needs and Requirements, minimum: false, group: product_line_management}
+  - {id: A49, name: Product Line Variant Needs and Requirements, minimum: false, group: product_line_management}
+
+source_note:
+  source_location: "Summary Sheet page 7"
+  minimum_set: "Attributes marked with an asterisk are the minimum set identified by the Summary Sheet."
+  semantic_definitions: "The Summary Sheet states that these attributes are defined in the INCOSE Needs and Requirements Manual."
