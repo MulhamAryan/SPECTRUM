@@ -1,0 +1,78 @@
+source:
+  id: incose-gtwr-v4-2023
+  authority: official_incose_publication
+skill: requirement-set-quality
+
+cases:
+  - id: set-quality-001
+    title: complete_and_consistent_set
+    intent: Evaluate a set with sufficient scope, consistent terminology, unique expressions, and explicit validation basis.
+    expected_status: conformant_observed
+
+  - id: set-quality-002
+    title: duplicate_expression
+    intent: Detect two members that express the same need or requirement and assess the uniqueness implication.
+    expected_findings: [duplicate_requirement_observed]
+    expected_rule_refs: [R30]
+
+  - id: set-quality-003
+    title: contradictory_members
+    intent: Detect two requirements whose scopes overlap and whose obligations conflict.
+    expected_findings: [set_conflict_observed]
+    expected_characteristics: [C11]
+
+  - id: set-quality-004
+    title: inconsistent_project_terminology
+    intent: Detect a term used with different meanings or different terms used for the same concept when the project glossary or ontology establishes the intended terminology.
+    expected_findings: [terminology_inconsistency_observed]
+    expected_rule_refs: [R4, R36]
+
+  - id: set-quality-005
+    title: missing_set_structure
+    intent: Detect non-conformance to an explicitly supplied project structure or template without inventing a structure where none exists.
+    expected_findings: [structured_set_conformance_issue]
+    expected_rule_refs: [R42]
+
+  - id: set-quality-006
+    title: incomplete_with_authoritative_scope_evidence
+    intent: Detect missing coverage when a supplied lifecycle concept, parent set, stakeholder source, model, or project baseline establishes that the missing content belongs in scope.
+    expected_findings: [set_incomplete_observed]
+    expected_characteristics: [C10]
+
+  - id: set-quality-007
+    title: feasibility_blocked
+    intent: Do not declare the set infeasible when relevant technical, cost, schedule, or risk constraints are absent.
+    expected_status: inconclusive_missing_context
+    expected_findings: [feasibility_evidence_missing]
+    expected_characteristics: [C12]
+
+  - id: set-quality-008
+    title: correctness_blocked_without_parent_source
+    intent: Do not infer C15 correctness when the source, parent set, or transformation evidence is unavailable.
+    expected_status: inconclusive_missing_context
+    expected_findings: [source_alignment_not_established]
+    expected_characteristics: [C15]
+
+  - id: set-quality-009
+    title: validation_basis_missing
+    intent: Do not treat well-written members as sufficient evidence that the set can be validated against its applicable goals, expectations, or higher-level needs/requirements.
+    expected_status: inconclusive_missing_context
+    expected_findings: [validation_basis_missing]
+    expected_characteristics: [C14]
+
+  - id: set-quality-010
+    title: individual_set_separation
+    intent: Verify that C10-C15 are assessed as set characteristics and that rules without set-level matrix cells are not added merely because they appear relevant.
+    expected_characteristics: [C10, C11, C12, C13, C14, C15]
+    expected_exclusions: [R1, R2, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, R27, R28, R31, R32, R35]
+
+  - id: set-quality-011
+    title: language_uniformity
+    intent: Detect inconsistent units, acronyms, abbreviations, style conventions, or decimal formatting across the set where the project basis establishes the expected convention.
+    expected_findings: [unit_inconsistency_observed, acronym_inconsistency_observed, abbreviation_issue_observed, decimal_format_inconsistency_observed]
+    expected_rule_refs: [R36, R37, R38, R39, R40]
+
+  - id: set-quality-012
+    title: no_false_positive_from_generic_checklist
+    intent: Do not report missing categories, taxonomy, or traceability artifacts solely because a generic checklist suggests them when no applicable source or project evidence establishes them as in scope.
+    expected_status: inconclusive_missing_context
