@@ -1,6 +1,6 @@
 ---
 name: requirement-relationship-traceability
-description: Analyser les relations de dérivation, d'allocation et de traçabilité disponibles entre exigences et niveaux associés.
+description: Analyser les relations de transformation, d'allocation, de traçabilité et de dépendance entre besoins, exigences et artefacts associés à partir de preuves explicites.
 type: component
 role: relationship_traceability
 ---
@@ -8,70 +8,364 @@ role: relationship_traceability
 # Requirement Relationship & Traceability
 
 ## Purpose
-Établir quelles relations entre exigences existent, lesquelles sont démontrées et lesquelles sont manquantes lorsqu'une relation est attendue ou utile.
+
+Identifier, qualifier and preserve explicit relationships between needs, requirements, sources, parent requirements, dependent peer requirements, allocations, interfaces, and related artifacts.
+
+This is a SPECTRUM analytical capability derived from the official INCOSE Guide to Writing Requirements v4 (GtWR v4) and its associated NRM activity relationships. INCOSE does not define a Skill with this name or status vocabulary.
+
+## Source boundary
+
+Authoritative source boundary:
+
+- INCOSE Guide to Writing Requirements v4, `INCOSE-TP-2010-006-04`.
+- INCOSE GtWR v4 Summary Sheet, especially pages 1–7.
+- Official NRM Concepts and Activities → Characteristics matrix.
+- Official attribute inventory where traceability-related attributes are listed.
+
+Local controlled representations:
+
+- `knowledge/sources/incose-gtwr-v4-2023/definitions.yaml`
+- `knowledge/sources/incose-gtwr-v4-2023/characteristics.yaml`
+- `knowledge/sources/incose-gtwr-v4-2023/attributes.yaml`
+- `knowledge/sources/incose-gtwr-v4-2023/matrices.yaml`
+
+The official INCOSE publication remains authoritative.
+
+## Interpretation boundary
+
+- `source_fact`: information explicitly represented in the INCOSE source.
+- `spectrum_observation`: an observation produced from source facts and supplied project evidence.
+- `business_gap`: a missing or unresolved project fact, relationship, artifact, agreement, or evidence item.
+
+A missing relation is not automatically a non-conformity. The project scope, lifecycle level, source/parent structure, or applicable process must establish that the relation is relevant before it is reported as missing.
 
 ## When to use
-Activer lorsque des exigences sont dérivées, allouées, liées à un niveau supérieur ou inférieur, ou lorsqu'un artefact de traçabilité existe.
+
+Use this Skill when a candidate need or requirement is expected to have explicit relationships to:
+
+- a lifecycle concept or source;
+- a need or higher-level requirement;
+- a child requirement or allocated requirement;
+- a dependent peer requirement;
+- an interface or interface definition;
+- another artifact needed to understand transformation, allocation, or dependency.
+
+Use it for orphan detection, directionality checks, relationship consistency, and traceability coverage.
+
+Do not use it to invent parents, infer links from textual similarity alone, or declare implementation readiness.
 
 ## Inputs
-Required: `requirements`, `available_traceability`
-Optional: `ticket`, `repository_evidence`, `related_artifacts`
+
+Required:
+
+- `requirements_or_needs`;
+- `relationship_evidence`.
+
+Recommended:
+
+- `source_or_parent_set`;
+- `allocation_data`;
+- `dependent_peer_requirements`;
+- `interface_definitions`;
+- `traceability_matrix_or_register`;
+- `attributes`;
+- `architecture_model`;
+- `prior_findings`;
+- `context_evidence`.
 
 ## Preconditions
-- Au moins une exigence ou relation candidate est disponible.
+
+1. Relationship candidates or target objects are identifiable.
+2. The analysis scope and evidence boundary are known.
+3. Object identifiers are stable where possible.
+4. The evidence boundary distinguishes absence of an artifact from proof that the underlying relation does not exist.
+5. The relevant source/parent/peer/interface basis is available when a relation is being assessed.
 
 ## Procedure
-1. Identifier les exigences source et cible impliquées.
-2. Rechercher les relations explicites de dérivation, allocation ou traçabilité.
-3. Vérifier que chaque relation relie réellement deux objets existants.
-4. Rechercher les exigences orphelines lorsque leur niveau supérieur ou inférieur est pertinent.
-5. Inspecter les matrices ou registres de traçabilité lorsqu'ils existent.
-6. Vérifier la cohérence directionnelle des liens.
-7. Distinguer l'absence d'un artefact de traçabilité de l'absence d'une relation réellement requise.
-8. Signaler les liens non établis, incohérents ou incomplets.
-9. Conserver source, cible, relation et evidence pour chaque observation.
+
+### 1. Preserve the objects and links
+
+Capture the exact requirements/needs and relationship artifacts used in the run.
+
+Record:
+
+- source object;
+- target object;
+- relationship type;
+- direction;
+- source of the relationship claim;
+- evidence references;
+- version or baseline information when supplied.
+
+### 2. Classify the relationship basis
+
+Determine whether the supplied evidence represents, as applicable:
+
+- transformation from a lifecycle concept or source into a need;
+- transformation from a need, source, or higher-level requirement into a requirement;
+- flow-down/allocation from a parent to a child requirement;
+- dependency between peer requirements;
+- relationship to an interface definition;
+- another project-defined relationship.
+
+Do not introduce a relationship type merely because it would be convenient.
+
+### 3. Verify object identity
+
+For every asserted relationship:
+
+- confirm the source object exists;
+- confirm the target object exists;
+- confirm the identifiers are unambiguous;
+- confirm the relationship does not point to an obsolete or out-of-scope object when version/scope evidence is available.
+
+### 4. Check transformation traceability
+
+When a need or requirement is represented as transformed from a source, parent, or higher-level object, preserve and assess the supplied linkage.
+
+Relevant source-backed characteristics include:
+
+- C1 Necessary;
+- C8 Correct;
+- C10 Complete;
+- C11 Consistent;
+- C14 Able to be validated;
+- C15 Correct.
+
+Do not infer C1 or C8 merely from the presence of a link. The link is evidence for analysis; correctness or necessity still requires the appropriate transformation and source context.
+
+### 5. Check allocation and dependent-peer relationships
+
+For design-input requirement structures, inspect supplied evidence for:
+
+- parent-to-child allocation/flow-down;
+- child requirements meeting the intent of allocated parents;
+- dependent peer relationships;
+- consistency of relationship direction.
+
+Where the official NRM matrix explicitly associates these activities with characteristics, preserve those source relationships rather than converting them into a synthetic rule.
+
+### 6. Check interfaces
+
+Where requirements concern interfaces, compare the requirement-side relationship with the supplied interface definition or model.
+
+Do not treat the existence of an interface identifier as proof that the interface requirement is correct or complete.
+
+### 7. Check relationship coverage
+
+Identify:
+
+- established relationships;
+- relationships explicitly expected but missing;
+- incomplete relationship artifacts;
+- contradictory relationship assertions;
+- orphan objects where an applicable source, parent, or peer basis has been established.
+
+A missing relationship must be tied to an explicit applicability basis.
+
+### 8. Check directionality and consistency
+
+Verify that the relationship direction matches the semantics established by the project or source model.
+
+Examples:
+
+`source → transformed need`
+
+`higher-level requirement → allocated child requirement`
+
+`peer requirement ↔ dependent peer relationship`
+
+These examples describe SPECTRUM relationship records, not additional INCOSE rules.
+
+### 9. Correlate with official NRM activities
+
+Use the official NRM matrix as contextual source evidence for activities such as:
+
+- `3.2.2.4 Identity and Manage Interdependencies`;
+- `6.2.2 Establish Traceability`;
+- `6.2.2.1 Establishing Traceability Between Dependent Peer Requirements`;
+- `6.2.3.6 Interface Requirements Audit`;
+- `6.4.3 Allocation – Flow Down of Requirements`;
+- `6.4.4 Defining Child Requirements that Meet the Intent of the Allocated Parents`;
+- `6.4.7 Use of Traceability and Allocation to Manage Requirements`;
+- `14.2.7 Combine Allocation and Traceability to Manage Requirements`;
+- `14.2.8 Managing Interfaces`.
+
+The official matrix establishes activity-to-characteristic relationships. It does not define a SPECTRUM traceability algorithm or score.
+
+### 10. Separate missing evidence from missing relation
+
+Distinguish:
+
+- relation established;
+- relation expected but not evidenced;
+- relation applicability unresolved;
+- artifact absent but relation status not determinable;
+- conflicting source evidence.
+
+Do not equate an absent matrix with an absent relationship.
+
+### 11. Produce evidence-backed findings
+
+Each finding must identify:
+
+- affected objects;
+- relationship type;
+- expected direction;
+- source-backed characteristic/activity where relevant;
+- project applicability evidence;
+- exact evidence references;
+- downstream impact.
+
+## Source-backed scope
+
+The official Summary Sheet defines a requirement expression as a requirement statement plus associated attributes, and defines requirement statements as the result of formal transformation from sources, needs, or higher-level requirements. citeturn502689view0
+
+The official NRM matrix explicitly includes `6.2.2 Establish Traceability`, `6.2.2.1 Establishing Traceability Between Dependent Peer Requirements`, `6.4.3 Allocation – Flow Down of Requirements`, `6.4.4 Defining Child Requirements that Meet the Intent of the Allocated Parents`, `6.4.7 Use of Traceability and Allocation to Manage Requirements`, `14.2.7 Combine Allocation and Traceability to Manage Requirements`, and `14.2.8 Managing Interfaces`. citeturn163892view0
+
+The official characteristics define correctness of an individual requirement in relation to the need, source, or higher-level requirement from which it was transformed, and set-level correctness in relation to the corresponding higher-level sources. citeturn502689view0
+
+The official attribute inventory includes traceability-relevant attributes such as Trace to Parent, Trace to Source, Trace to Interface Definition, and Trace to Dependent Peer Requirements. Their detailed attribute guidance belongs to the NRM and is not redefined by this Skill.
 
 ## Analysis logic
-La traçabilité est un résultat de relations établies ; une simple proximité de texte ne constitue pas un lien. Une matrice n'est pas rendue universellement obligatoire si aucune source ou politique applicable ne l'exige.
 
-## Decision rules
-- `trace_established`: source, cible et nature du lien sont établies.
-- `trace_missing`: relation attendue mais non établie.
-- `trace_incomplete`: artefact existe mais ne couvre pas le périmètre nécessaire.
-- `trace_contradictory`: différents artefacts donnent des liens incompatibles.
+Use this sequence:
 
-## Rules
-- `ISO29148-R004`
-- `ISO29148-R005`
-- `ISO29148-R006`
+`objects → relationship basis → identity → direction → evidence → applicability → relationship status`
 
-## Output
-`relationship_records` avec `from_ref`, `to_ref`, `relation`, `direction`, `status`, `evidence_refs` et `traceability_scope`.
+A relationship record is valid only when its endpoints and relationship semantics are evidenced. Textual similarity alone does not establish traceability.
+
+## Decision semantics
+
+Use only these Skill-level result semantics:
+
+- `trace_established`: the relationship is explicitly evidenced with identifiable endpoints and applicable semantics.
+- `trace_missing`: a relationship is applicable and expected from explicit project/source context but is not established in the available evidence.
+- `trace_incomplete`: a traceability artifact exists but does not cover the applicable scope.
+- `trace_contradictory`: supplied authoritative project artifacts assert incompatible relationship information.
+- `traceability_context_missing`: applicability or relationship basis cannot be established reliably.
+- `not_applicable`: the declared relationship type is outside the analysis scope.
+
+These are SPECTRUM analytical statuses, not INCOSE certification statuses.
 
 ## Findings
-- `derived_requirement_relationship_missing`
-- `traceability_relationship_missing`
+
+Use specific findings such as:
+
+- `source_trace_missing`
+- `parent_trace_missing`
+- `allocation_trace_missing`
+- `dependent_peer_trace_missing`
+- `interface_trace_missing`
+- `orphan_requirement_observed`
+- `relationship_endpoint_missing`
+- `relationship_direction_inconsistent`
 - `incomplete_traceability_artifact`
 - `contradictory_traceability`
+- `relationship_applicability_unresolved`
+- `source_alignment_not_established`
+- `transformation_evidence_insufficient`
 
 ## Evidence
-Conserver les références de la source et de la cible pour chaque relation et l'artefact de traçabilité lorsqu'il est utilisé.
+
+Preserve:
+
+- exact source and target identifiers;
+- relationship type and direction;
+- traceability matrix/register entries;
+- source/parent/peer/interface artifacts;
+- version/baseline information when available;
+- official INCOSE source references used for the analysis;
+- project evidence establishing applicability.
 
 ## Handoff
-Vers `verification-analysis`, `validation-analysis` et le workflow.
+
+Results can feed:
+
+- `requirements-context` for missing source or level context;
+- `requirement-statement-quality` for member wording analysis;
+- `requirement-set-quality` for set-level completeness/consistency/correctness;
+- `verification-analysis` where traceability is needed to establish a verification target;
+- `validation-analysis` where traceability is needed to establish the validation chain;
+- `elicitation-gap` when source, parent, peer, or interface evidence is missing.
+
+Handoffs preserve evidence references and interpretation level.
+
+## Output
+
+Produce a `relationship_traceability_observation` containing:
+
+- `object_refs`;
+- `relationship_records`;
+- `relationship_status`;
+- `source_characteristic_refs`;
+- `source_activity_refs`;
+- `findings`;
+- `missing_context`;
+- `evidence_refs`;
+- `unassessed_scope`.
+
+Do not output a global implementation-readiness decision.
 
 ## Exit conditions
-- `completed`
-- `completed_with_gaps`
-- `not_applicable`
+
+`completed` when all applicable relationship checks are assessed with sufficient evidence.
+
+`completed_with_findings` when one or more evidence-backed relationship issues are observed.
+
+`completed_with_gaps` when the relationship assessment is useful but applicability or evidence remains unresolved.
+
+`blocked_on_missing_context` when the endpoints, relationship basis, or evidence boundary cannot be established.
+
+`not_applicable` when no declared relationship in scope applies.
 
 ## Non-goals
-Ne pas créer artificiellement un parent ou une relation ; ne pas imposer une matrice dans tous les cas.
+
+This Skill does not:
+
+- invent source, parent, child, peer, or interface relationships;
+- infer traceability from textual similarity alone;
+- make every traceability matrix universally mandatory;
+- infer C1, C8, C10, C11, C14, or C15 solely from link presence;
+- create a synthetic INCOSE traceability characteristic or rule;
+- replace project requirements management or configuration management;
+- approve or reject implementation readiness;
+- issue formal INCOSE certification;
+- silently resolve conflicting authoritative project artifacts.
 
 ## References
-- `ISO/IEC/IEEE 29148:2018`
-- `ISO29148-R004`, `R005`, `R006`
-- `rules/sources/iso-iec-ieee-29148-2018/rules.yaml`
+
+Primary:
+
+- INCOSE Guide to Writing Requirements v4, `INCOSE-TP-2010-006-04`.
+- INCOSE GtWR v4 Summary Sheet, June 2023.
+
+Local controlled representations:
+
+- `knowledge/sources/incose-gtwr-v4-2023/definitions.yaml`
+- `knowledge/sources/incose-gtwr-v4-2023/characteristics.yaml`
+- `knowledge/sources/incose-gtwr-v4-2023/attributes.yaml`
+- `knowledge/sources/incose-gtwr-v4-2023/matrices.yaml`
+- `models/skill-relationships/incose-gtwr-v4.yaml`
+
+Official source URLs:
+
+- `https://www.incose.org/docs/default-source/working-groups/requirements-wg/guidetowritingrequirements/incose_rwg_gtwr_v4_summary_sheet.pdf`
+- `https://www.incose.org/docs/default-source/working-groups/requirements-wg/gtwr/incose_rwg_gtwr_v4_040423_final_drafts.pdf`
 
 ## Evaluation
-Tester : chaîne de traçabilité complète, relation manquante, matrice absente mais non requise, matrice incomplète, contradiction, régression.
+
+Minimum evaluation cases:
+
+- complete_transformation_trace;
+- missing_parent_or_source_trace;
+- allocation_and_child_relationship;
+- dependent_peer_relationship;
+- interface_relationship;
+- orphan_requirement_with_established_parent_basis;
+- incomplete_traceability_artifact;
+- contradictory_relationship_sources;
+- directionality_error;
+- absent_artifact_without_applicability_basis;
+- textual_similarity_false_positive;
+- correctness_not_inferred_from_link_presence.
