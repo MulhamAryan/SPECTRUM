@@ -23,7 +23,7 @@ rules:
   - {id: R11, group: Concision, name: Separate Clauses, summary: "Use a separate clause for each condition or qualification."}
   - {id: R12, group: Non-ambiguity, name: Correct Grammar, summary: "Use correct grammar in need and requirement statements."}
   - {id: R13, group: Non-ambiguity, name: Correct Spelling, summary: "Use correct spelling."}
-  - {id: R14, group: Non-ambiguity, name: Correct Condition, summary: "Use conditions correctly and express their logical relationship clearly."}
+  - {id: R14, group: Non-ambiguity, name: Correct Punctuation, summary: "Use correct punctuation."}
   - {id: R15, group: Non-ambiguity, name: Logical Expressions, summary: "Use a defined convention for logical expressions."}
   - {id: R16, group: Non-ambiguity, name: Use of Not, summary: "Avoid the use of the word not."}
   - {id: R17, group: Non-ambiguity, name: Use of Oblique Symbol, summary: "Avoid the oblique slash except where permitted for units or fractions."}
@@ -56,8 +56,16 @@ rules:
 validation:
   rule_count: 42
   expected_rule_ids: [R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, R26, R27, R28, R29, R30, R31, R32, R33, R34, R35, R36, R37, R38, R39, R40, R41, R42]
-  source_location: "Summary Sheet page 3"
-  correction_verified: "R14 is Correct Condition"
+  source_location: "Summary Sheet page 3; R14 detailed definition verified in GtWR v4 section 4.3.3"
+  correction_verified: "R14 canonical rule name is Correct Punctuation; the Summary Sheet page 4 matrix contains a conflicting label 'Correct Condition'."
+
+provenance_note:
+  r14_discrepancy: >-
+    The official GtWR v4 detailed rule heading and definition identify R14 as
+    Correct Punctuation. The official Summary Sheet page 3 also identifies R14
+    as Correct Punctuation, while the page 4 cross-reference matrix labels the
+    R14 row Correct Condition. This is preserved as an official-source
+    inconsistency and must not be silently normalized.
 
 copyright:
   source_summary_used: true
