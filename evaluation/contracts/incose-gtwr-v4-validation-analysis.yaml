@@ -1,0 +1,59 @@
+skill: validation-analysis
+source_basis: incose-gtwr-v4-2023
+
+contract:
+  input_required:
+    - need_or_requirement_or_set
+    - validation_evidence_or_context
+  input_optional:
+    - intended_use
+    - system_context
+    - usage_context
+    - stakeholder_expectations
+    - stakeholder_evidence
+    - lifecycle_concepts
+    - source_or_parent_reference
+    - higher_level_needs_or_requirements
+    - validation_objectives
+    - validation_criteria
+    - scenarios_or_operational_concepts
+    - risk_and_constraint_context
+    - traceability_evidence
+    - prior_findings
+  output_type: validation_observation
+  status_values:
+    - validation_basis_established
+    - validation_basis_partial
+    - validation_basis_missing
+    - validation_evidence_mismatch
+    - validation_contradicted
+    - validation_context_missing
+    - not_applicable
+  characteristic_scope: [C14]
+  source_activity_scope:
+    - "3.2.1.7 System Verification and System Validation"
+    - "5.2 Needs Validation"
+    - "5.2.2 Perform Needs Validation"
+    - "7.2 Design Input Requirements Validation"
+    - "7.2.2 Perform Design Input Requirements Validation"
+    - "8.5 Design Validation"
+    - "14.2.9 Managing System Verification and System Validation"
+  evidence_requirements:
+    - preserve_validation_target
+    - preserve_intended_use_and_scope
+    - cite_validation_reference_or_objective
+    - cite_validation_criteria_when_claimed
+    - cite_stakeholder_or_source_evidence_when_used
+    - cite_official_characteristic_or_activity_reference
+    - preserve_baseline_context_when_relevant
+  prohibitions:
+    - invent_stakeholder_objectives
+    - invent_intended_use
+    - invent_validation_criteria
+    - infer_validation_success_from_wording_only
+    - infer_validation_success_from_verification_success
+    - silently_choose_between_conflicting_authoritative_sources
+    - create_new_INCOSE_characteristics
+    - create_new_INCOSE_rules
+    - claim_formal_INCOSE_certification
+    - treat_missing_artifact_as_failure_without_applicability_basis
