@@ -1,0 +1,209 @@
+source:
+  id: incose-gtwr-v4-2023
+  title: INCOSE Guide to Writing Requirements
+  document_number: INCOSE-TP-2010-006-04
+  version: 4
+  revision: 4
+  publication_date: 2023-07-01
+  authority: INCOSE Requirements Working Group
+  source_type: technical_product
+  role_in_spectrum: primary_requirement_quality_reference
+  provenance: official_incose_source
+  official_owner: INCOSE
+  official_group: Requirements Working Group
+
+phase:
+  number: 1
+  name: official_source_baseline
+  status: completed
+  objective: >-
+    Establish the authoritative INCOSE source set, version boundary, scope,
+    access status, provenance requirements, and source hierarchy before any
+    SPECTRUM rule, procedure, Skill, workflow, or evaluation is derived.
+
+source_policy:
+  principle: >-
+    SPECTRUM derives implementation knowledge only from explicitly identified
+    official INCOSE publications for this workstream. Secondary articles,
+    community summaries, vendor documentation, and AI-generated interpretations
+    are not source authority for the INCOSE baseline.
+  primary_source:
+    id: gtwr-v4
+    title: INCOSE Guide to Writing Requirements
+    document_number: INCOSE-TP-2010-006-04
+    version: 4
+    revision: 4
+    date: 2023-07-01
+    authority: INCOSE Requirements Working Group
+    access: official_public_copy
+    url: https://www.incose.org/docs/default-source/working-groups/requirements-wg/gtwr/incose_rwg_gtwr_v4_040423_final_drafts.pdf
+    use: >-
+      Authoritative source for the detailed Guide to Writing Requirements v4
+      content used in later extraction and mapping work.
+  companion_source:
+    id: gtwr-v4-summary-sheet
+    title: INCOSE Guide to Writing Requirements v4 – Summary Sheet
+    document_number: INCOSE-TP-2010-006-04
+    version: 4
+    document_date: 2023-06
+    authority: INCOSE Requirements Working Group
+    access: official_free_download
+    url: https://www.incose.org/docs/default-source/working-groups/requirements-wg/guidetowritingrequirements/incose_rwg_gtwr_v4_summary_sheet.pdf
+    pages: 7
+    use: >-
+      Public companion used to establish and cross-check the official
+      characteristics, rules, attributes, and cross-reference matrices.
+    limitation: >-
+      The summary sheet is a companion summary and is not treated as a
+      substitute for the full Guide when detailed source verification requires
+      material not exposed in the summary.
+  authority_source:
+    id: requirements-working-group
+    title: INCOSE Requirements Working Group
+    authority: INCOSE
+    access: official_public_page
+    url: https://www.incose.org/group/requirements-working-group/
+    use: >-
+      Establishes the official INCOSE Requirements Working Group context and
+      identifies the current family of Requirements Working Group products.
+
+supporting_official_references:
+  policy: >-
+    These references are recorded as official INCOSE companion products because
+    the GtWR v4 explicitly aligns with them. They are not silently merged into
+    the GtWR knowledge baseline. Their content will be analyzed separately only
+    when a later phase demonstrates that it is needed.
+  references:
+    - id: needs-and-requirements-manual
+      title: INCOSE Needs and Requirements Manual
+      current_official_reference: version_2
+      publication_note: >-
+        INCOSE states that NRM v2 was published in December 2024. It is part of
+        the current Requirements Working Group product family.
+      official_page: https://www.incose.org/event/incose-webinar-189-incose-rwg-needs-and-requirements-manual-nrm-v2-overview/
+      role: supporting_reference
+    - id: guide-to-needs-and-requirements
+      title: INCOSE Guide to Needs and Requirements
+      document_number: INCOSE-TP-2021-003-01
+      version: 1
+      date: 2022-05
+      official_store_page: https://portal.incose.org/Web/iCore/Store/StoreLayouts/Item_Detail.aspx?Category=EBOOKS&iProductCode=GUIDENEEDSREQ
+      role: supporting_reference
+    - id: guide-to-verification-and-validation
+      title: INCOSE Guide to Verification and Validation
+      document_number: INCOSE-TP-2021-004-01
+      version: 1
+      date: 2022-05
+      official_store_page: https://portal.incose.org/Web/iCore/Store/StoreLayouts/Item_Detail.aspx?Category=EBOOKS&iProductCode=GUIDEVERIF
+      role: supporting_reference
+
+scope:
+  in_scope_for_phase_1:
+    - exact_identity_of_gtwr_v4
+    - official_authority_and_provenance
+    - version_and_revision_boundary
+    - primary_and_companion_source_hierarchy
+    - official_supporting_reference_inventory
+    - access_and_copyright_boundary
+    - source_verification_requirements_for_later_phases
+  out_of_scope_for_phase_1:
+    - rule_extraction
+    - rule_reformulation
+    - SPECTRUM_skill_design
+    - procedure_design
+    - workflow_design
+    - agent_design
+    - evaluation_case_generation
+    - scoring
+    - readiness_decision
+    - ISO_29148_mapping
+
+verified_structure:
+  source_documents_confirm:
+    definitions: true
+    individual_characteristics: true
+    requirement_set_characteristics: true
+    writing_rules: true
+    attributes: true
+    rules_to_characteristics_cross_reference: true
+  later_extraction_targets:
+    - definitions
+    - characteristics
+    - rules
+    - attributes
+    - cross_reference_matrices
+  important_scope_distinction:
+    individual_needs_and_requirements: true
+    sets_of_needs_and_requirements: true
+
+source_boundary:
+  copyright: >-
+    The full Guide is a copyrighted INCOSE technical product. The repository
+    must not reproduce the protected document wholesale.
+  implementation_rule: >-
+    SPECTRUM stores source metadata and derived structured knowledge, rules,
+    findings, and procedures with provenance. It does not copy the full source
+    text into the repository.
+  public_source_rule: >-
+    Public official material may be summarized and structured with explicit
+    provenance. When a later control depends on detailed content not available
+    from an authorized public source, that content must not be fabricated.
+
+provenance_contract:
+  every_derived_item_must_record:
+    - source_id
+    - source_title
+    - document_number
+    - version_or_revision
+    - source_section_or_rule_when_verified
+    - source_access_basis
+    - interpretation_level
+  interpretation_levels:
+    - source_fact
+    - structured_knowledge
+    - spectrum_derived_control
+    - spectrum_skill_behavior
+    - spectrum_product_decision
+
+extraction_principles:
+  - id: official_before_interpretation
+    statement: >-
+      Verify the official source content before designing a SPECTRUM rule or
+      Skill around it.
+  - id: preserve_scope
+    statement: >-
+      Distinguish characteristics for individual needs and requirements from
+      characteristics for sets of needs and requirements.
+  - id: preserve_cross_reference
+    statement: >-
+      Preserve the official relationship between writing rules and the
+      characteristics they support; do not infer a one-to-one mapping merely
+      from characteristic names.
+  - id: no_quality_list_invention
+    statement: >-
+      SPECTRUM must not replace the official characteristic and rule structure
+      with an independently generated checklist.
+  - id: no_ai_as_source
+    statement: >-
+      Model-generated summaries or classifications may not be treated as source
+      evidence. Any implementation decision must be traceable to an identified
+      official INCOSE publication.
+
+phase_1_exit_criteria:
+  - official_primary_source_identified
+  - exact_version_and_revision_recorded
+  - official_summary_sheet_identified
+  - official_authority_context_recorded
+  - supporting_official_references_recorded_without_merging_them
+  - source_hierarchy_defined
+  - copyright_boundary_defined
+  - provenance_contract_defined
+  - downstream_scope_explicit
+
+next_phase:
+  number: 2
+  name: structured_knowledge_extraction
+  first_task: >-
+    Extract and structure the official GtWR v4 definitions, individual and set
+    characteristics, rules, attributes, and rule-to-characteristic matrices
+    with source-level provenance before designing SPECTRUM controls.
