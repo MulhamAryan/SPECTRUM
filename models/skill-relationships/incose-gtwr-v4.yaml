@@ -10,10 +10,10 @@ source:
 interpretation_level: spectrum_skill_mapping
 
 purpose: >-
-  Define a traceable mapping from official INCOSE GtWR v4 characteristics and
-  writing rules to SPECTRUM analytical Skills. The Skill grouping is a SPECTRUM
-  architecture decision; the underlying rule-to-characteristic relationships are
-  taken from the official INCOSE cross-reference matrix.
+  Define a traceable mapping from official INCOSE GtWR v4 characteristics,
+  rules, attributes, and NRM activity relationships to SPECTRUM analytical
+  Skills. Skill grouping is a SPECTRUM architecture decision; source
+  relationships remain those of the official INCOSE publications.
 
 principles:
   - official_source_before_skill_behavior
@@ -100,6 +100,64 @@ skills:
       - "8.5 Design Validation"
       - "14.2.7 Combine Allocation and Traceability to Manage Requirements"
       - "14.2.8 Managing Interfaces"
+
+  requirements-context:
+    purpose: >-
+      Établir et analyser les éléments de contexte et les preuves nécessaires
+      pour interpréter et évaluer correctement un besoin ou une exigence sans
+      inventer de faits de projet.
+    characteristic_scope: [C1, C2, C3, C4, C6, C7, C8, C9]
+    rule_scope: []
+    attribute_scope: [A1, A2, A3, A4, A12]
+    source_activity_scope:
+      - "3.2.1.6 Formal, Binding Agreement"
+      - "3.2.2.1 Analysis from Which Needs and Requirements are Derived"
+      - "3.2.2.4 Identity and Manage Interdependencies"
+      - "4.3.3 Identify External and Internal Stakeholders"
+      - "4.3.6.2 Technology Maturity"
+      - "4.3.7.1 Classes of Risk - Development Risk"
+      - "4.4.3 Get Stakeholder Agreement"
+      - "4.5 Lifecycle Concepts Analysis and Maturation"
+      - "4.5.1 Feasibility"
+      - "4.5.4 Levels of Detail and Abstraction"
+      - "4.6.3.1 Managing Unknowns"
+      - "4.6.3.2 Appropriate to Level"
+      - "4.6.3.4 Needs Feasibility and Risk"
+      - "4.8 Baseline & Manage Lifecycle Concepts & Needs Definition Outputs"
+      - "5.1.2 Perform Needs Verification"
+      - "5.2.2 Perform Needs Validation"
+      - "6.2 Perform Design Input Requirements Definition"
+      - "6.2.1.5 Managing Unknowns"
+      - "6.2.2 Establish Traceability"
+      - "6.2.3.6 Interface Requirements Audit"
+      - "6.2.6.2 Completeness, Correctness, and Consistency"
+      - "6.2.6.3 Requirements Feasibility and Risk"
+      - "7.2.2 Perform Design Input Requirements Validation"
+      - "14.2.4 Managing Unknowns"
+      - "14.2.8 Managing Interfaces"
+      - "14.2.9 Managing System Verification and System Validation"
+    source_basis:
+      definitions: knowledge/sources/incose-gtwr-v4-2023/definitions.yaml
+      characteristics: knowledge/sources/incose-gtwr-v4-2023/characteristics.yaml
+      attributes: knowledge/sources/incose-gtwr-v4-2023/attributes.yaml
+      relationships: knowledge/sources/incose-gtwr-v4-2023/matrices.yaml
+      official_source: "INCOSE GtWR v4 Summary Sheet pages 1-7"
+    qualification: >-
+      This Skill is a SPECTRUM context/evidence capability. INCOSE does not
+      define a Skill named requirements-context. The listed characteristics,
+      attributes, and NRM activities are source relationships used to constrain
+      the Skill. No additional rule or characteristic is created.
+    evidence_boundary: >-
+      Attributes listed here are source attributes from the official GtWR
+      inventory; the Summary Sheet states that attribute definitions are in the
+      NRM. The Skill checks whether relevant project evidence exists and is
+      attributable; it does not make every listed attribute mandatory in every
+      project or context.
+    derived_behavior_boundary: >-
+      The Skill identifies context needed for reliable downstream analysis,
+      preserves evidence dependencies, and reports missing or conflicting
+      context. It does not infer business facts, certify INCOSE conformity, or
+      decide implementation readiness.
 
 source_discrepancy:
   id: R14-label
