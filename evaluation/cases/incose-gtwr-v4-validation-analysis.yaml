@@ -1,0 +1,71 @@
+source:
+  id: incose-gtwr-v4-2023
+  authority: official_incose_publication
+skill: validation-analysis
+
+cases:
+  - id: validation-001
+    title: validatable_set_with_authoritative_reference
+    intent: Evaluate a requirement set with established intended use, stakeholder/objective reference, validation criteria, and supporting evidence.
+    expected_status: validation_basis_established
+    expected_characteristics: [C14]
+
+  - id: validation-002
+    title: missing_intended_use
+    intent: Do not infer the intended use when the validation context does not establish it.
+    expected_status: validation_context_missing
+    expected_findings: [intended_use_missing]
+
+  - id: validation-003
+    title: missing_stakeholder_validation_basis
+    intent: Report missing stakeholder or objective evidence when the validation claim depends on it.
+    expected_findings: [stakeholder_validation_basis_missing]
+
+  - id: validation-004
+    title: missing_validation_objective
+    intent: Detect absence of an explicit validation objective when the declared validation scope requires one.
+    expected_findings: [validation_objective_missing]
+
+  - id: validation-005
+    title: missing_validation_criteria
+    intent: Do not invent criteria when no applicable validation criterion is established.
+    expected_status: validation_basis_missing
+    expected_findings: [validation_criterion_missing]
+
+  - id: validation-006
+    title: validation_evidence_mismatch
+    intent: Detect evidence that concerns a different system, level, use case, or validation target.
+    expected_status: validation_evidence_mismatch
+    expected_findings: [validation_evidence_mismatch]
+
+  - id: validation-007
+    title: validation_level_mismatch
+    intent: Detect validation evidence established at a different lifecycle or system level than the target.
+    expected_findings: [validation_level_mismatch]
+
+  - id: validation-008
+    title: contradictory_authoritative_sources
+    intent: Preserve conflicting validation objectives or intended-use statements instead of silently choosing one.
+    expected_status: validation_contradicted
+    expected_findings: [validation_context_conflict]
+
+  - id: validation-009
+    title: partial_validation_coverage
+    intent: Recognize materially useful validation evidence that leaves part of the declared scope unsupported.
+    expected_status: validation_basis_partial
+    expected_findings: [validation_partial_coverage]
+
+  - id: validation-010
+    title: verification_success_but_validation_unestablished
+    intent: Do not treat successful verification against specified requirements as proof that the requirement is appropriate for intended use.
+    expected_status: validation_basis_missing
+
+  - id: validation-011
+    title: no_false_positive_from_missing_artifact
+    intent: Do not report validation failure solely because an artifact named validation is absent when an equivalent authoritative validation basis exists.
+    expected_status: validation_basis_established
+
+  - id: validation-012
+    title: wording_issue_handed_to_statement_quality
+    intent: Keep wording defects that obstruct validation interpretation separate from the validation conclusion and hand them to statement analysis.
+    expected_findings: [validation_objective_missing]
