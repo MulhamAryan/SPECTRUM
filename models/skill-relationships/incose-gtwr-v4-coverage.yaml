@@ -125,7 +125,7 @@ consistency_checks:
     result: passed
 
 next_decision:
-  action: do_not_add_more_inco​se_skills_yet
+  action: do_not_add_more_incose_skills_yet
   rationale: >-
     The current six-Skill set covers C1-C15 and R1-R42 at least once, but attribute
     coverage and NRM activity coverage remain intentionally partial. The next
