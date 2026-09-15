@@ -1,0 +1,47 @@
+model: spectrum-canonical-data-model
+
+skill_bindings:
+  requirement-statement-quality:
+    targets: [Requirement]
+    produces: [Observation, Finding]
+  requirement-set-quality:
+    targets: [RequirementSet]
+    produces: [Observation, Finding]
+  requirements-context:
+    targets: [Requirement, RequirementSet, Context]
+    consumes: [Source, SourceFragment, Evidence, Stakeholder, Entity, Constraint, Scenario]
+    produces: [Observation, Finding, Context]
+  requirement-relationship-traceability:
+    targets: [Requirement, RequirementSet, Relationship]
+    consumes: [Source, Evidence, Attribute]
+    produces: [Observation, Finding, Relationship]
+  verification-analysis:
+    targets: [Requirement, RequirementSet]
+    consumes: [Scenario, Constraint, Evidence, Attribute, Artifact]
+    produces: [Observation, Finding]
+  validation-analysis:
+    targets: [RequirementSet]
+    consumes: [Stakeholder, Scenario, Context, Evidence, Attribute, Artifact]
+    produces: [Observation, Finding]
+  requirements-attribute-management:
+    targets: [Requirement, RequirementSet, Attribute]
+    consumes: [Source, Evidence, Context]
+    produces: [Observation, Finding, Attribute]
+  baseline-change-management:
+    targets: [Requirement, RequirementSet, Baseline, Change]
+    consumes: [Attribute, Evidence, Artifact, Relationship]
+    produces: [Observation, Finding, Baseline, Change]
+
+pipeline_roles:
+  source_ingestion: [Source, SourceFragment, Artifact]
+  contextualization: [Context, Stakeholder, Entity, Constraint, Scenario]
+  requirement_representation: [Need, Requirement, RequirementSet, Attribute, Relationship]
+  analytical_execution: [Observation]
+  issue_aggregation: [Finding]
+  policy_decision: [Decision]
+  handoff: [Artifact]
+
+boundary:
+  - Skills do not own Decision creation semantics.
+  - Evidence remains attributable to its source or declared project origin.
+  - Canonical model does not imply that every object or attribute is mandatory for every ticket.
