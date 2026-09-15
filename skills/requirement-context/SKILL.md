@@ -7,76 +7,88 @@ role: requirement_analysis
 
 # Requirement Context
 
-## Responsibility
+## Purpose
+Construire une représentation factuelle du sujet auquel l'exigence s'applique avant d'évaluer sa qualité ou sa suffisance.
 
-Établir ce qui est explicitement identifiable dans l'exigence et son contexte immédiat avant toute conclusion de qualité ou de readiness.
-
-## Trigger
-
-Utiliser lorsqu'un ticket ou une exigence doit être interprété par rapport à son sujet, son niveau, son besoin, ses contraintes, ses conditions ou ses états.
+## When to use
+Utiliser pour toute analyse où le ticket ou l'exigence doit être interprété par rapport à un système, une capacité, un comportement, un besoin, une contrainte, une condition, un état ou un niveau de spécification.
+Ne pas l'utiliser pour inventer un item d'intérêt absent des sources.
 
 ## Inputs
-
 Required: `ticket`, `available_context`
 Optional: `prior_findings`, `prior_decisions`
 
 ## Preconditions
-
 - Le ticket ou l'exigence est disponible.
+- Les sources accessibles sont identifiables.
 
-## Operations
+## Procedure
+1. Extraire les expressions candidates qui portent une obligation, un besoin ou une attente.
+2. Identifier l'item d'intérêt explicitement nommé ou démontré par les sources.
+3. Relier chaque exigence à son sujet, système, sous-système, fonction ou autre objet pertinent.
+4. Identifier séparément, lorsqu'ils existent, le besoin, la contrainte, la condition et l'état.
+5. Déterminer le niveau de spécification seulement lorsqu'il est justifié par le contexte.
+6. Comparer ces éléments aux sources disponibles pour détecter contradictions, absences ou ambiguïtés de contexte.
+7. Marquer chaque élément comme `established`, `partial` ou `not_established`.
+8. Produire un résultat traçable, sans compléter silencieusement les informations manquantes.
 
-- Identifier l'item d'intérêt.
-- Identifier le contexte de l'exigence.
-- Distinguer besoin, contrainte, condition et état lorsqu'applicable.
-- Déterminer le niveau de spécification lorsqu'il est pertinent.
+## Analysis logic
+- Une information trouvée uniquement par supposition reste `not_established`.
+- Une condition n'est pas fusionnée avec une contrainte si les deux sont distinguables.
+- Un nom de composant n'est pas considéré comme un item d'intérêt suffisant sans relation explicite avec l'exigence.
+- Un niveau de spécification n'est conclu que si le contexte permet de le justifier.
+- Toute contradiction entre sources est conservée comme finding plutôt que résolue arbitrairement.
+
+## Decision rules
+- `established`: support direct ou convergent par les sources autorisées.
+- `partial`: information présente mais incomplète ou conditionnelle.
+- `not_established`: aucune preuve suffisante.
+- `contradictory`: deux sources autorisées produisent des interprétations incompatibles.
 
 ## Rules
-
 - `ISO29148-R001`
 - `ISO29148-R002`
 - `ISO29148-R013`
 - `ISO29148-R015`
 
-## Outputs
+## Output
+Produit `requirement_context` contenant :
+- `items_of_interest`
+- `needs`
+- `constraints`
+- `conditions`
+- `states`
+- `requirement_level`
+- `status`
+- `evidence_refs`
 
-- `requirement_context`
-- `requirement_level_observation`
-- `findings`
+Chaque item doit indiquer son statut et ses références d'origine.
 
 ## Findings
-
 - `missing_item_of_interest`
 - `requirement_context_incomplete`
 - `condition_constraint_state_unclear`
 - `requirement_level_unclear`
+- `contradictory_requirement_context`
 
 ## Evidence
-
-Chaque affirmation factuelle doit pointer vers une source ou être marquée comme information non établie.
+Conserver le texte ou artefact source, sa localisation et la relation exacte avec l'élément extrait.
 
 ## Handoff
-
-Fournit le contexte aux Skills d'élicitation, d'expression et de relations. Il ne rend aucune décision finale de readiness.
+Vers `elicitation-gap` pour les éléments non établis ; vers `requirement-expression`, `requirement-relationship-traceability`, `verification-analysis` et `validation-analysis` pour les analyses dépendantes.
 
 ## Exit conditions
-
-- `completed`
-- `completed_with_gaps`
-- `not_applicable`
+- `completed`: contexte suffisamment établi pour la suite.
+- `completed_with_gaps`: contexte exploitable mais incomplet.
+- `not_applicable`: aucune exigence/contextualisation pertinente.
 
 ## Non-goals
-
-- Ne pas inventer un item d'intérêt.
-- Ne pas produire `READY`, `READY WITH INVESTIGATION` ou `NOT READY/BLOCKED`.
-- Ne pas faire une déclaration formelle de conformité.
+Ne pas décider de readiness, ne pas créer de besoin, ne pas réécrire la spécification métier.
 
 ## References
-
-- Norme : `ISO/IEC/IEEE 29148:2018`
-- Contrôles : `rules/sources/iso-iec-ieee-29148-2018/rules.yaml`
-- Sections principalement utilisées : `3.1.19`, `3.1.6`, `3.1.7`, `3.1.30`, `3.1.29`, `3.1.33`
+- `ISO/IEC/IEEE 29148:2018`
+- `ISO29148-R001`, `R002`, `R013`, `R015`
+- `rules/sources/iso-iec-ieee-29148-2018/rules.yaml`
 
 ## Evaluation
-
-Couvrir au minimum : `nominal`, `missing_context`, `not_applicable`, `regression`.
+Tester : contexte nominal, item absent, contrainte ambiguë, sources contradictoires, niveau non établi, régression.

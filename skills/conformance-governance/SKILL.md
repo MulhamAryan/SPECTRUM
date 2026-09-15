@@ -7,66 +7,67 @@ role: governance
 
 # Conformance Governance
 
-## Responsibility
+## Purpose
+Empêcher qu'une sélection de contrôles ou qu'un résultat de workflow soit présenté comme une conformité normative sans périmètre, mode et preuves suffisants.
 
-Vérifier que toute affirmation de conformité possède un périmètre, un mode de conformité et des éléments de preuve explicitement établis.
-
-## Trigger
-
-Utiliser lorsqu'un résultat, une documentation ou une communication affirme une conformité à ISO/IEC/IEEE 29148.
+## When to use
+Activer dès qu'un artefact ou un agent formule explicitement une affirmation de conformité à ISO/IEC/IEEE 29148.
 
 ## Inputs
-
 Required: `conformance_claim`, `assessment_evidence`
-Optional: `implemented_controls`
+Optional: `implemented_controls`, `scope_definition`, `assessment_method`
 
 ## Preconditions
+- Une revendication de conformité est présente ou doit être revue.
 
-- Une affirmation de conformité est présente.
+## Procedure
+1. Capturer la formulation exacte de la revendication.
+2. Identifier son périmètre : produit, processus, artefact, organisation, partie de norme ou autre objet.
+3. Identifier le mode de conformité revendiqué et la méthode d'évaluation.
+4. Vérifier que les contrôles, preuves et résultats cités correspondent au périmètre.
+5. Vérifier si des exclusions, limites ou dépendances sont explicites.
+6. Rechercher les lacunes entre la portée revendiquée et les preuves réellement produites.
+7. Produire un finding lorsque la revendication dépasse le support disponible.
+8. Ne jamais élargir silencieusement le périmètre pour rendre la revendication acceptable.
 
-## Operations
+## Analysis logic
+La présence des contrôles `R001` à `R017` prouve la couverture de contrôles SPECTRUM sélectionnés, pas à elle seule la conformité à la norme. Le Skill contrôle le bien-fondé d'une revendication ; il ne certifie pas lui-même l'organisation ou le produit.
 
-- Identifier le périmètre de l'affirmation.
-- Identifier le mode de conformité revendiqué.
-- Examiner les preuves d'évaluation associées.
+## Decision rules
+- `supported_within_scope`: revendication supportée dans son périmètre explicite.
+- `scope_limited`: support partiel, revendication à restreindre.
+- `evidence_insufficient`: preuves insuffisantes.
+- `unsupported`: affirmation non étayée.
 
 ## Rules
-
 - `ISO29148-R017`
 
-## Outputs
-
-- `conformance_observation`
-- `findings`
+## Output
+`conformance_observation` contient `claim`, `scope`, `mode`, `assessment_method`, `evidence_refs`, `limitations`, `status`.
 
 ## Findings
-
 - `unsupported_conformance_claim`
+- `conformance_scope_exceeds_evidence`
+- `conformance_method_not_established`
 
 ## Evidence
-
-La revendication doit être reliée à son périmètre d'évaluation et aux preuves correspondantes.
+Relier chaque élément de support à la revendication et à son périmètre.
 
 ## Handoff
-
-Valide ou invalide le support d'une revendication de conformité ; il ne transforme pas les contrôles sélectionnés en conformité formelle.
+Transmettre au workflow ou à la couche de gouvernance ; ne pas convertir ce résultat en décision finale de readiness.
 
 ## Exit conditions
-
 - `completed`
 - `completed_with_gaps`
 - `not_applicable`
 
 ## Non-goals
-
-- Ne pas déclarer une conformité formelle par simple présence de contrôles sélectionnés.
+Ne pas déclarer une conformité formelle sur la seule présence de contrôles ; ne pas remplacer une évaluation de conformité officielle.
 
 ## References
-
-- Norme : `ISO/IEC/IEEE 29148:2018`
-- Contrôle : `ISO29148-R017`
-- Source : `rules/sources/iso-iec-ieee-29148-2018/rules.yaml`
+- `ISO/IEC/IEEE 29148:2018`
+- `ISO29148-R017`
+- `rules/sources/iso-iec-ieee-29148-2018/rules.yaml`
 
 ## Evaluation
-
-Couvrir : `nominal`, `evidence_insufficient`, `not_applicable`, `regression`.
+Tester : revendication bornée et étayée, revendication trop large, preuves insuffisantes, méthode absente, non-applicable, régression.
