@@ -1,0 +1,70 @@
+source:
+  id: incose-gtwr-v4-2023
+  authority: official_incose_publication
+skill: requirement-relationship-traceability
+
+cases:
+  - id: traceability-001
+    title: complete_transformation_trace
+    intent: Verify an explicit source-or-parent to requirement relationship with identifiable endpoints and supporting evidence.
+    expected_status: trace_established
+
+  - id: traceability-002
+    title: missing_parent_or_source_trace
+    intent: Report a missing transformation relationship when the applicable source or parent basis is explicitly established.
+    expected_findings: [parent_trace_missing, source_trace_missing]
+
+  - id: traceability-003
+    title: allocation_and_child_relationship
+    intent: Verify an explicit parent-to-child allocation and preserve its direction and evidence.
+    expected_status: trace_established
+    expected_activity_refs: ["6.4.3 Allocation – Flow Down of Requirements", "6.4.4 Defining Child Requirements that Meet the Intent of the Allocated Parents"]
+
+  - id: traceability-004
+    title: dependent_peer_relationship
+    intent: Verify an explicitly represented dependency between peer requirements.
+    expected_status: trace_established
+    expected_activity_refs: ["6.2.2.1 Establishing Traceability Between Dependent Peer Requirements"]
+
+  - id: traceability-005
+    title: interface_relationship
+    intent: Verify a requirement relationship to an identified interface definition or model when such a relationship is applicable.
+    expected_activity_refs: ["6.2.3.6 Interface Requirements Audit", "14.2.8 Managing Interfaces"]
+
+  - id: traceability-006
+    title: orphan_requirement_with_parent_basis
+    intent: Detect an orphan requirement when project evidence establishes that a parent or source relationship applies.
+    expected_findings: [orphan_requirement_observed]
+
+  - id: traceability-007
+    title: incomplete_traceability_artifact
+    intent: Detect incomplete coverage in an existing traceability matrix or register without assuming that every object must appear when no applicability basis exists.
+    expected_status: trace_incomplete
+    expected_findings: [incomplete_traceability_artifact]
+
+  - id: traceability-008
+    title: contradictory_relationship_sources
+    intent: Detect incompatible relationship assertions from authoritative project artifacts.
+    expected_status: trace_contradictory
+    expected_findings: [contradictory_traceability]
+
+  - id: traceability-009
+    title: directionality_error
+    intent: Detect a relationship whose recorded direction conflicts with the applicable source/parent/allocation semantics.
+    expected_findings: [relationship_direction_inconsistent]
+
+  - id: traceability-010
+    title: absent_artifact_without_applicability_basis
+    intent: Do not report missing traceability merely because a matrix or register is absent when no source or project evidence establishes that the relationship applies.
+    expected_status: traceability_context_missing
+
+  - id: traceability-011
+    title: textual_similarity_false_positive
+    intent: Do not infer a traceability relationship from similar wording without explicit endpoints or relationship evidence.
+    expected_status: traceability_context_missing
+
+  - id: traceability-012
+    title: correctness_not_inferred_from_link_presence
+    intent: Preserve the link as evidence but do not infer C8 or C15 correctness solely from the existence of a traceability link.
+    expected_characteristics: [C8, C15]
+    expected_findings: [transformation_evidence_insufficient]
