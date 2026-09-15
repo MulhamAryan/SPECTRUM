@@ -1,0 +1,855 @@
+source:
+  reference: ISO/IEC/IEEE 29148:2018
+  skill_evaluation:
+    contract: evaluation/skills/iso-iec-ieee-29148.yaml
+  rules: rules/sources/iso-iec-ieee-29148-2018/rules.yaml
+
+purpose: >-
+  Cas comportementaux déterministes pour vérifier que chaque Skill transforme
+  ses entrées en observations, findings et evidence conformes à son contrat,
+  sans inventer de contexte ni franchir sa frontière de responsabilité.
+
+execution_principles:
+  - Chaque cas fournit uniquement le contexte déclaré dans ses inputs.
+  - Toute information attendue comme fait doit être soutenue par une evidence.
+  - Une absence de donnée n'est jamais convertie en valeur inventée.
+  - Les statuts attendus sont ceux du Skill testé ; ils ne constituent pas une décision finale de readiness.
+  - Une régression est considérée détectée si un résultat attendu, un finding attendu ou une provenance attendue disparaît.
+
+case_schema:
+  id: stable_case_identifier
+  skill: skill_name
+  class: nominal|negative|edge|regression
+  scenario: scenario_description
+  input: structured_input
+  expected:
+    status: expected_skill_status
+    outputs: expected_output_contract
+    findings: expected_findings
+    evidence: expected_evidence_properties
+    assertions: executable_assertions
+
+cases:
+  - id: requirement-context-001
+    skill: requirement-context
+    class: nominal
+    scenario: Contexte explicite et cohérent pour une exigence fonctionnelle.
+    input:
+      ticket: "Le système doit permettre à l'opérateur de clôturer une session."
+      available_context:
+        - source: "product-spec.md#session-lifecycle"
+          content: "Une session peut être ouverte ou clôturée par un opérateur."
+        - source: "architecture.md#session-service"
+          content: "Session Service gère le cycle de vie des sessions."
+    expected:
+      status: completed
+      outputs:
+        requirement_context:
+          items_of_interest: present
+          needs: present_or_empty
+          constraints: present_or_empty
+          conditions: present_or_empty
+          states: [open, closed]
+          requirement_level: identified_or_not_established
+          status: established
+          evidence_refs: required
+      findings: []
+      evidence:
+        every_extracted_fact_has_reference: true
+      assertions:
+        - "L'item d'intérêt est identifié sans supposition."
+        - "Les états open et closed restent distincts."
+
+  - id: requirement-context-002
+    skill: requirement-context
+    class: negative
+    scenario: L'exigence nomme une capacité mais aucune source ne permet d'établir son objet système.
+    input:
+      ticket: "Améliorer la gestion des sessions."
+      available_context:
+        - source: "ticket.md"
+          content: "Améliorer la gestion des sessions."
+    expected:
+      status: completed_with_gaps
+      outputs:
+        requirement_context:
+          status: not_established_or_partial
+      findings:
+        - missing_item_of_interest
+        - requirement_context_incomplete
+      evidence:
+        absence_is_explicit: true
+      assertions:
+        - "Aucun système ou composant n'est inventé."
+
+  - id: requirement-context-003
+    skill: requirement-context
+    class: edge
+    scenario: Deux sources autorisées décrivent des états incompatibles.
+    input:
+      ticket: "Une session fermée ne peut plus être réouverte."
+      available_context:
+        - source: "domain.md#session"
+          content: "Une session fermée peut être réouverte par un administrateur."
+        - source: "policy.md#session"
+          content: "Une session fermée est définitive."
+    expected:
+      status: completed_with_gaps
+      findings:
+        - contradictory_requirement_context
+      evidence:
+        both_conflicting_sources_preserved: true
+      assertions:
+        - "La contradiction est conservée et non résolue arbitrairement."
+
+  - id: requirement-expression-001
+    skill: requirement-expression
+    class: nominal
+    scenario: Exigence claire, bornée et objectivement vérifiable.
+    input:
+      requirement:
+        ref: REQ-01
+        text: "Le système doit afficher le résultat en moins de 2 secondes dans 95 % des requêtes."
+      requirement_context:
+        status: established
+    expected:
+      status: completed
+      outputs:
+        requirement_expression_observation:
+          status: clear
+          atomic_obligations: required
+          ambiguities: []
+          missing_bounds: []
+          verification_implications: required
+          evidence_refs: required
+      findings: []
+      evidence:
+        original_requirement_preserved: true
+      assertions:
+        - "L'exigence reste une obligation atomique ou est correctement représentée comme telle."
+        - "Aucun seuil métier n'est inventé."
+
+  - id: requirement-expression-002
+    skill: requirement-expression
+    class: negative
+    scenario: Formulation vague avec plusieurs interprétations plausibles.
+    input:
+      requirement:
+        ref: REQ-02
+        text: "L'application doit charger très rapidement."
+    expected:
+      status: completed_with_gaps
+      outputs:
+        requirement_expression_observation:
+          status: unclear_or_underspecified
+          missing_bounds: required
+      findings:
+        - requirement_expression_unclear
+        - requirement_expression_underspecified
+      evidence:
+        original_requirement_preserved: true
+      assertions:
+        - "Le Skill signale l'ambiguïté sans inventer une durée cible."
+
+  - id: requirement-expression-003
+    skill: requirement-expression
+    class: edge
+    scenario: Une seule phrase contient deux obligations distinctes.
+    input:
+      requirement:
+        ref: REQ-03
+        text: "Le système doit enregistrer l'événement et notifier l'administrateur dans les 5 secondes."
+    expected:
+      status: completed
+      outputs:
+        requirement_expression_observation:
+          atomic_obligations:
+            minimum: 2
+      findings: []
+      evidence:
+        original_requirement_preserved: true
+      assertions:
+        - "Les deux obligations sont distinguées avant l'analyse détaillée."
+
+  - id: elicitation-gap-001
+    skill: elicitation-gap
+    class: nominal
+    scenario: Une information essentielle est réellement absente après recherche des sources.
+    input:
+      requirement_context:
+        needs:
+          - name: retry_policy
+            status: not_established
+      available_sources:
+        checked:
+          - "ticket.md"
+          - "product-spec.md"
+          - "architecture.md"
+    expected:
+      status: completed
+      outputs:
+        elicitation_gap:
+          gap_type: requirement_or_policy
+          question_or_need: required
+          why_needed: required
+          source_scope_checked: required
+          status: gap_or_critical_gap
+      findings:
+        - elicitation_gap
+      evidence:
+        consulted_sources_recorded: true
+      assertions:
+        - "Le Skill ne fournit pas lui-même une retry policy."
+
+  - id: elicitation-gap-002
+    skill: elicitation-gap
+    class: negative
+    scenario: L'information absente du ticket est trouvée dans une autre source autorisée.
+    input:
+      requirement_context:
+        needs:
+          - name: timeout
+            status: partial
+      available_sources:
+        checked:
+          - source: "ticket.md"
+            contains: "timeout non précisé"
+          - source: "architecture.md#client-timeout"
+            contains: "timeout=30s"
+    expected:
+      status: completed
+      outputs:
+        elicitation_gap:
+          status: no_gap
+      findings: []
+      evidence:
+        found_source_recorded: true
+      assertions:
+        - "Le Skill ne crée pas un gap alors qu'une source autorisée établit la valeur."
+
+  - id: elicitation-gap-003
+    skill: elicitation-gap
+    class: edge
+    scenario: Deux sources autorisées donnent des réponses incompatibles.
+    input:
+      requirement_context:
+        needs:
+          - name: retention
+            status: contradictory
+      available_sources:
+        checked:
+          - source: "legal.md#retention"
+            contains: "7 years"
+          - source: "policy.md#retention"
+            contains: "5 years"
+    expected:
+      status: completed
+      outputs:
+        elicitation_gap:
+          status: contradiction_gap
+      findings:
+        - contradictory_information_gap
+      evidence:
+        both_sources_preserved: true
+      assertions:
+        - "Aucune des deux durées n'est choisie arbitrairement."
+
+  - id: stakeholder-scenario-context-001
+    skill: stakeholder-scenario-context
+    class: nominal
+    scenario: Acteur et scénario explicitement établis.
+    input:
+      ticket: "L'opérateur clôture une session depuis l'écran de supervision."
+      available_context:
+        - source: "roles.md#operator"
+          content: "Operator can close sessions."
+        - source: "use-cases.md#UC-12"
+          content: "Operator -> select session -> close -> confirmation displayed."
+    expected:
+      status: completed
+      outputs:
+        stakeholder_context:
+          actors: [operator]
+          evidence_refs: required
+        scenario_context:
+          scenario_elements: required
+          applicability: required
+      findings: []
+      evidence:
+        actor_and_scenario_sourced: true
+      assertions:
+        - "Operator est retenu comme partie prenante car son rôle est sourcé."
+
+  - id: stakeholder-scenario-context-002
+    skill: stakeholder-scenario-context
+    class: negative
+    scenario: Un prénom est cité mais aucun rôle n'est établi.
+    input:
+      ticket: "Demander à Sarah de valider la clôture."
+      available_context:
+        - source: "ticket.md"
+          content: "Sarah doit valider la clôture."
+    expected:
+      status: completed_with_gaps
+      findings:
+        - stakeholder_role_not_established
+      evidence:
+        original_reference_preserved: true
+      assertions:
+        - "Sarah n'est pas transformée en rôle de stakeholder déterminé par simple inférence."
+
+  - id: stakeholder-scenario-context-003
+    skill: stakeholder-scenario-context
+    class: edge
+    scenario: Le scénario est nécessaire mais son résultat attendu est absent.
+    input:
+      ticket: "Lorsqu'un paiement échoue, le système doit guider l'utilisateur."
+      available_context:
+        - source: "domain.md#payment-failure"
+          content: "A payment failure occurs."
+        - source: "roles.md"
+          content: "User initiates payment."
+    expected:
+      status: completed_with_gaps
+      findings:
+        - operational_scenario_context_gap
+      evidence:
+        sources_for_actor_and_trigger_recorded: true
+      assertions:
+        - "Le Skill signale le scénario incomplet plutôt que d'inventer le guidage attendu."
+
+  - id: requirement-relationship-traceability-001
+    skill: requirement-relationship-traceability
+    class: nominal
+    scenario: Une exigence dérivée possède une relation parent et une trace descendante établies.
+    input:
+      requirements:
+        - ref: SYS-REQ-10
+          level: system
+        - ref: SW-REQ-10.1
+          level: software
+      available_traceability:
+        - from: SYS-REQ-10
+          to: SW-REQ-10.1
+          relation: derives
+          evidence: "traceability.csv:42"
+    expected:
+      status: completed
+      outputs:
+        relationship_records:
+          - from_ref: SYS-REQ-10
+            to_ref: SW-REQ-10.1
+            relation: derives
+            status: trace_established
+      findings: []
+      evidence:
+        source_and_target_referenced: true
+
+  - id: requirement-relationship-traceability-002
+    skill: requirement-relationship-traceability
+    class: negative
+    scenario: Une exigence est présentée comme dérivée mais aucune relation parent n'est établie.
+    input:
+      requirements:
+        - ref: SW-REQ-11.2
+          level: software
+      available_traceability: []
+    expected:
+      status: completed_with_gaps
+      findings:
+        - derived_requirement_relationship_missing
+      evidence:
+        requirement_ref_preserved: true
+      assertions:
+        - "Aucun parent artificiel n'est créé."
+
+  - id: requirement-relationship-traceability-003
+    skill: requirement-relationship-traceability
+    class: edge
+    scenario: Une matrice existe mais ne couvre qu'une partie du périmètre.
+    input:
+      requirements:
+        - ref: SYS-REQ-20
+        - ref: SW-REQ-20.1
+        - ref: SW-REQ-20.2
+      available_traceability:
+        matrix:
+          rows:
+            - from: SYS-REQ-20
+              to: SW-REQ-20.1
+              relation: derives
+    expected:
+      status: completed_with_gaps
+      findings:
+        - incomplete_traceability_artifact
+      evidence:
+        matrix_reference: required
+      assertions:
+        - "L'absence de lien pour SW-REQ-20.2 est signalée sans supposer que toute absence est un défaut universel."
+
+  - id: verification-analysis-001
+    skill: verification-analysis
+    class: nominal
+    scenario: L'exigence possède un critère observable et une preuve de test liée.
+    input:
+      requirements:
+        - ref: REQ-30
+          text: "Le traitement doit se terminer en moins de 2 secondes."
+      available_evidence:
+        - type: test-result
+          ref: "test-run-88"
+          verifies: REQ-30
+          result: "1.4s"
+    expected:
+      status: completed
+      outputs:
+        verification_observations:
+          status: verifiable
+          coverage: complete
+          evidence_quality: sufficient
+      findings: []
+      evidence:
+        linked_test_result_required: true
+
+  - id: verification-analysis-002
+    skill: verification-analysis
+    class: negative
+    scenario: Une phrase affirme qu'un test a été fait mais aucun artefact de preuve n'est disponible.
+    input:
+      requirements:
+        - ref: REQ-31
+          text: "Le système doit être disponible 99.9% du temps."
+      available_evidence:
+        - type: assertion
+          ref: "comment-17"
+          content: "Testé avec succès."
+    expected:
+      status: completed_with_gaps
+      outputs:
+        verification_observations:
+          status: verification_basis_unavailable
+      findings:
+        - verification_evidence_insufficient
+      assertions:
+        - "Une simple affirmation n'est pas traitée comme preuve objective."
+
+  - id: verification-analysis-003
+    skill: verification-analysis
+    class: edge
+    scenario: Une preuve existe mais cible une autre exigence.
+    input:
+      requirements:
+        - ref: REQ-32
+          text: "Le délai de réponse doit être inférieur à 3 secondes."
+      available_evidence:
+        - type: test-result
+          ref: "test-run-90"
+          verifies: REQ-31
+          result: "1.5s"
+    expected:
+      status: completed_with_gaps
+      findings:
+        - verification_evidence_mismatch
+      evidence:
+        mismatch_preserved: true
+      assertions:
+        - "La preuve n'est pas réassignée à REQ-32 par similarité de texte."
+
+  - id: validation-analysis-001
+    skill: validation-analysis
+    class: nominal
+    scenario: L'exigence est reliée au système et à un usage métier établi.
+    input:
+      requirements:
+        - ref: REQ-40
+          text: "L'opérateur doit pouvoir annuler une commande avant expédition."
+      system_context:
+        source: "system.md#orders"
+        content: "Order Service owns cancellation."
+      usage_context:
+        source: "process.md#pre-shipment"
+        content: "Operators can cancel before shipment."
+      stakeholder_context:
+        source: "roles.md#operator"
+        content: "Operator manages orders."
+    expected:
+      status: completed
+      outputs:
+        validation_observations:
+          status: validation_supported
+      findings: []
+      evidence:
+        system_usage_stakeholder_links_required: true
+
+  - id: validation-analysis-002
+    skill: validation-analysis
+    class: negative
+    scenario: Le système est connu mais l'usage prévu n'est pas établi.
+    input:
+      requirements:
+        - ref: REQ-41
+          text: "Le système doit prioriser les demandes."
+      system_context:
+        source: "architecture.md#requests"
+        content: "Request service handles prioritization."
+      usage_context: null
+    expected:
+      status: completed_with_gaps_or_blocked
+      findings:
+        - validation_basis_unavailable
+        - validation_context_incomplete
+      assertions:
+        - "La priorité métier n'est pas inventée."
+
+  - id: validation-analysis-003
+    skill: validation-analysis
+    class: edge
+    scenario: L'exigence contredit la procédure métier établie.
+    input:
+      requirements:
+        - ref: REQ-42
+          text: "Toute commande expédiée peut être annulée par l'opérateur."
+      system_context:
+        source: "system.md#orders"
+        content: "Cancellation is disabled after shipment."
+      usage_context:
+        source: "process.md#shipment"
+        content: "After shipment, cancellation is prohibited."
+    expected:
+      status: completed_with_gaps
+      findings:
+        - validation_contradiction
+      evidence:
+        conflicting_sources_preserved: true
+
+  - id: requirements-engineering-context-001
+    skill: requirements-engineering-context
+    class: nominal
+    scenario: Ticket simple où seules analyse, documentation et vérification sont pertinentes.
+    input:
+      ticket: "Corriger la valeur affichée d'un champ existant."
+      available_context:
+        - source: "ticket.md"
+          content: "Field value is incorrect."
+        - source: "test.md"
+          content: "Existing regression test covers the field."
+    expected:
+      status: completed
+      outputs:
+        re_context_assessment:
+          relevant_activities: required
+          coverage_by_activity: required
+      findings: []
+      assertions:
+        - "Les activités non pertinentes ne sont pas artificiellement exigées."
+
+  - id: requirements-engineering-context-002
+    skill: requirements-engineering-context
+    class: negative
+    scenario: Modification d'une exigence existante sans historique ni contexte de gestion.
+    input:
+      ticket: "Modifier REQ-100 pour accepter trois tentatives."
+      available_context:
+        - source: "requirements.md#REQ-100"
+          content: "Maximum one attempt."
+      requirement_history: []
+    expected:
+      status: completed_with_gaps
+      findings:
+        - requirements_management_context_gap
+      evidence:
+        relevant_lifecycle_basis_required: true
+
+  - id: requirements-engineering-context-003
+    skill: requirements-engineering-context
+    class: edge
+    scenario: Une activité de validation est pertinente mais non démontrée.
+    input:
+      ticket: "Introduire une nouvelle règle de calcul pour les remboursements."
+      available_context:
+        - source: "ticket.md"
+          content: "Refund formula changes."
+        - source: "tests.md"
+          content: "Unit tests exist."
+      workflow_state:
+        validation_evidence: absent
+    expected:
+      status: completed_with_gaps
+      findings:
+        - requirements_engineering_coverage_gap
+      assertions:
+        - "La couverture est distinguée de la simple présence de tests unitaires."
+
+  - id: multi-source-context-001
+    skill: multi-source-context
+    class: nominal
+    scenario: Le ticket est incomplet mais le repository contient le contexte exact.
+    input:
+      ticket: "Ajouter le timeout demandé pour le connecteur ABC."
+      authorized_sources:
+        - repository
+        - documentation
+      repository:
+        - source: "src/connectors/ABC/config.ts"
+          content: "timeoutMs = 30000"
+      documentation:
+        - source: "docs/abc.md#timeout"
+          content: "ABC connector timeout is 30 seconds."
+    expected:
+      status: completed
+      outputs:
+        context_package:
+          facts: required
+          unknowns: required
+          contradictions: []
+          source_coverage: required
+          provenance_records: required
+      findings: []
+      assertions:
+        - "Le contexte retrouvé est attribué à ses sources."
+
+  - id: multi-source-context-002
+    skill: multi-source-context
+    class: negative
+    scenario: Les sources autorisées ne contiennent pas l'information recherchée.
+    input:
+      ticket: "Ajouter le seuil légal applicable."
+      authorized_sources:
+        - repository
+        - documentation
+      repository: []
+      documentation: []
+    expected:
+      status: completed_with_gaps_or_blocked
+      outputs:
+        context_package:
+          unknowns: required
+          source_coverage: all_relevant_sources_checked
+      findings:
+        - context_not_sufficiently_established
+      assertions:
+        - "La conclusion de manque intervient après couverture des sources autorisées pertinentes."
+
+  - id: multi-source-context-003
+    skill: multi-source-context
+    class: edge
+    scenario: Deux sources autorisées contredisent la configuration du ticket.
+    input:
+      ticket: "Le timeout doit être de 30 secondes."
+      authorized_sources:
+        - repository
+        - documentation
+      repository:
+        - source: "config.ts"
+          content: "timeoutMs = 30000"
+      documentation:
+        - source: "docs/config.md"
+          content: "timeout is 60 seconds"
+    expected:
+      status: completed_with_gaps
+      outputs:
+        context_package:
+          contradictions: required
+      findings:
+        - contradictory_source_context
+      assertions:
+        - "Les deux sources sont conservées."
+
+  - id: conformance-governance-001
+    skill: conformance-governance
+    class: nominal
+    scenario: Revendication limitée à un périmètre explicite et soutenue par des preuves.
+    input:
+      conformance_claim: "Les contrôles sélectionnés couvrent les pratiques analysées pour les tickets de type feature."
+      assessment_evidence:
+        - source: "evaluation/skills/iso-iec-ieee-29148-cases.yaml"
+          content: "Behavioral cases executed for feature scope."
+      implemented_controls: [ISO29148-R001, ISO29148-R003, ISO29148-R009]
+      scope_definition: "feature tickets"
+      assessment_method: "behavioral evaluation"
+    expected:
+      status: completed
+      outputs:
+        conformance_observation:
+          status: supported_within_scope
+      findings: []
+      evidence:
+        claim_scope_and_method_linked: true
+
+  - id: conformance-governance-002
+    skill: conformance-governance
+    class: negative
+    scenario: L'auteur affirme une conformité générale à la norme avec seulement quelques contrôles.
+    input:
+      conformance_claim: "SPECTRUM est conforme à ISO/IEC/IEEE 29148:2018."
+      assessment_evidence:
+        - source: "rules.yaml"
+          content: "17 derived controls"
+      implemented_controls: [ISO29148-R001, ISO29148-R002]
+      scope_definition: "all of SPECTRUM"
+      assessment_method: null
+    expected:
+      status: completed_with_gaps
+      findings:
+        - unsupported_conformance_claim
+        - conformance_scope_exceeds_evidence
+        - conformance_method_not_established
+      assertions:
+        - "La présence de contrôles dérivés n'est pas présentée comme une conformité formelle."
+
+  - id: conformance-governance-003
+    skill: conformance-governance
+    class: edge
+    scenario: La portée annoncée est plus large que le périmètre réellement évalué.
+    input:
+      conformance_claim: "Conformité pour tous les processus RE."
+      assessment_evidence:
+        - source: "case-set"
+          content: "Only ticket readiness skills evaluated"
+      implemented_controls: [ISO29148-R001, ISO29148-R017]
+      scope_definition: "ticket readiness only"
+      assessment_method: "behavioral cases"
+    expected:
+      status: completed_with_gaps
+      findings:
+        - conformance_scope_exceeds_evidence
+      assertions:
+        - "Le Skill demande une restriction de portée au lieu d'élargir l'evidence."
+
+  - id: verification-analysis-004
+    skill: verification-analysis
+    class: regression
+    scenario: Une nouvelle version de preuve n'est pas liée à la même exigence que dans le baseline.
+    input:
+      requirements:
+        - ref: REQ-50
+          text: "Le taux d'erreur doit être inférieur à 1%."
+      available_evidence:
+        - type: test-result
+          ref: "run-new"
+          verifies: REQ-51
+          result: "0.5%"
+      baseline_expected:
+        evidence_ref: "run-old"
+        verifies: REQ-50
+    expected:
+      status: completed_with_gaps
+      findings:
+        - verification_evidence_mismatch
+      assertions:
+        - "Le changement de cible est détecté comme régression de la chaîne de preuve."
+
+  - id: iso29148-readiness-001
+    skill: iso29148-readiness
+    class: nominal
+    scenario: Feature ticket bien contextualisé avec exigences vérifiables.
+    input:
+      ticket:
+        type: feature
+        title: "Ajouter un délai de réponse maximal pour ABC"
+        description: "Le délai doit être inférieur à 2 secondes dans 95% des cas."
+      available_context:
+        repository: available
+        documentation: available
+        tests: available
+      authorized_sources: [repository, documentation, tests]
+      complexity: medium
+    expected:
+      status: completed
+      outputs:
+        executed_skills:
+          includes:
+            - multi-source-context
+            - requirement-context
+            - requirement-expression
+            - verification-analysis
+        decision_inputs:
+          required_fields:
+            - findings
+            - evidence
+            - unresolved_gaps
+            - scope_and_limitations
+      findings: []
+      assertions:
+        - "Le workflow sélectionne les Skills pertinents sans exiger toutes les branches."
+        - "La décision finale READY/NOT READY n'est pas produite par le workflow."
+
+  - id: iso29148-readiness-002
+    skill: iso29148-readiness
+    class: negative
+    scenario: Ticket incomplet avec sources externes indisponibles.
+    input:
+      ticket:
+        type: feature
+        title: "Modifier la politique de retry"
+        description: "Appliquer la nouvelle politique."
+      available_context: {}
+      authorized_sources: [repository, documentation]
+      source_availability:
+        repository: inaccessible
+        documentation: inaccessible
+    expected:
+      status: completed_with_gaps
+      outputs:
+        executed_skills:
+          includes: [multi-source-context, requirement-context, elicitation-gap]
+        skipped_skills_with_reason: required
+        decision_inputs:
+          unresolved_gaps: required
+          scope_and_limitations: required
+      findings:
+        - context_not_sufficiently_established
+        - elicitation_gap
+      assertions:
+        - "L'inaccessibilité des sources réduit explicitement le périmètre."
+        - "Le workflow ne convertit pas l'absence d'accès en absence factuelle du contexte."
+
+  - id: iso29148-readiness-003
+    skill: iso29148-readiness
+    class: edge
+    scenario: Ticket contenant une revendication de conformité hors du périmètre courant.
+    input:
+      ticket:
+        type: governance
+        title: "Déclarer la conformité ISO"
+        description: "Le produit est conforme à ISO/IEC/IEEE 29148:2018."
+      available_context:
+        rules: available
+        evaluation: partial
+      authorized_sources: [repository, evaluation]
+      complexity: high
+    expected:
+      status: completed_with_gaps
+      outputs:
+        executed_skills:
+          includes: [conformance-governance]
+        decision_inputs:
+          findings: required
+          evidence: required
+      findings:
+        - unsupported_conformance_claim
+      assertions:
+        - "Le workflow déclenche la gouvernance de conformité uniquement parce qu'un claim est présent."
+        - "La frontière entre observation et décision finale est préservée."
+
+  - id: iso29148-readiness-004
+    skill: iso29148-readiness
+    class: regression
+    scenario: Un finding et son evidence provenant d'un Skill disparaissent de l'agrégation.
+    input:
+      prior_run:
+        aggregate_findings:
+          - requirement_expression_underspecified
+        evidence_package:
+          - "ticket.md#REQ-60"
+      current_run:
+        aggregate_findings: []
+        evidence_package: []
+      changed_skill: requirement-expression
+    expected:
+      status: completed_with_gaps
+      findings:
+        - skill_output_regression
+      assertions:
+        - "La régression de propagation est détectée."
+        - "Une optimisation du workflow ne peut pas supprimer silencieusement un finding ou une evidence existante."
