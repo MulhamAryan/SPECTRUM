@@ -1,0 +1,66 @@
+skill: verification-analysis
+source_basis: incose-gtwr-v4-2023
+
+contract:
+  input_required:
+    - requirement_or_need_or_set
+    - verification_evidence
+  input_optional:
+    - verification_method
+    - verification_criteria
+    - acceptance_or_success_criteria
+    - test_or_analysis_procedure
+    - test_results
+    - inspection_records
+    - demonstration_records
+    - measurement_data
+    - simulation_or_analysis_results
+    - requirement_context
+    - source_or_parent_reference
+    - traceability_evidence
+    - baseline_or_version_reference
+    - prior_findings
+    - architecture_model
+    - interface_definitions
+    - risk_constraints
+    - configuration_data
+    - tool_outputs
+  output_type: verification_observation
+  status_values:
+    - verification_basis_established
+    - verification_basis_partial
+    - verification_basis_missing
+    - verification_evidence_mismatch
+    - verification_context_missing
+    - not_applicable
+  characteristic_scope:
+    individual: [C7]
+    set: [C14]
+  source_activity_scope:
+    - "3.2.1.7 System Verification and System Validation"
+    - "5.1.2 Perform Needs Verification"
+    - "6.2.5 Plan for System Verification"
+    - "7.1.2 Perform Design Input Requirements Verification"
+    - "8.4 Design Verification"
+    - "14.2.9 Managing System Verification and System Validation"
+  evidence_requirements:
+    - preserve_target_expression_or_set
+    - identify_verification_target
+    - preserve_verification_basis
+    - preserve_objective_criterion_when_available
+    - link_evidence_to_target
+    - preserve_baseline_or_configuration_when_supplied
+    - cite_official_characteristic_or_activity_reference
+  prohibitions:
+    - invent_test_method
+    - invent_threshold
+    - invent_acceptance_criterion
+    - invent_verification_result
+    - treat_test_plan_as_test_result
+    - infer_success_from_wording_only
+    - infer_failure_from_missing_artifact_alone
+    - merge_C7_and_C14
+    - create_new_INCOSE_verification_rule
+    - create_new_INCOSE_characteristic
+    - claim_formal_INCOSE_certification
+    - replace_validation_analysis
