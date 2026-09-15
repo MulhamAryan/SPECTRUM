@@ -18,7 +18,7 @@ source:
 phase:
   number: 2
   name: structured_knowledge_extraction
-  status: in_progress
+  status: completed
   objective: >-
     Maintain a source-faithful, auditable index of the structured INCOSE GtWR
     knowledge without reproducing the copyrighted full Guide.
@@ -43,17 +43,17 @@ integrity_requirements:
   - Every extracted element must retain source identity and location when verified.
   - The published Rule-to-Characteristic matrix must not be inferred from rule names.
   - The published NRM Concepts and Activities-to-Characteristic matrix must not be inferred.
-  - Attribute names may be inventoried from the GtWR Summary Sheet; detailed attribute semantics require the official NRM.
+  - Attribute names are inventoried from the GtWR Summary Sheet; detailed attribute semantics belong to the NRM and are not silently reconstructed here.
   - No AI-generated summary is accepted as source evidence.
 
 coverage:
-  definitions: structured_with_source_locations
+  definitions: complete_with_source_locations
   characteristics: C1-C15_structured
   rules: R1-R42_structured
   attributes: A1-A49_inventory_structured
   rules_to_characteristics_matrix: transcribed
   nrm_concepts_activities_to_characteristics_matrix: transcribed
-  attributes_to_characteristics_matrix: pending_authorized_source_extraction
+  attributes_to_characteristics_matrix: transcribed
 
 known_source_discrepancy:
   rule: R14
@@ -66,10 +66,25 @@ known_source_discrepancy:
     GtWR rule definition as the canonical rule identity; do not silently replace
     the matrix label.
 
-next_phase_2_tasks:
-  - verify_attribute_to_characteristic_relationships_from_authorized_source
-  - compare_all_extracted_elements_against_the_official_summary_sheet
-  - final_phase_2_integrity_check
+phase_2_exit_criteria:
+  - official_source_identity_preserved
+  - definitions_structured_and_source_located
+  - C1_C15_structured
+  - R1_R42_structured
+  - A1_A49_inventory_structured
+  - rules_to_characteristics_cells_transcribed
+  - nrm_concepts_activities_to_characteristics_cells_transcribed
+  - attributes_to_characteristics_cells_transcribed
+  - official_source_discrepancies_explicitly_preserved
+  - no_spectrum_behavior_mixed_into_source_knowledge
+
+out_of_scope_requires_nrm:
+  - detailed_semantic_definitions_of_A1_A49
+  - NRM_Section_15_attribute_guidance
+  note: >-
+    The GtWR Summary Sheet explicitly directs readers to the NRM for detailed
+    attribute descriptions. Such content belongs in a separate NRM knowledge
+    baseline rather than being fabricated or inferred in the GtWR source set.
 
 copyright:
   full_guide: protected
@@ -81,3 +96,8 @@ copyright:
 source_reference:
   official_summary_sheet: https://www.incose.org/docs/default-source/working-groups/requirements-wg/guidetowritingrequirements/incose_rwg_gtwr_v4_summary_sheet.pdf
   official_gtwr_v4: https://www.incose.org/docs/default-source/working-groups/requirements-wg/gtwr/incose_rwg_gtwr_v4_040423_final_drafts.pdf
+
+next_phase:
+  number: 3
+  name: incose_controls_and_skills
+  prerequisite: phase_2_exit_criteria_passed
