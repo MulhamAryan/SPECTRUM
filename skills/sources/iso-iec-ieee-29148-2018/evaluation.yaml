@@ -2,9 +2,10 @@ source:
   id: iso-iec-ieee-29148-2018
   step: "2.5"
   skills: skills/sources/iso-iec-ieee-29148-2018/skills.yaml
+  human_catalog: skills/SKILLS.md
   rules: rules/sources/iso-iec-ieee-29148-2018/rules.yaml
 
-evaluation:
+ evaluation:
   purpose: >-
     Vérifier que chaque capacité de Skill dérivée des contrôles ISO conserve une
     responsabilité cohérente, une liaison explicite aux règles, des résultats
@@ -65,6 +66,8 @@ evaluation:
     - verify_conditional_skill_activation
     - verify_no_responsibility_duplication
     - verify_decision_boundary
+    - verify_all_skill_references_resolve
+    - verify_all_workflow_references_resolve
 
   completeness:
     required_rule_refs:
@@ -72,6 +75,19 @@ evaluation:
       check: >-
         Chaque contrôle ISO29148-R001 à ISO29148-R017 doit apparaître au moins une
         fois dans control_to_skill et correspondre à un Skill défini.
+    rule_reference_integrity:
+      check: >-
+        Chaque rule_ref présent dans skills.yaml doit correspondre à un contrôle
+        réellement défini dans rules.yaml.
+    skill_reference_integrity:
+      check: >-
+        Chaque Skill cité par une dependency, relation ou invocation de Workflow
+        doit exister dans le catalogue canonique.
+    human_catalog_consistency:
+      check: >-
+        Les identifiants, types et regroupements de contrôles affichés dans
+        skills/SKILLS.md doivent correspondre au catalogue canonique machine-readable ;
+        SKILLS.md ne doit pas introduire de second mapping contradictoire.
     exclusions:
       check: >-
         Les exclusions ISO29148-X001 à X003 ne doivent pas être transformées en Skills
@@ -81,8 +97,8 @@ evaluation:
         Les Skills référencent les règles existantes et n'en réécrivent pas la définition.
     architecture_integrity:
       check: >-
-        Les types, rôles, relations et workflow sont cohérents avec les responsabilités
-        déclarées dans le catalogue.
+        Les types, rôles, relations, dépendances et workflow sont cohérents avec les
+        responsabilités déclarées dans le catalogue.
     readiness_boundary:
       check: >-
         Aucun Skill de cette famille ne décide seul READY, READY WITH INVESTIGATION ou
@@ -95,10 +111,14 @@ evaluation:
   definition_of_done:
     - all_17_controls_mapped
     - every_skill_has_rule_refs
+    - every_rule_ref_resolves
+    - every_skill_reference_resolves
+    - every_workflow_reference_resolves
     - every_skill_has_bounded_responsibility
     - every_skill_has_inputs_and_preconditions
     - every_skill_has_outputs_and_findings
     - every_skill_has_evidence_requirements
+    - human_catalog_matches_canonical_catalog
     - relations_are_explicit
     - workflow_is_explicit
     - decision_boundary_is_preserved
