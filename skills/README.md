@@ -8,7 +8,7 @@ Cette section définit le modèle de conception des Skills SPECTRUM avant leur i
 
 Un Skill SPECTRUM est une capacité explicite, composable et évaluable qui transforme un contexte d'entrée en résultats structurés, traçables et vérifiables.
 
-Un Skill n'est pas un Agent, n'est pas un Workflow et n'est pas une règle. Il utilise des règles et du contexte ; il produit des résultats qu'un autre Skill, un Workflow ou le Decision Engine peut consommer.
+Un Skill n'est pas un Agent et n'est pas une règle. Un Workflow est un type de Skill ; il se distingue d'un component ou d'un interactive par sa responsabilité d'orchestration.
 
 ### Chaîne de conception
 
@@ -88,7 +88,7 @@ Workflow
 
 ### Principe de chargement
 
-Le métadonné court du Skill doit permettre son routage sans charger toute son instruction. Le contenu détaillé, les références et les exemples sont chargés à l'exécution selon le besoin et le contexte.
+Les métadonnées courtes du Skill doivent permettre son routage sans charger toute son instruction. Le contenu détaillé, les références et les exemples sont chargés à l'exécution selon le besoin et le contexte.
 
 Le Skill doit donc séparer :
 
@@ -144,7 +144,7 @@ Les éléments de `knowledge/` fournissent le vocabulaire, les concepts, les niv
 
 ### Relation avec les autres couches
 
-- `workflows/` orchestre les Skills.
+- `workflows/` orchestre les Skills lorsque le Workflow est porté par une couche distincte.
 - `agents/` fournit le mécanisme d'exécution.
 - `evidence/` porte les éléments probants.
 - `decisions/` porte les décisions et leurs justifications.
