@@ -1,0 +1,54 @@
+skill: requirement-relationship-traceability
+source_basis: incose-gtwr-v4-2023
+
+contract:
+  input_required:
+    - requirements_or_needs
+    - relationship_evidence
+  input_optional:
+    - source_or_parent_set
+    - allocation_data
+    - dependent_peer_requirements
+    - interface_definitions
+    - traceability_matrix_or_register
+    - attributes
+    - architecture_model
+    - prior_findings
+    - context_evidence
+  output_type: relationship_traceability_observation
+  status_values:
+    - trace_established
+    - trace_missing
+    - trace_incomplete
+    - trace_contradictory
+    - traceability_context_missing
+    - not_applicable
+  characteristic_scope: [C1, C2, C4, C7, C8, C10, C11, C14, C15]
+  attribute_scope: [A2, A3, A32, A33]
+  source_activity_scope:
+    - "3.2.2.4 Identity and Manage Interdependencies"
+    - "6.2.2 Establish Traceability"
+    - "6.2.2.1 Establishing Traceability Between Dependent Peer Requirements"
+    - "6.2.3.6 Interface Requirements Audit"
+    - "6.4.3 Allocation – Flow Down of Requirements"
+    - "6.4.4 Defining Child Requirements that Meet the Intent of the Allocated Parents"
+    - "6.4.7 Use of Traceability and Allocation to Manage Requirements"
+    - "14.2.7 Combine Allocation and Traceability to Manage Requirements"
+    - "14.2.8 Managing Interfaces"
+  evidence_requirements:
+    - preserve_object_identifiers
+    - preserve_relationship_type
+    - preserve_relationship_direction
+    - cite_project_evidence_for_applicability
+    - cite_source_parent_peer_or_interface_evidence
+    - cite_official_activity_or_characteristic_reference
+  prohibitions:
+    - infer_traceability_from_textual_similarity
+    - invent_source_or_parent
+    - invent_child_or_peer_relationship
+    - infer_correctness_from_link_presence
+    - make_every_traceability_matrix_universally_mandatory
+    - create_new_INCOSE_traceability_rule
+    - create_new_INCOSE_characteristic
+    - claim_formal_INCOSE_certification
+    - silently_resolve_conflicting_relationship_sources
