@@ -11,28 +11,89 @@ phase:
 
 matrices:
   rules_to_characteristics:
-    source_location: "page 4"
-    status: identified_pending_cell_transcription
+    source_location: "Summary Sheet page 4; independently checked against official GtWR Appendix E"
+    status: transcribed
     rows: 42
-    columns:
-      individual: [C1, C2, C3, C4, C5, C6, C7, C8, C9]
-      sets: [C10, C11, C12, C13, C14, C15]
-    rule_ids: [R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, R26, R27, R28, R29, R30, R31, R32, R33, R34, R35, R36, R37, R38, R39, R40, R41, R42]
-    control: "Transcribe X cells directly from the official table; never infer cells from names or quality-focus groups."
+    columns: [C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14, C15]
+    x_cells:
+      R1: [C3, C4, C7, C8, C9]
+      R2: [C2, C3, C4, C7]
+      R3: [C2, C3, C7, C10, C14]
+      R4: [C3, C7, C11, C13, C14, C15]
+      R5: [C3, C7]
+      R6: [C3, C4, C7, C8]
+      R7: [C3, C4, C7]
+      R8: [C3, C7]
+      R9: [C3, C4, C5, C7]
+      R10: [C3, C7]
+      R11: [C3, C4, C7, C8]
+      R12: [C3, C7, C8, C9]
+      R13: [C3, C7]
+      R14: [C3, C8]
+      R15: [C3, C7]
+      R16: [C3, C7, C8]
+      R17: [C3, C7]
+      R18: [C3, C5, C7, C9, C13]
+      R19: [C3, C5]
+      R20: [C1, C5]
+      R21: [C5]
+      R22: [C3, C5]
+      R23: [C3, C4, C5]
+      R24: [C3, C4, C7]
+      R25: [C4]
+      R26: [C6, C7, C8, C12]
+      R27: [C4, C7, C8]
+      R28: [C3, C7]
+      R29: [C10, C11]
+      R30: [C1, C9, C11]
+      R31: [C2]
+      R32: [C3, C7, C8]
+      R33: [C3, C4, C6, C7, C8, C11]
+      R34: [C3, C4, C7, C12]
+      R35: [C3, C4, C7]
+      R36: [C3, C8, C9, C11, C13, C14, C15]
+      R37: [C3, C9, C11, C13, C14, C15]
+      R38: [C9, C11, C13, C14, C15]
+      R39: [C4, C5, C8, C11, C13, C14, C15]
+      R40: [C3, C4, C8, C11]
+      R41: [C4, C8, C9, C10, C11, C13, C15]
+      R42: [C9, C10, C12, C13, C14, C15]
+    source_control: >-
+      Cell membership is transcribed from the published cross-reference table;
+      no cell is inferred from a rule name or quality-focus grouping.
+    verification_sources:
+      - "INCOSE GtWR v4, Appendix E, Rules to Characteristics Cross Reference Matrix"
+      - "INCOSE GtWR v4 Summary Sheet, page 4"
 
   nrm_concepts_activities_to_characteristics:
-    source_locations: "pages 5-6"
+    source_locations: "Summary Sheet pages 5-6"
     status: identified_pending_cell_transcription
-    columns:
-      individual: [C1, C2, C3, C4, C5, C6, C7, C8, C9]
-      sets: [C10, C11, C12, C13, C14, C15]
-    source_sections: ["3 Information-Based Needs and Requirement Development and Management", "4 Lifecycle Concepts and Needs Definition", "5 Needs Verification and Needs Validation", "6 Design Input Requirements Definition", "7 Design Input Requirements Verification & Validation", "8 Design Verification and Design Validation", "14 Needs, Requirements, Verification, & Validation Management"]
+    columns: [C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14, C15]
+    source_sections:
+      - "3 Information-Based Needs and Requirement Development and Management"
+      - "4 Lifecycle Concepts and Needs Definition"
+      - "5 Needs Verification and Needs Validation"
+      - "6 Design Input Requirements Definition"
+      - "7 Design Input Requirements Verification & Validation"
+      - "8 Design Verification and Design Validation"
+      - "14 Needs, Requirements, Verification, & Validation Management"
     control: "Transcribe X cells directly from the official tables; preserve the section/activity identifiers exactly."
 
   attributes_to_characteristics:
     source: gtwr-v4-full-and-summary
     status: identified_pending_authorized_detailed_extraction
     note: "The Summary Sheet identifies the attributes and states they are defined in the NRM. Detailed attribute-to-characteristic semantics are not reconstructed without the authorized official source."
+
+source_discrepancies:
+  - id: R14-label
+    subject: R14
+    rule_identity_in_detailed_GtWR: "Correct Punctuation"
+    summary_sheet_page_3_label: "Correct Punctuation"
+    summary_sheet_page_4_matrix_label: "Correct Condition"
+    handling: >-
+      Preserve the official-source inconsistency. The detailed rule definition
+      and page 3 identify R14 as Correct Punctuation. The page 4 matrix label is
+      retained as a source discrepancy rather than silently normalized.
 
 verification_policy:
   - Verify every matrix cell against the official PDF image/table.
@@ -43,3 +104,4 @@ verification_policy:
 
 official_reference:
   summary_sheet: https://www.incose.org/docs/default-source/working-groups/requirements-wg/guidetowritingrequirements/incose_rwg_gtwr_v4_summary_sheet.pdf
+  gtwr_v4: https://www.incose.org/docs/default-source/working-groups/requirements-wg/gtwr/incose_rwg_gtwr_v4_040423_final_drafts.pdf
