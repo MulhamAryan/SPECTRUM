@@ -1,0 +1,112 @@
+source:
+  id: iso-iec-ieee-29148-2018
+  title: ISO/IEC/IEEE 29148:2018
+  status: normative_reference
+  provenance: official_iso_source
+  edition: 2018
+  note: >-
+    Structured SPECTRUM knowledge derived only from the publicly visible ISO
+    Online Browsing Platform structure and terminology. This does not
+    reproduce the copyrighted standard.
+
+knowledge_scope:
+  requirements_engineering:
+    role: foundational_concept
+    provenance: iso_iec_ieee_29148_2018
+    applies_to_spectrum: true
+    description: >-
+      Requirements engineering is treated as the foundational discipline for
+      discovering, eliciting, developing, analysing, verifying, validating,
+      communicating, documenting and managing requirements.
+  requirement:
+    role: core_concept
+    provenance: iso_iec_ieee_29148_2018
+    applies_to_spectrum: true
+    description: >-
+      A requirement is represented as a statement expressing a need together
+      with applicable constraints or conditions.
+  requirements_levels:
+    role: conceptual_structure
+    provenance: iso_iec_ieee_29148_2018
+    applies_to_spectrum: true
+    description: >-
+      Requirements can exist at different levels; SPECTRUM therefore keeps
+      requirement identity and context explicit.
+  requirements_fundamentals:
+    role: conceptual_group
+    provenance: iso_iec_ieee_29148_2018
+    applies_to_spectrum: true
+    themes:
+      - requirement_concept
+      - requirement_characteristics
+      - requirement_levels
+      - relationships_between_requirements
+  practical_considerations:
+    role: engineering_context
+    provenance: iso_iec_ieee_29148_2018
+    applies_to_spectrum: true
+  requirement_information_items:
+    role: information_model_reference
+    provenance: iso_iec_ieee_29148_2018
+    applies_to_spectrum: true
+
+processes:
+  requirement_processes:
+    provenance: iso_iec_ieee_29148_2018
+    applies_to_spectrum: true
+    role: process_family
+    children:
+      business_or_mission_analysis:
+        role: process_reference
+      stakeholder_needs_and_requirements_definition:
+        role: process_reference
+      system_software_requirements_definition:
+        role: process_reference
+      requirements_engineering_activities_in_other_technical_processes:
+        role: process_reference
+      requirements_management:
+        role: process_reference
+
+information_items:
+  role: information_model
+  provenance: iso_iec_ieee_29148_2018
+  applies_to_spectrum: true
+  note: >-
+    The public ISO structure identifies information items and requirements
+    information-item outlines. Concrete SPECTRUM objects are mapped only after
+    the relevant source definition has been verified.
+
+terminology:
+  status: controlled_vocabulary_source
+  provenance: iso_iec_ieee_29148_2018
+  applies_to_spectrum: true
+  policy:
+    preserve_source_term: true
+    invent_normative_definition: false
+    distinguish_product_term: true
+
+architecture_mapping:
+  knowledge: true
+  rules: pending_detailed_extraction
+  skills: pending_process_and_rule_design
+  workflows: pending_process_mapping
+  agents: not_directly_defined_by_source
+  data_model: informed_by_information_items_and_requirements_concepts
+  evidence_traceability: product_architecture_layer
+  decision_logic: product_architecture_layer
+  outputs: product_architecture_layer
+  evaluation: product_architecture_layer
+  governance_provenance: required_for_source_control
+  configuration_policy: product_architecture_layer
+
+implementation_constraints:
+  - id: provenance_required
+    statement: Every knowledge element derived from the standard must retain source identity and, where verified, source section.
+  - id: no_normative_invention
+    statement: SPECTRUM must not present a product interpretation as an ISO requirement.
+  - id: no_copyright_reproduction
+    statement: Do not reproduce the copyrighted standard in the repository.
+  - id: version_control
+    statement: Source version must remain explicit so a future ISO edition can be mapped separately.
+  - id: public_source_boundary
+    statement: Publicly visible ISO material is insufficient to claim exhaustive coverage of the complete standard text.
