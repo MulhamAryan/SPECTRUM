@@ -1,0 +1,17 @@
+schema:
+  source_id: required
+  source_label: required
+  source_version: required
+  source_location: required_when_verified
+  interpretation_level: required
+
+interpretation_levels:
+  - source_fact
+  - structured_knowledge
+  - spectrum_derived_control
+  - spectrum_skill_behavior
+
+policy:
+  source_authority: official_incose_only
+  ai_generated_content_as_source: false
+  secondary_sources_as_source: false
