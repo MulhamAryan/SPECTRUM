@@ -55,15 +55,20 @@ coverage:
   nrm_concepts_activities_to_characteristics_matrix: pending_cell_verification
   attributes_to_characteristics_matrix: pending_controlled_extraction
 
-known_correction:
+known_source_discrepancy:
   rule: R14
-  correct_name: Correct Condition
-  previous_in_repo: Correct Punctuation
-  basis: official_summary_sheet_page_3_and_page_4
+  canonical_rule_name: Correct Punctuation
+  detailed_source_basis: "GtWR v4 section 4.3.3; Summary Sheet page 3"
+  conflicting_matrix_label: "Correct Condition"
+  conflicting_source_location: "Summary Sheet page 4 cross-reference matrix"
+  handling: >-
+    Preserve the discrepancy between official source locations. Use the detailed
+    GtWR rule definition as the canonical rule identity; do not silently replace
+    the matrix label.
 
 next_phase_2_tasks:
   - verify_every_rules_to_characteristics_cell
-  - verify_every_nrm_activity_to_characteristics_cell
+  - verify_every_nrm_activity_to_characteristic_cell
   - verify_attribute_to_characteristic_relationships_from_authorized_source
   - verify_source_locations_for_structured_definitions
   - compare_extracted_elements_against_the_official_summary_sheet
