@@ -1,8 +1,8 @@
 source:
   id: incose-gtwr-v4-2023
-  source: gtwr-v4-summary-sheet
+  source: gtwr-v4-full-and-summary-sheet
   source_basis: official_incose_publication
-  source_date: 2023-06
+  source_date: 2023-07-01
 
 phase:
   number: 2
@@ -123,8 +123,8 @@ matrices:
       "7.1.2 Perform Design Input Requirements Verification": [C1, C3, C4, C7, C9, C10, C11, C14]
       "7.2 Design Input Requirements Validation": [C14]
       "7.2.2 Perform Design Input Requirements Validation": [C1, C3, C4, C6, C8, C10, C11, C12, C13, C14, C15]
-      "8.1 Design Definition Process Overview": [C3, C4, C6, C7, C8, C10, C11, C12, C13, C14, C15]
-      "8.2 Early System Verification and System Validation": [C3, C4, C6, C7, C8, C10, C11, C12, C13, C14, C15]
+      "8.1 Design Definition Process Overview": [C1, C3, C4, C6, C7, C8, C10, C11, C12, C13, C14, C15]
+      "8.2 Early System Verification and System Validation": [C1, C3, C4, C6, C7, C8, C10, C11, C12, C13, C14, C15]
       "8.4 Design Verification": [C3, C4, C6, C7, C8, C10, C11]
       "8.5 Design Validation": [C10, C11, C12, C13, C14]
       "14.2.1 Baseline Needs, Requirements, and Specifications": [C1, C3, C4, C6, C8, C10, C11, C12, C13, C14, C15]
@@ -147,9 +147,67 @@ matrices:
       - "INCOSE GtWR v4 Summary Sheet, pages 5-6"
 
   attributes_to_characteristics:
-    source: gtwr-v4-full-and-summary
-    status: identified_pending_authorized_detailed_extraction
-    note: "The Summary Sheet identifies the attributes and states they are defined in the NRM. Detailed attribute-to-characteristic semantics are not reconstructed without the authorized official source."
+    source: "INCOSE GtWR v4 Appendix E; Summary Sheet page 7 attribute inventory"
+    status: transcribed
+    rows: 49
+    columns: [C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14, C15]
+    x_cells:
+      A1: [C1, C3, C12]
+      A2: [C1, C9]
+      A3: [C1]
+      A4: [C9]
+      A5: []
+      A6: [C3, C4, C6, C7, C8]
+      A7: []
+      A8: [C3, C4, C6, C7, C8]
+      A9: []
+      A10: []
+      A11: []
+      A12: [C4, C8]
+      A13: []
+      A14: []
+      A15: []
+      A16: []
+      A17: []
+      A18: []
+      A19: []
+      A20: []
+      A21: []
+      A22: []
+      A23: []
+      A24: []
+      A25: []
+      A26: [C6, C12]
+      A27: []
+      A28: []
+      A29: []
+      A30: []
+      A31: [C10]
+      A32: [C1, C4, C7, C11]
+      A33: [C1, C11]
+      A34: [C1]
+      A35: [C1]
+      A36: [C6, C12]
+      A37: []
+      A38: [C6, C12]
+      A39: [C3]
+      A40: [C10]
+      A41: []
+      A42: []
+      A43: []
+      A44: []
+      A45: []
+      A46: []
+      A47: []
+      A48: []
+      A49: []
+    source_control: >-
+      Cell membership is transcribed from the official Attributes to
+      Characteristics Cross Reference Matrix in GtWR v4 Appendix E. Empty
+      arrays represent rows with no marked characteristic cells in the source.
+    verification_sources:
+      - "INCOSE GtWR v4, Appendix E, Attributes to Characteristics Cross Reference Matrix"
+      - "INCOSE GtWR v4 Summary Sheet, page 7"
 
 source_discrepancies:
   - id: R14-label
