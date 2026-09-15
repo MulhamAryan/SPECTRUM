@@ -1,0 +1,65 @@
+source:
+  id: incose-gtwr-v4-2023
+  source: gtwr-v4-summary-sheet
+  source_basis: official_incose_publication
+  source_date: 2023-06
+
+phase:
+  number: 2
+  name: structured_knowledge_extraction
+  status: controlled_extraction
+
+rules:
+  - {id: R1, group: Accuracy, name: Structured Statements, summary: "Conform each need or requirement statement to one agreed pattern."}
+  - {id: R2, group: Accuracy, name: Active Voice, summary: "Use active voice and identify the responsible entity as the subject."}
+  - {id: R3, group: Accuracy, name: Appropriate Subject-Verb, summary: "Use a subject and verb appropriate to the addressed entity."}
+  - {id: R4, group: Accuracy, name: Defined Terms, summary: "Define terms used in needs and requirements in an associated glossary or data dictionary."}
+  - {id: R5, group: Accuracy, name: Definite Articles, summary: "Use the definite article for the identified entity rather than an indefinite article."}
+  - {id: R6, group: Accuracy, name: Common Units of Measure, summary: "State quantities with appropriate and consistent units using a common measurement system."}
+  - {id: R7, group: Accuracy, name: Vague Terms, summary: "Avoid vague quantitative terms and vague qualitative adjectives."}
+  - {id: R8, group: Accuracy, name: Escape Clauses, summary: "Avoid clauses that defer or weaken applicability through vague conditions or possibilities."}
+  - {id: R9, group: Accuracy, name: Open-ended Clauses, summary: "Avoid open-ended non-specific clauses such as unspecified continuations."}
+  - {id: R10, group: Concision, name: Superfluous Infinitives, summary: "Avoid unnecessary infinitive constructions that add no requirement meaning."}
+  - {id: R11, group: Concision, name: Separate Clauses, summary: "Use a separate clause for each condition or qualification."}
+  - {id: R12, group: Non-ambiguity, name: Correct Grammar, summary: "Use correct grammar in need and requirement statements."}
+  - {id: R13, group: Non-ambiguity, name: Correct Spelling, summary: "Use correct spelling."}
+  - {id: R14, group: Non-ambiguity, name: Correct Condition, summary: "Use conditions correctly and express their logical relationship clearly."}
+  - {id: R15, group: Non-ambiguity, name: Logical Expressions, summary: "Use a defined convention for logical expressions."}
+  - {id: R16, group: Non-ambiguity, name: Use of Not, summary: "Avoid the use of the word not."}
+  - {id: R17, group: Non-ambiguity, name: Use of Oblique Symbol, summary: "Avoid the oblique slash except where permitted for units or fractions."}
+  - {id: R18, group: Singularity, name: Single-thought Sentence, summary: "Write a single sentence containing a single thought, conditioned and qualified by relevant sub-clauses."}
+  - {id: R19, group: Singularity, name: Combinators, summary: "Avoid words that join or combine clauses into multiple thoughts."}
+  - {id: R20, group: Singularity, name: Purpose Phrases, summary: "Avoid phrases expressing the purpose, intent, or reason for the statement."}
+  - {id: R21, group: Singularity, name: Parentheses, summary: "Avoid parentheses or brackets containing subordinate text."}
+  - {id: R22, group: Singularity, name: Enumeration, summary: "Enumerate sets explicitly instead of using a group noun to name the set."}
+  - {id: R23, group: Singularity, name: Supporting Diagram, Model or ICD, summary: "For complex behavior, refer to an appropriate supporting diagram, model, or ICD."}
+  - {id: R24, group: Completeness, name: Pronouns, summary: "Avoid personal and indefinite pronouns that obscure references."}
+  - {id: R25, group: Completeness, name: Headings, summary: "Do not rely on headings to supply essential explanation or understanding."}
+  - {id: R26, group: Realism, name: Absolutes, summary: "Avoid unachievable absolute claims."}
+  - {id: R27, group: Conditions, name: Explicit Conditions, summary: "State condition applicability explicitly rather than requiring inference from context."}
+  - {id: R28, group: Conditions, name: Multiple Conditions, summary: "Express the propositional nature of a condition explicitly for a single action."}
+  - {id: R29, group: Uniqueness, name: Classification, summary: "Classify needs and requirements according to the aspect of the problem or system addressed."}
+  - {id: R30, group: Uniqueness, name: Unique Expression, summary: "Express each need and requirement once and only once."}
+  - {id: R31, group: Abstraction, name: Solution Free, summary: "Avoid stating implementation unless there is rationale for constraining the design."}
+  - {id: R32, group: Quantifiers, name: Universal Qualification, summary: "Use each for intended universal quantification rather than all, any, or both."}
+  - {id: R33, group: Tolerance, name: Range of Values, summary: "Define each quantity with an appropriate range against which it can be verified or validated."}
+  - {id: R34, group: Quantification, name: Measurable Performance, summary: "Provide specific measurable performance targets appropriate to the addressed entity."}
+  - {id: R35, group: Quantification, name: Temporal Dependencies, summary: "Define temporal dependencies explicitly rather than using indefinite temporal terms."}
+  - {id: R36, group: Uniformity of Language, name: Consistent Terms and Units, summary: "Use terms and measurement units consistently with the project ontology across the lifecycle."}
+  - {id: R37, group: Uniformity of Language, name: Acronyms, summary: "Use acronyms consistently across requirement sets and associated lifecycle artifacts."}
+  - {id: R38, group: Uniformity of Language, name: Abbreviations, summary: "Avoid abbreviations in needs, requirements, and associated lifecycle artifacts."}
+  - {id: R39, group: Uniformity of Language, name: Style Guide, summary: "Use a project-wide style guide for individual need and requirement statements."}
+  - {id: R40, group: Uniformity of Language, name: Decimal Format, summary: "Use a consistent format and number of significant digits for decimal numbers."}
+  - {id: R41, group: Modularity, name: Related Needs and Requirements, summary: "Group related needs and requirements together."}
+  - {id: R42, group: Modularity, name: Structured Sets, summary: "Conform to a defined structure or template for organizing sets of needs and requirements."}
+
+validation:
+  rule_count: 42
+  expected_rule_ids: [R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, R26, R27, R28, R29, R30, R31, R32, R33, R34, R35, R36, R37, R38, R39, R40, R41, R42]
+  source_location: "Summary Sheet page 3"
+  correction_verified: "R14 is Correct Condition"
+
+copyright:
+  source_summary_used: true
+  attribution_required: true
+  note: "This file uses concise structured paraphrases; it does not reproduce the full Guide."
