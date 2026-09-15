@@ -251,7 +251,7 @@ Exemples :
 does not invent missing requirements
 does not approve requirements
 does not make implementation decisions
- does not claim formal standards conformance
+does not claim formal standards conformance
 ```
 
 ## 18. Références et chargement contextuel
