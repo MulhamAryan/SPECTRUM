@@ -43,7 +43,7 @@ attributes:
   - {id: A28, name: Need or Requirement Verification Status, minimum: true, group: lifecycle_management}
   - {id: A29, name: Need or Requirement Validation Status, minimum: true, group: lifecycle_management}
   - {id: A30, name: Status of the Need or Requirement, minimum: false, group: lifecycle_management}
-  - {id: A31, name: Status of Implementation, minimum: false, group: lifecycle_management}
+  - {id: A31, name: Status (of Implementation), minimum: false, group: lifecycle_management}
   - {id: A32, name: Trace to Interface Definition, minimum: false, group: lifecycle_management}
   - {id: A33, name: Trace to Dependent Peer Requirements, minimum: false, group: lifecycle_management}
   - {id: A34, name: Priority, minimum: true, group: lifecycle_management}
