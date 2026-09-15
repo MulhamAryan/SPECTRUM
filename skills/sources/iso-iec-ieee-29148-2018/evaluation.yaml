@@ -5,7 +5,7 @@ source:
   human_catalog: skills/SKILLS.md
   rules: rules/sources/iso-iec-ieee-29148-2018/rules.yaml
 
- evaluation:
+evaluation:
   purpose: >-
     Vérifier que chaque capacité de Skill dérivée des contrôles ISO conserve une
     responsabilité cohérente, une liaison explicite aux règles, des résultats
