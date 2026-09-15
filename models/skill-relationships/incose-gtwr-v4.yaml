@@ -260,6 +260,33 @@ skills:
       set-level ability to be validated. It does not invent stakeholder objectives
       or validation results, and it does not replace validation execution.
 
+  requirements-attribute-management:
+    purpose: >-
+      Structurer et analyser les attributs associés aux besoins et exigences
+      lorsque ces attributs sont nécessaires pour interpréter, tracer, vérifier,
+      valider ou gérer leur cycle de vie.
+    characteristic_scope: [C1, C3, C4, C6, C7, C8, C9, C10, C11, C12]
+    rule_scope: []
+    attribute_scope: [A1, A2, A3, A4, A6, A8, A12, A26, A31, A32, A33, A34, A35, A36, A38, A39, A40]
+    source_activity_scope: []
+    source_basis:
+      characteristics: knowledge/sources/incose-gtwr-v4-2023/characteristics.yaml
+      attributes: knowledge/sources/incose-gtwr-v4-2023/attributes.yaml
+      relationships: knowledge/sources/incose-gtwr-v4-2023/matrices.yaml
+      official_attribute_matrix: "INCOSE GtWR v4 Appendix E / Summary Sheet page 7"
+    qualification: >-
+      Attribute identities and marked attribute-to-characteristic relationships
+      are source-backed. Attribute applicability policy, observation statuses,
+      provenance handling, and lifecycle-management grouping are SPECTRUM
+      behavior. Detailed attribute definitions may require the NRM and are not
+      invented here.
+    derived_behavior_boundary: >-
+      The Skill evaluates supplied attributes and their evidence, distinguishes
+      source inventory from project-level applicability, and reports missing,
+      conflicting, or unsupported attribute evidence. It does not make the full
+      A1-A49 inventory universally mandatory and does not replace dedicated
+      traceability, verification, validation, or workflow analysis.
+
 source_discrepancy:
   id: R14-label
   canonical_rule_identity: Correct Punctuation
