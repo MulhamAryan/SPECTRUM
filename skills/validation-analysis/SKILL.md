@@ -1,6 +1,6 @@
 ---
 name: validation-analysis
-description: Analyser la base permettant d'établir qu'un besoin, une exigence ou un ensemble correspond à l'utilisation prévue, aux objectifs et aux attentes applicables.
+description: Analyser la base permettant d'établir qu'un ensemble de besoins ou d'exigences peut être validé par rapport à l'utilisation prévue, aux objectifs et aux attentes applicables.
 type: component
 role: validation
 ---
@@ -9,11 +9,11 @@ role: validation
 
 ## Purpose
 
-Déterminer si la base de validation disponible permet d'établir qu'un besoin, une exigence ou un ensemble d'exigences correspond à l'utilisation prévue, aux objectifs, aux attentes et au contexte de référence applicables.
+Déterminer si la base de validation disponible permet d'établir qu'un ensemble de besoins ou d'exigences peut être validé par rapport à l'utilisation prévue, aux objectifs, aux attentes et au contexte de référence applicables.
 
 This is a SPECTRUM analytical capability derived from the official INCOSE Guide to Writing Requirements v4 (GtWR v4) and its associated NRM validation relationships. INCOSE does not define a Skill with this name or this status vocabulary.
 
-The Skill is concerned with validation basis, intended use, stakeholder expectations, lifecycle concepts, needs, and higher-level requirements. It does not replace verification, stakeholder elicitation, validation execution, or implementation approval.
+The Skill is concerned with set-level validation basis, intended use, stakeholder expectations, lifecycle concepts, needs, higher-level requirements, and validation evidence. Individual wording/context defects remain the responsibility of the Skills whose source-backed scopes cover the relevant characteristics.
 
 ## Source boundary
 
@@ -44,9 +44,7 @@ A validation status, coverage criterion, evidence-quality rule, or recommendatio
 
 ## When to use
 
-Use this Skill when the question is whether a need or requirement is the right one for the intended system use and objectives, rather than merely whether it can be objectively checked against a stated requirement.
-
-For an individual need or requirement, use it to assess the validation-related characteristics that the official NRM activity matrix associates with the applicable needs-validation activity, particularly C3, C6, and C8. For a set, use the set-level characteristics associated with validation activities, particularly C10, C12, C13, C14, and C15.
+Use this Skill when the target is a need set or requirement set and the question is whether the set can be validated against its applicable intended use, objectives, expectations, lifecycle concepts, or higher-level references.
 
 Use it when validation depends on:
 
@@ -55,8 +53,8 @@ Use it when validation depends on:
 - lifecycle concepts;
 - objectives or goals;
 - higher-level needs or requirements;
-- applicable conditions of use;
-- system or operational context;
+- approved operational scenarios or conditions of use;
+- validation objectives and criteria;
 - acceptable-risk or feasibility context where relevant to the validation basis.
 
 Do not use it to invent stakeholder objectives or declare a validation result without supporting evidence.
@@ -65,14 +63,14 @@ Do not use it to invent stakeholder objectives or declare a validation result wi
 
 Required:
 
-- `need_or_requirement` or `requirement_set`;
+- `requirement_set` or another explicitly declared set-level validation target;
 - `validation_evidence` or `validation_context`.
 
 Recommended:
 
+- `set_type`: `need_set` or `requirement_set`;
 - `intended_use`;
 - `system_context`;
-- `usage_context`;
 - `stakeholder_expectations`;
 - `stakeholder_evidence`;
 - `lifecycle_concepts`;
@@ -94,7 +92,7 @@ Optional:
 
 ## Preconditions
 
-1. The validation target is identifiable.
+1. The validation target is an identifiable set of needs or requirements.
 2. The intended system, use, level, or declared validation scope is known or explicitly identified as missing.
 3. The validation evidence boundary is known.
 4. Stakeholder/source evidence is preserved when it is used to support the validation claim.
@@ -102,20 +100,13 @@ Optional:
 
 ## Procedure
 
-### 1. Preserve the target
+### 1. Preserve the target set
 
-Capture the exact need, requirement, or set used for the validation assessment, including stable identifiers and relevant baseline information.
+Capture the exact need set or requirement set used for the validation assessment, including stable identifiers and relevant baseline information.
 
 ### 2. Identify the validation subject and scope
 
-Determine whether the target is:
-
-- a need;
-- an individual requirement;
-- a requirement set;
-- another explicitly declared artifact.
-
-Determine the system, system level, lifecycle context, intended use, and declared scope against which validation is being assessed.
+Determine whether the target is a need set or requirement set and establish the system, system level, lifecycle context, intended use, and declared scope against which validation is being assessed.
 
 ### 3. Establish the intended use and objectives
 
@@ -132,7 +123,7 @@ Do not invent an objective because a requirement appears to imply one.
 
 ### 4. Establish the validation reference
 
-Determine what the target is being validated against.
+Determine what the set is being validated against.
 
 Depending on scope, this may include:
 
@@ -158,25 +149,15 @@ Distinguish:
 
 Do not manufacture acceptance criteria, stakeholder goals, or operational outcomes.
 
-### 6. Assess individual-target validation relationships
+### 6. Assess C14 set-level ability to be validated
 
-For an individual need or requirement, assess only the characteristics actually associated with the applicable validation activity in the official NRM matrix.
+Assess `C14 Able to be validated` only at set level.
 
-For needs validation, the official matrix associates `5.2.2 Perform Needs Validation` with C3, C6, and C8 at the individual level. Use these characteristics when the target and activity scope justify them.
+Evaluate whether the set has an established validation basis through applicable goals, stakeholder expectations, lifecycle concepts, higher-level references, conditions of use, validation objectives, validation criteria, and supporting evidence.
 
-For design-input requirements validation, the official matrix likewise associates `7.2.2 Perform Design Input Requirements Validation` with C3, C6, and C8 at the individual level.
+Do not treat C14 as an individual-statement characteristic. Individual validation-related C3, C6, and C8 relationships in the official NRM matrix are outside this Skill's characteristic scope and must not be silently reassigned to C14.
 
-Do not treat C14 as an individual-statement characteristic; C14 is a set-level characteristic in the GtWR v4.
-
-### 7. Assess set-level validation
-
-For a need set or requirement set, evaluate whether the set can be validated against its applicable goals, stakeholder expectations, lifecycle concepts, and higher-level references.
-
-Use the official set characteristics associated with validation activities, including C10, C12, C13, C14, and C15 where the activity matrix marks them.
-
-Where set correctness or completeness is relevant, preserve the separate C15/C10 evidence rather than collapsing all dimensions into a single validation status.
-
-### 8. Correlate with official NRM validation activities
+### 7. Correlate with official NRM validation activities
 
 Use the official NRM matrix for activities including:
 
@@ -190,17 +171,17 @@ Use the official NRM matrix for activities including:
 
 The official matrix establishes activity-to-characteristic relationships. It does not define a SPECTRUM validation score or automatic pass/fail formula.
 
-### 9. Separate validation from verification
+### 8. Separate validation from verification
 
-Do not treat a successful verification result as proof that the need or requirement is the right one for the intended use.
+Do not treat a successful verification result as proof that the set is the right one for intended use.
 
 Do not treat stakeholder agreement as proof that every technical clause is verified.
 
 Validation concerns the relationship to intended use, needs, objectives, and applicable expectations; verification concerns meeting specified requirements.
 
-### 10. Assess coverage
+### 9. Assess coverage
 
-Determine whether the available validation evidence covers the declared validation scope, including where applicable:
+Determine whether the available validation evidence covers the declared set-level validation scope, including where applicable:
 
 - intended uses;
 - relevant stakeholder expectations;
@@ -212,21 +193,21 @@ Determine whether the available validation evidence covers the declared validati
 
 Report partial coverage explicitly.
 
-### 11. Detect contradiction or mismatch
+### 10. Detect contradiction or mismatch
 
 Identify cases where:
 
-- a requirement conflicts with an established stakeholder need or objective;
-- a requirement addresses a different intended use than the declared system purpose;
+- the set conflicts with an established stakeholder need or objective;
+- the set addresses a different intended use than the declared system purpose;
 - the validation evidence refers to the wrong level or system context;
 - authoritative sources provide incompatible validation objectives;
 - the validation claim exceeds the evidence scope.
 
-### 12. Produce evidence-backed findings
+### 11. Produce evidence-backed findings
 
 Each finding must identify:
 
-- exact target reference;
+- exact set reference;
 - validation reference/objective;
 - criteria;
 - evidence used;
@@ -236,33 +217,33 @@ Each finding must identify:
 
 ## Source-backed scope
 
-The official GtWR v4 Summary Sheet identifies C1–C9 as individual need/requirement characteristics and C10–C15 as set characteristics. The NRM activity matrix then associates validation activities with the applicable characteristics. This Skill preserves that separation instead of assigning C14 to an individual statement.
+The official GtWR v4 Summary Sheet identifies C1–C9 as individual need/requirement characteristics and C10–C15 as set characteristics. This Skill is intentionally scoped to `C14 Able to be validated`, which is a set-level characteristic.
 
-The official NRM matrix associates `5.2.2 Perform Needs Validation` and `7.2.2 Perform Design Input Requirements Validation` with individual-level C3, C6, and C8 as well as set-level characteristics. It also associates `5.2 Needs Validation`, `7.2 Design Input Requirements Validation`, and `8.5 Design Validation` with set-level validation characteristics, including C14 where marked.
+The official NRM matrix associates several validation activities with additional individual and set characteristics. Those source relationships remain in the knowledge corpus, but this Skill does not collapse them into a generic individual validation capability and does not reclassify C14 as individual.
 
-The INCOSE Guide to Verification and Validation is an official supporting guide in the Requirements Working Group product family and provides practical guidance on verification and validation across the lifecycle. It may support interpretation when explicitly used, but it does not replace the source relationships recorded from the GtWR/NRM corpus.
+The INCOSE Guide to Verification and Validation is an official supporting guide in the Requirements Working Group product family and may support interpretation when explicitly selected. It does not replace the source relationships recorded from the GtWR/NRM corpus.
 
 ## Analysis logic
 
 Use this sequence:
 
-`validation target → intended use/objective → validation reference → criteria → evidence linkage → coverage → validation status`
+`validation set → intended use/objective → validation reference → criteria → evidence linkage → coverage → C14 status`
 
-The primary question is whether the available evidence supports the claim that the target is appropriate for the intended use and applicable expectations.
+The primary question is whether the available evidence supports the set's ability to be validated against the applicable intended use and expectations.
 
-Do not infer validation success from wording quality, requirement presence, or verification success alone.
+Do not infer validation capability from wording quality, requirement presence, or verification success alone.
 
 ## Decision semantics
 
 Use only these Skill-level result semantics:
 
-- `validation_basis_established`: the validation reference, criteria, and supporting evidence are sufficiently established for the declared scope.
+- `validation_basis_established`: the validation reference, criteria, and supporting evidence are sufficiently established for the declared set-level scope.
 - `validation_basis_partial`: the validation basis is materially established but one or more relevant parts remain unsupported.
 - `validation_basis_missing`: an essential validation reference, objective, criterion, or evidence basis is not established.
-- `validation_evidence_mismatch`: evidence exists but does not correspond reliably to the validation target or intended-use context.
-- `validation_contradicted`: authoritative evidence shows an incompatibility between the target and the applicable intended use/objectives/reference.
+- `validation_evidence_mismatch`: evidence exists but does not correspond reliably to the validation set or intended-use context.
+- `validation_contradicted`: authoritative evidence shows an incompatibility between the set and the applicable intended use/objectives/reference.
 - `validation_context_missing`: intended use, system context, scope, or other essential validation context cannot be established.
-- `not_applicable`: validation is explicitly outside the declared scope.
+- `not_applicable`: validation is explicitly outside the declared set-level scope.
 
 These are SPECTRUM statuses, not INCOSE certification statuses.
 
@@ -291,7 +272,7 @@ A finding must never invent a stakeholder objective, operational outcome, or val
 
 Preserve:
 
-- exact need/requirement/set;
+- exact need/requirement set;
 - intended-use evidence;
 - stakeholder expectations and source evidence;
 - lifecycle concepts;
@@ -307,12 +288,12 @@ Preserve:
 
 Results can feed:
 
-- `requirement-statement-quality` for wording defects that obstruct validation interpretation;
+- `requirement-set-quality` for set-level completeness, consistency, comprehensibility, feasibility, and correctness questions;
 - `requirements-context` for missing intended-use, level, source, condition, or stakeholder context;
-- `requirement-set-quality` for set-level completeness, consistency, and correctness questions;
 - `requirement-relationship-traceability` for source/parent/higher-level relationships;
 - `verification-analysis` when the question is actually about meeting specified requirements;
-- `elicitation-gap` for missing stakeholder/source information required to establish validation.
+- `elicitation-gap` for missing stakeholder/source information required to establish validation;
+- `requirement-statement-quality` only when set analysis reveals a member-level wording defect that obstructs interpretation.
 
 Handoff preserves evidence references and interpretation level.
 
@@ -320,7 +301,7 @@ Handoff preserves evidence references and interpretation level.
 
 Produce a `validation_observation` containing:
 
-- `requirement_ref` or `set_ref`;
+- `set_ref`;
 - `validation_subject`;
 - `intended_use`;
 - `validation_reference`;
@@ -329,7 +310,7 @@ Produce a `validation_observation` containing:
 - `evidence_refs`;
 - `coverage`;
 - `status`;
-- `characteristics_assessed`;
+- `characteristics_assessed` (must include only C14 for this Skill);
 - `source_activity_refs`;
 - `findings`;
 - `missing_context`;
@@ -339,7 +320,7 @@ Do not output a global implementation-readiness decision.
 
 ## Exit conditions
 
-`completed` when the declared validation scope, reference, criteria, and evidence are sufficiently established and assessed.
+`completed` when the declared set-level validation scope, reference, criteria, and evidence are sufficiently established and assessed.
 
 `completed_with_gaps` when useful validation analysis is possible but one or more evidence elements remain unavailable.
 
@@ -353,13 +334,14 @@ This Skill does not:
 
 - invent stakeholder objectives, needs, usage scenarios, acceptance criteria, or validation results;
 - confuse validation with verification;
-- infer validation success from requirement wording alone;
+- infer validation capability from requirement wording alone;
 - treat a verification result as validation evidence by default;
 - replace stakeholder elicitation or validation execution;
 - create new INCOSE rules or characteristics;
 - issue formal INCOSE certification;
 - approve or reject implementation readiness;
-- silently resolve conflicting authoritative evidence.
+- silently resolve conflicting authoritative evidence;
+- evaluate C14 on an individual statement.
 
 ## References
 
@@ -388,9 +370,8 @@ Official source URLs:
 
 Minimum evaluation cases:
 
-- validatable_individual_need_with_authoritative_validation_basis;
-- validatable_individual_requirement_with_authoritative_validation_basis;
-- validatable_set_with_authoritative_reference;
+- validatable_need_set_with_authoritative_validation_basis;
+- validatable_requirement_set_with_authoritative_validation_basis;
 - missing_intended_use;
 - missing_stakeholder_expectations;
 - missing_validation_objective;
@@ -399,6 +380,6 @@ Minimum evaluation cases:
 - validation_level_mismatch;
 - contradictory_authoritative_validation_sources;
 - partial_validation_coverage;
-- verification_success_but_validation_unestablished;
+- verification_success_but_C14_unestablished;
 - no_false_positive_from_missing_artifact;
-- wording_issue_handed_to_statement_quality.
+- individual_target_not_misclassified_as_C14;
