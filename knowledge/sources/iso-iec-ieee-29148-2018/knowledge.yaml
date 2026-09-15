@@ -4,109 +4,338 @@ source:
   status: normative_reference
   provenance: official_iso_source
   edition: 2018
+  publication: 2018-11
+  current_status_note: >-
+    ISO states that the 2018 edition was last reviewed and confirmed in 2024.
+    A third edition is currently under development as DIS and is not treated
+    here as the current published reference.
   note: >-
-    Structured SPECTRUM knowledge derived only from the publicly visible ISO
-    Online Browsing Platform structure and terminology. This does not
-    reproduce the copyrighted standard.
+    Structured SPECTRUM knowledge derived from the publicly visible ISO Online
+    Browsing Platform. This file paraphrases and structures public information;
+    it does not reproduce the copyrighted standard.
 
-knowledge_scope:
-  requirements_engineering:
-    role: foundational_concept
-    provenance: iso_iec_ieee_29148_2018
-    applies_to_spectrum: true
-    description: >-
-      Requirements engineering is treated as the foundational discipline for
-      discovering, eliciting, developing, analysing, verifying, validating,
-      communicating, documenting and managing requirements.
+scope_and_purpose:
+  role_in_spectrum: foundational_reference
+  provenance: iso_iec_ieee_29148_2018
+  public_scope_points:
+    - requirements_engineering_processes_across_the_life_cycle
+    - guidance_for_requirements_related_processes_in_iso_iec_ieee_15288
+    - guidance_for_requirements_related_processes_in_iso_iec_ieee_12207
+    - requirements_related_information_items
+    - required_content_of_information_items
+    - guidance_for_information_item_formats
+  applicability:
+    scope_independent_of_project_size_methodology_and_complexity: true
+    systems: true
+    software: true
+    hardware_products: true
+    services: true
+
+normative_references:
+  - id: iso-iec-ieee-15288-2015
+    title: Systems and software engineering — System life cycle processes
+    role: normative_reference_of_29148
+  - id: iso-iec-ieee-12207-2017
+    title: Systems and software engineering — Software life cycle processes
+    role: normative_reference_of_29148
+  note: >-
+    SPECTRUM records these as dependencies of the 29148 reference. Their own
+    detailed content is not copied into this knowledge file.
+
+terminology:
+  source_section: 3
+  status: controlled_vocabulary
+  preserve_source_term: true
+  invent_normative_definition: false
+  terms:
+    - id: acquirer
+      source_ref: "3.1.1"
+    - id: attribute
+      source_ref: "3.1.2"
+    - id: baseline
+      source_ref: "3.1.3"
+    - id: business_requirements_specification
+      source_ref: "3.1.4"
+    - id: concept_of_operations
+      source_ref: "3.1.5"
+    - id: condition
+      source_ref: "3.1.6"
+    - id: constraint
+      source_ref: "3.1.7"
+    - id: context_of_use
+      source_ref: "3.1.8"
+    - id: customer
+      source_ref: "3.1.9"
+    - id: derived_requirement
+      source_ref: "3.1.10"
+    - id: developer
+      source_ref: "3.1.11"
+    - id: document
+      source_ref: "3.1.12"
+    - id: human_systems_integration
+      source_ref: "3.1.13"
+    - id: information_item
+      source_ref: "3.1.14"
+    - id: level_of_abstraction
+      source_ref: "3.1.15"
+    - id: operational_concept
+      source_ref: "3.1.16"
+    - id: operational_scenario
+      source_ref: "3.1.17"
+    - id: operator
+      source_ref: "3.1.18"
+    - id: requirement
+      source_ref: "3.1.19"
+    - id: requirements_elicitation
+      source_ref: "3.1.20"
+    - id: requirements_engineering
+      source_ref: "3.1.21"
+    - id: requirements_management
+      source_ref: "3.1.22"
+    - id: requirements_traceability
+      source_ref: "3.1.23"
+    - id: requirements_traceability_matrix
+      source_ref: "3.1.24"
+    - id: requirements_validation
+      source_ref: "3.1.25"
+    - id: requirements_verification
+      source_ref: "3.1.26"
+    - id: software_requirements_specification
+      source_ref: "3.1.27"
+    - id: stakeholder
+      source_ref: "3.1.28"
+    - id: stakeholder_requirements_specification
+      source_ref: "3.1.29"
+    - id: state
+      source_ref: "3.1.30"
+    - id: supplier
+      source_ref: "3.1.31"
+    - id: system_of_interest
+      source_ref: "3.1.32"
+    - id: system_requirements_specification
+      source_ref: "3.1.33"
+    - id: trade_off
+      source_ref: "3.1.34"
+    - id: user
+      source_ref: "3.1.35"
+    - id: validation
+      source_ref: "3.1.36"
+    - id: verification
+      source_ref: "3.1.37"
+  abbreviated_terms:
+    source_ref: "3.2"
+    values:
+      - BABOK
+      - BRS
+      - ConOps
+      - FSM
+      - HSI
+      - MDD
+      - MOP
+      - OpsCon
+      - RTM
+      - SRS
+      - StRS
+      - SyRS
+      - TBD
+      - TBR
+      - TBS
+      - TPM
+
+concepts:
+  source_section: 5
+  categories:
+    general:
+      source_ref: "5.1"
+      role: foundational_concept
+    requirements_fundamentals:
+      source_ref: "5.2"
+      role: requirements_conceptual_foundation
+      themes:
+        - requirement
+        - requirement_characteristics
+        - requirement_attributes
+        - requirements_levels
+        - relationships_between_requirements
+    practical_considerations:
+      source_ref: "5.3"
+      role: engineering_context
+    requirement_information_items:
+      source_ref: "5.4"
+      role: information_model_reference
+
+requirement_related_concepts:
   requirement:
-    role: core_concept
-    provenance: iso_iec_ieee_29148_2018
+    provenance: "3.1.19"
     applies_to_spectrum: true
-    description: >-
-      A requirement is represented as a statement expressing a need together
-      with applicable constraints or conditions.
-  requirements_levels:
-    role: conceptual_structure
-    provenance: iso_iec_ieee_29148_2018
+    representation: structured_requirement
+    notes:
+      - requirements_are_expressed_at_multiple_levels
+      - requirements_relate_to_a_system_software_service_or_other_item_of_interest
+  derived_requirement:
+    provenance: "3.1.10"
     applies_to_spectrum: true
-    description: >-
-      Requirements can exist at different levels; SPECTRUM therefore keeps
-      requirement identity and context explicit.
-  requirements_fundamentals:
-    role: conceptual_group
-    provenance: iso_iec_ieee_29148_2018
+    relationship_model:
+      parent: true
+      child: true
+  stakeholder:
+    provenance: "3.1.28"
     applies_to_spectrum: true
-    themes:
-      - requirement_concept
-      - requirement_characteristics
-      - requirement_levels
-      - relationships_between_requirements
-  practical_considerations:
-    role: engineering_context
-    provenance: iso_iec_ieee_29148_2018
+    notes:
+      - stakeholder_context_is_relevant_to_requirements
+      - developer_is_a_stakeholder_role_in_the_public_definition
+  condition:
+    provenance: "3.1.6"
     applies_to_spectrum: true
-  requirement_information_items:
-    role: information_model_reference
-    provenance: iso_iec_ieee_29148_2018
+  constraint:
+    provenance: "3.1.7"
     applies_to_spectrum: true
+  operational_scenario:
+    provenance: "3.1.17"
+    applies_to_spectrum: true
+    verification_validation_relevance: true
+  verification:
+    provenance: "3.1.37"
+    applies_to_spectrum: true
+  validation:
+    provenance: "3.1.36"
+    applies_to_spectrum: true
+  requirements_verification:
+    provenance: "3.1.26"
+    applies_to_spectrum: true
+  requirements_validation:
+    provenance: "3.1.25"
+    applies_to_spectrum: true
+  requirements_traceability:
+    provenance: "3.1.23"
+    applies_to_spectrum: true
+    relationship_model:
+      upward_derivation: true
+      downward_allocation_flow_down: true
+  requirements_traceability_matrix:
+    provenance: "3.1.24"
+    applies_to_spectrum: true
+    role: traceability_artifact_reference
 
 processes:
+  source_section: 6
   requirement_processes:
-    provenance: iso_iec_ieee_29148_2018
-    applies_to_spectrum: true
+    source_ref: "6.1"
     role: process_family
     children:
       business_or_mission_analysis:
-        role: process_reference
+        source_ref: "6.2"
       stakeholder_needs_and_requirements_definition:
-        role: process_reference
-      system_software_requirements_definition:
-        role: process_reference
+        source_ref: "6.3"
+      system_or_system_software_requirements_definition:
+        source_ref: "6.4"
       requirements_engineering_activities_in_other_technical_processes:
-        role: process_reference
+        source_ref: "6.5"
       requirements_management:
-        role: process_reference
+        source_ref: "6.6"
+  spectrum_interpretation:
+    workflow_candidate: true
+    skill_candidates: true
+    note: >-
+      These are SPECTRUM architectural mappings. The names of SPECTRUM skills
+      are not claimed to be names prescribed by ISO/IEC/IEEE 29148.
+
+conformance:
+  source_section: 4
+  categories:
+    intended_usage:
+      source_ref: "4.1"
+    full_conformance:
+      source_ref: "4.2"
+    conformance_to_processes:
+      source_ref: "4.3"
+    conformance_to_information_item_content:
+      source_ref: "4.4"
+    tailored_conformance:
+      source_ref: "4.5"
+  spectrum_relevance:
+    governance: true
+    evaluation: true
+    policy: true
+  important_boundary: >-
+    SPECTRUM must not claim formal conformance to the standard merely because
+    individual checks are implemented. A conformance claim requires its own
+    defined scope, evidence and assessment approach.
 
 information_items:
-  role: information_model
-  provenance: iso_iec_ieee_29148_2018
+  source_section: 7
+  role: information_model_reference
   applies_to_spectrum: true
-  note: >-
-    The public ISO structure identifies information items and requirements
-    information-item outlines. Concrete SPECTRUM objects are mapped only after
-    the relevant source definition has been verified.
+  principle: >-
+    Requirements engineering produces identifiable information items. SPECTRUM
+    should therefore distinguish requirements from the other artifacts and keep
+    source identity and provenance explicit.
 
-terminology:
-  status: controlled_vocabulary_source
-  provenance: iso_iec_ieee_29148_2018
-  applies_to_spectrum: true
-  policy:
-    preserve_source_term: true
-    invent_normative_definition: false
-    distinguish_product_term: true
+guidelines_for_information_items:
+  source_section: 8
+  categories:
+    requirements_information_item_outlines:
+      source_ref: "8.1"
+      role: information_structure_reference
+    business_requirements_specification:
+      source_ref: "8.2"
+      role: information_structure_reference
+  note: >-
+    Publicly visible structure is recorded here; detailed templates or full
+    normative content are not reproduced without access to the licensed text.
 
 architecture_mapping:
   knowledge: true
   rules: pending_detailed_extraction
   skills: pending_process_and_rule_design
   workflows: pending_process_mapping
-  agents: not_directly_defined_by_source
-  data_model: informed_by_information_items_and_requirements_concepts
-  evidence_traceability: product_architecture_layer
+  agents: not_directly_defined_by_iso_29148
+  data_model:
+    informed_by:
+      - requirements
+      - requirement_relationships
+      - stakeholders
+      - constraints
+      - conditions
+      - information_items
+      - traceability
+      - verification
+      - validation
+  evidence_traceability:
+    informed_by:
+      - requirements_traceability
+      - requirements_traceability_matrix
+      - verification
+      - validation
   decision_logic: product_architecture_layer
   outputs: product_architecture_layer
-  evaluation: product_architecture_layer
-  governance_provenance: required_for_source_control
+  evaluation:
+    informed_by:
+      - conformance_structure
+      - verification_validation_concepts
+  governance_provenance: required
   configuration_policy: product_architecture_layer
 
 implementation_constraints:
   - id: provenance_required
-    statement: Every knowledge element derived from the standard must retain source identity and, where verified, source section.
+    statement: >-
+      Every knowledge element derived from the standard must retain source
+      identity and, where verified, source section.
   - id: no_normative_invention
-    statement: SPECTRUM must not present a product interpretation as an ISO requirement.
+    statement: >-
+      SPECTRUM must not present a product interpretation as an ISO requirement.
   - id: no_copyright_reproduction
-    statement: Do not reproduce the copyrighted standard in the repository.
+    statement: >-
+      Do not reproduce the copyrighted standard in the repository.
   - id: version_control
-    statement: Source version must remain explicit so a future ISO edition can be mapped separately.
+    statement: >-
+      The source version must remain explicit so a future ISO edition can be
+      mapped separately.
   - id: public_source_boundary
-    statement: Publicly visible ISO material is insufficient to claim exhaustive coverage of the complete standard text.
+    statement: >-
+      Publicly visible ISO material is insufficient to claim exhaustive
+      coverage of the complete standard text.
+  - id: conformance_claim_control
+    statement: >-
+      Implementation of selected requirements-engineering practices must not be
+      represented as formal standard conformance without an explicit assessment.
