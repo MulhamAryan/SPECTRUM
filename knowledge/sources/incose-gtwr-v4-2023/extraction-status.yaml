@@ -1,0 +1,46 @@
+source:
+  id: incose-gtwr-v4-2023
+  document: INCOSE Guide to Writing Requirements
+  version: 4
+  revision: 4
+  authority: INCOSE Requirements Working Group
+  basis: official_incose_publication
+
+phase:
+  number: 2
+  name: structured_knowledge_extraction
+  status: in_progress
+
+verified_inventory:
+  characteristics:
+    individual: C1-C9
+    sets: C10-C15
+  writing_rules: R1-R42
+  attributes: A1-A49
+
+corrections_required:
+  - id: R14
+    current_catalog_value: "Correct Punctuation"
+    required_source_value: "Correct Condition"
+    source: gtwr-v4-summary-sheet
+    status: pending_catalog_correction
+
+remaining_controlled_extraction:
+  - definitions_source_locations
+  - rules_to_characteristics_matrix_cell_values
+  - nrm_concepts_and_activities_to_characteristics_matrix_cell_values
+  - attributes_to_characteristics_matrix_cell_values
+  - detailed_attribute_semantics_from_authorized_NRM_material
+
+implementation_boundary:
+  no_spectrum_rules: true
+  no_skills: true
+  no_procedures: true
+  no_workflows: true
+  no_agents: true
+  no_readiness_decision: true
+
+source_policy:
+  official_incose_only: true
+  secondary_sources_as_authority: false
+  ai_generated_text_as_source_evidence: false
