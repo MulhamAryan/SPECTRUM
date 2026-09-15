@@ -1,0 +1,25 @@
+source:
+  reference: ISO/IEC/IEEE 29148:2018
+  skill_evaluation:
+    contract: evaluation/contracts/iso-iec-ieee-29148.yaml
+  rules: rules/sources/iso-iec-ieee-29148-2018/rules.yaml
+
+purpose: >-
+  Cas comportementaux déterministes pour vérifier que chaque Skill transforme
+  ses entrées en observations, findings et evidence conformes à son contrat,
+  sans inventer de contexte ni franchir sa frontière de responsabilité.
+
+case_schema:
+  id: stable_case_identifier
+  skill: skill_name
+  class: nominal|negative|edge|regression
+  scenario: scenario_description
+  input: structured_input
+  expected:
+    status: expected_skill_status
+    outputs: expected_output_contract
+    findings: expected_findings
+    evidence: expected_evidence_properties
+    assertions: executable_assertions
+
+cases: []
