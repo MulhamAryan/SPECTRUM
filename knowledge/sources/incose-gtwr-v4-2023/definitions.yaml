@@ -2,6 +2,7 @@ source:
   id: incose-gtwr-v4-2023
   basis: official_incose_publication
   companion: gtwr-v4-summary-sheet
+  source_version: "v4 / Rev 4"
 
 phase: 2
 status: controlled_extraction
@@ -13,86 +14,131 @@ purpose: >-
 
 scope:
   applies_to:
+    - entities
+    - concepts
     - needs
-    - requirement_statements
+    - requirements
+    - need_requirement_patterns
     - needs_sets
     - requirement_sets
-    - associated_attributes
+    - attributes
+    - need_expressions
+    - requirement_expressions
   source_family: INCOSE Guide to Writing Requirements v4
 
 terms:
   - id: entity
     source_label: Entity
     summary: >-
-      The item, system, product, service, or other addressed object to which a
-      need or requirement applies.
+      A single addressed item to which a concept, need, or requirement applies;
+      the source examples include organizational, project, service, process,
+      system, product, and stakeholder-class entities.
+    source_location: "GtWR v4 Summary Sheet page 1"
+    interpretation_level: structured_knowledge
+
   - id: concept
     source_label: Concept
     summary: >-
-      A lifecycle or engineering concept used as a source or framing context
-      for developing needs and requirements.
+      A textual or graphical representation of how an entity can address the
+      problem, threat, or opportunity it was defined to address, within stated
+      constraints and acceptable risk.
+    source_location: "GtWR v4 Summary Sheet page 1"
+    interpretation_level: structured_knowledge
+
   - id: lifecycle_concept
-    source_label: Lifecycle Concepts
+    source_label: Set of Lifecycle Concepts
     summary: >-
-      Concepts describing the intended lifecycle context from which needs and
-      requirements are derived or understood.
+      Multiple concepts covering the lifecycle activities and how the
+      organization and stakeholders expect to manage, acquire, define, develop,
+      build, integrate, verify, validate, transition, operate, support,
+      maintain, and retire an entity.
+    source_location: "GtWR v4 Summary Sheet page 1"
+    interpretation_level: structured_knowledge
+
   - id: need_statement
     source_label: Need Statement
     summary: >-
-      A statement expressing an identified need that provides a basis for later
-      requirements development.
+      The result of formally transforming one or more sources or lifecycle
+      concepts into an agreed expectation for an entity to perform a function
+      or possess a quality within stated constraints and acceptable risk.
+    source_location: "GtWR v4 Summary Sheet page 1"
+    interpretation_level: structured_knowledge
+
   - id: requirement_statement
     source_label: Requirement Statement
     summary: >-
-      A statement expressing an obligation that can be evaluated against its
-      applicable source, need, or higher-level requirement.
+      The result of formally transforming one or more sources, needs, or
+      higher-level requirements into an agreed obligation for an entity to
+      perform a function or possess a quality within stated constraints and
+      acceptable risk.
+    source_location: "GtWR v4 Summary Sheet page 1"
+    interpretation_level: structured_knowledge
+
   - id: need_requirement_pattern
-    source_label: Need / Requirement Pattern
+    source_label: Requirement Pattern / Need Pattern
     summary: >-
-      An approved structural pattern used to formulate needs or requirements
-      consistently.
+      A series of building blocks or pattern slots representing the elements
+      needed for a well-formed, singular, and complete need or requirement.
+    source_location: "GtWR v4 Summary Sheet page 1"
+    interpretation_level: structured_knowledge
+
   - id: need_set
     source_label: Need Set
     summary: >-
-      A defined collection of related need statements considered together.
+      A structured set of agreed-to need expressions for an entity and its
+      external interfaces; within the cited INCOSE product family this is called
+      an Integrated Set of Needs.
+    source_location: "GtWR v4 Summary Sheet page 1"
+    interpretation_level: structured_knowledge
+
   - id: requirement_set
     source_label: Requirement Set
     summary: >-
-      A defined collection of related requirement statements considered
-      together for set-level quality characteristics.
+      A structured set of agreed-to requirement expressions for an entity and
+      its external interfaces; within the cited INCOSE product family this is
+      called a set of system Design Input Requirements.
+    source_location: "GtWR v4 Summary Sheet page 1"
+    interpretation_level: structured_knowledge
+
   - id: attribute
     source_label: Attribute
     summary: >-
-      Additional information associated with a need or requirement to support
-      its definition, understanding, verification, validation, or management.
+      Additional information associated with an entity that supports its
+      definition, understanding, and management.
+    source_location: "GtWR v4 Summary Sheet page 1"
+    interpretation_level: structured_knowledge
+
   - id: need_expression
     source_label: Need Expression
     summary: >-
-      The expression used to represent a need in an approved form.
+      A need statement together with its associated set of attributes.
+    source_location: "GtWR v4 Summary Sheet page 1"
+    interpretation_level: structured_knowledge
+
   - id: requirement_expression
     source_label: Requirement Expression
     summary: >-
-      The expression used to represent a requirement in an approved form.
+      A requirement statement together with its associated set of attributes.
+    source_location: "GtWR v4 Summary Sheet page 1"
+    interpretation_level: structured_knowledge
+
+provenance_contract:
+  every_term_records:
+    - source_id
+    - source_label
+    - source_version
+    - source_location
+    - interpretation_level
 
 interpretation_boundary:
   source_fact: >-
     A structured representation supported by an identified official INCOSE
     publication.
   derived_behavior: >-
-    Any machine-checking procedure or Skill behavior is deferred to later
-    SPECTRUM phases.
+    Machine-checking procedures, Skills, and other SPECTRUM behavior are not
+    source facts and are deferred to later phases.
   no_ai_source: true
 
-provenance_requirements:
-  every_term_records:
-    - source_id
-    - source_label
-    - source_version
-    - source_location_when_verified
-    - interpretation_level
-
 next_extraction:
-  - verify_source_locations_for_each_term
-  - verify_rule_to_characteristic_cells
-  - verify_nrm_activity_to_characteristic_cells
-  - obtain_detailed_attribute_semantics_from_authorized_official_NRM_material
+  - verify_attribute_to_characteristic_relationships_from_authorized_NRM_material
+  - final_summary_sheet_comparison
