@@ -159,6 +159,41 @@ skills:
       context. It does not infer business facts, certify INCOSE conformity, or
       decide implementation readiness.
 
+  requirement-relationship-traceability:
+    purpose: >-
+      Identifier et qualifier les relations explicites de transformation,
+      d'allocation, de traçabilité et de dépendance entre besoins, exigences
+      et artefacts associés à partir de preuves explicites.
+    characteristic_scope: [C1, C2, C4, C7, C8, C10, C11, C14, C15]
+    rule_scope: []
+    attribute_scope: [A2, A3, A32, A33]
+    source_activity_scope:
+      - "3.2.2.4 Identity and Manage Interdependencies"
+      - "6.2.2 Establish Traceability"
+      - "6.2.2.1 Establishing Traceability Between Dependent Peer Requirements"
+      - "6.2.3.6 Interface Requirements Audit"
+      - "6.4.3 Allocation – Flow Down of Requirements"
+      - "6.4.4 Defining Child Requirements that Meet the Intent of the Allocated Parents"
+      - "6.4.7 Use of Traceability and Allocation to Manage Requirements"
+      - "14.2.7 Combine Allocation and Traceability to Manage Requirements"
+      - "14.2.8 Managing Interfaces"
+    source_basis:
+      characteristics: knowledge/sources/incose-gtwr-v4-2023/characteristics.yaml
+      attributes: knowledge/sources/incose-gtwr-v4-2023/attributes.yaml
+      relationships: knowledge/sources/incose-gtwr-v4-2023/matrices.yaml
+      official_nrm_matrix: "INCOSE GtWR v4 Summary Sheet pages 5-6"
+      official_attribute_matrix: "INCOSE GtWR v4 Appendix E / Summary Sheet page 7"
+    qualification: >-
+      The listed characteristics and attributes are source-backed relationships.
+      The Skill name, relationship-record schema, decision statuses, and grouping
+      of these checks are SPECTRUM architecture decisions. No INCOSE traceability
+      rule or synthetic traceability characteristic is created.
+    derived_behavior_boundary: >-
+      The Skill verifies that relationship endpoints, direction, applicability,
+      and supporting evidence are established. It does not infer correctness or
+      necessity from link presence alone, and it does not make every traceability
+      artifact universally mandatory.
+
 source_discrepancy:
   id: R14-label
   canonical_rule_identity: Correct Punctuation
