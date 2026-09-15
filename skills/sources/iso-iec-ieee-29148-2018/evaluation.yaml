@@ -1,0 +1,105 @@
+source:
+  id: iso-iec-ieee-29148-2018
+  step: "2.5"
+  skills: skills/sources/iso-iec-ieee-29148-2018/skills.yaml
+  rules: rules/sources/iso-iec-ieee-29148-2018/rules.yaml
+
+evaluation:
+  purpose: >-
+    Vérifier que chaque capacité de Skill dérivée des contrôles ISO conserve une
+    responsabilité cohérente, une liaison explicite aux règles, des résultats
+    vérifiables et un comportement sûr face aux lacunes de contexte.
+
+  skill_unit_checks:
+    - stable_id
+    - explicit_type
+    - explicit_role
+    - discriminating_trigger
+    - bounded_responsibility
+    - declared_inputs
+    - declared_preconditions
+    - bounded_operations
+    - non_empty_rule_refs
+    - outputs_structured
+    - findings_structured
+    - evidence_expectations_defined
+    - dependencies_and_relations_defined
+    - exit_conditions_defined
+    - non_goals_defined
+    - evaluation_cases_defined
+
+  test_classes:
+    - id: nominal
+      expected: >-
+        Le Skill s'active lorsque ses préconditions sont satisfaites, applique ses
+        règles référencées et produit les observations attendues.
+    - id: missing_context
+      expected: >-
+        Le Skill représente explicitement la lacune et ne fabrique pas l'information manquante.
+    - id: contradictory_context
+      expected: >-
+        Lorsque pertinent, le Skill conserve le conflit sous forme de finding ou d'état prévu.
+    - id: not_applicable
+      expected: >-
+        Le Skill peut conclure qu'il n'est pas applicable sans transformer cette situation en échec.
+    - id: insufficient_evidence
+      expected: >-
+        Une conclusion non suffisamment étayée est marquée comme telle.
+    - id: rule_linkage
+      expected: >-
+        Chaque finding issu d'un contrôle ISO conserve la référence vers le contrôle concerné.
+    - id: evidence_linkage
+      expected: >-
+        Les conclusions soutenues disposent de références d'evidence ou signalent leur absence.
+    - id: regression
+      expected: >-
+        Les cas validés restent reproductibles après évolution du Skill.
+
+  workflow_checks:
+    - verify_relevant_skill_selection
+    - verify_precondition_order
+    - verify_finding_propagation
+    - verify_evidence_propagation
+    - verify_handoff_contracts
+    - verify_blocking_state_propagation
+    - verify_conditional_skill_activation
+    - verify_no_responsibility_duplication
+    - verify_decision_boundary
+
+  completeness:
+    required_rule_refs:
+      expected_control_count: 17
+      check: >-
+        Chaque contrôle ISO29148-R001 à ISO29148-R017 doit apparaître au moins une
+        fois dans control_to_skill et correspondre à un Skill défini.
+    exclusions:
+      check: >-
+        Les exclusions ISO29148-X001 à X003 ne doivent pas être transformées en Skills
+        ou règles ISO supplémentaires.
+    source_integrity:
+      check: >-
+        Les Skills référencent les règles existantes et n'en réécrivent pas la définition.
+    architecture_integrity:
+      check: >-
+        Les types, rôles, relations et workflow sont cohérents avec les responsabilités
+        déclarées dans le catalogue.
+    readiness_boundary:
+      check: >-
+        Aucun Skill de cette famille ne décide seul READY, READY WITH INVESTIGATION ou
+        NOT READY/BLOCKED.
+    provenance_boundary:
+      check: >-
+        Les conclusions restent reliées aux sources et evidence disponibles et les lacunes
+        sont exprimées comme lacunes.
+
+  definition_of_done:
+    - all_17_controls_mapped
+    - every_skill_has_rule_refs
+    - every_skill_has_bounded_responsibility
+    - every_skill_has_inputs_and_preconditions
+    - every_skill_has_outputs_and_findings
+    - every_skill_has_evidence_requirements
+    - relations_are_explicit
+    - workflow_is_explicit
+    - decision_boundary_is_preserved
+    - negative_cases_are_testable
