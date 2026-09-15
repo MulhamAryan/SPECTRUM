@@ -10,10 +10,10 @@ source:
 interpretation_level: spectrum_skill_mapping
 
 purpose: >-
-  Define the traceable mapping from official INCOSE GtWR v4 characteristics and
-  writing rules to SPECTRUM analytical Skills. This file is a SPECTRUM-derived
-  architecture artifact; it is not an INCOSE publication and does not redefine
-  the source rules.
+  Define a traceable mapping from official INCOSE GtWR v4 characteristics and
+  writing rules to SPECTRUM analytical Skills. The Skill grouping is a SPECTRUM
+  architecture decision; the underlying rule-to-characteristic relationships are
+  taken from the official INCOSE cross-reference matrix.
 
 principles:
   - official_source_before_skill_behavior
@@ -28,14 +28,26 @@ skills:
       Examiner la qualité d'une expression individuelle de besoin ou d'exigence
       au regard des caractéristiques individuelles et des règles de formulation
       du GtWR v4 qui lui sont explicitement reliées.
-    characteristic_scope: [C3, C4, C5, C7, C8, C9]
-    rule_scope: [R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, R26, R27, R28, R32, R33, R34, R35, R36, R37, R38, R39, R40]
-    not_in_scope_rules: [R29, R30, R31, R41, R42]
+    characteristic_scope: [C1, C2, C3, C4, C5, C6, C7, C8, C9]
+    rule_scope: [R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, R26, R27, R28, R30, R31, R32, R33, R34, R35, R36, R37, R38, R39, R40]
+    not_in_scope_rules: [R29, R41, R42]
     source_basis:
       characteristics: knowledge/sources/incose-gtwr-v4-2023/characteristics.yaml
       rules: knowledge/sources/incose-gtwr-v4-2023/rules.yaml
       relationships: knowledge/sources/incose-gtwr-v4-2023/matrices.yaml
+      official_matrix: "INCOSE GtWR v4 Summary Sheet page 4"
+    qualification: >-
+      The rule-to-characteristic matrix is the source relationship. C1 Necessary,
+      C6 Feasible, and C8 Correct may require contextual or source evidence beyond
+      the statement text. The Skill must return an inconclusive/context-dependent
+      result rather than infer these characteristics from wording alone.
     derived_behavior_boundary: >-
-      The Skill checks the presence and quality of observable statement features
-      against the cited INCOSE rules. It does not invent missing business values,
-      approve a requirement, or claim formal compliance with INCOSE.
+      The Skill checks observable statement features and relevant contextual
+      evidence against the cited INCOSE rules. It does not invent missing business
+      values, approve a requirement, or claim formal compliance with INCOSE.
+
+source_discrepancy:
+  id: R14-label
+  canonical_rule_identity: Correct Punctuation
+  conflicting_matrix_label: Correct Condition
+  handling: preserve_as_official_source_inconsistency
