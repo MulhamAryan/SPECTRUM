@@ -47,13 +47,13 @@ integrity_requirements:
   - No AI-generated summary is accepted as source evidence.
 
 coverage:
-  definitions: structured
+  definitions: structured_with_source_locations
   characteristics: C1-C15_structured
   rules: R1-R42_structured
   attributes: A1-A49_inventory_structured
-  rules_to_characteristics_matrix: pending_cell_verification
-  nrm_concepts_activities_to_characteristics_matrix: pending_cell_verification
-  attributes_to_characteristics_matrix: pending_controlled_extraction
+  rules_to_characteristics_matrix: transcribed
+  nrm_concepts_activities_to_characteristics_matrix: transcribed
+  attributes_to_characteristics_matrix: pending_authorized_source_extraction
 
 known_source_discrepancy:
   rule: R14
@@ -67,11 +67,9 @@ known_source_discrepancy:
     the matrix label.
 
 next_phase_2_tasks:
-  - verify_every_rules_to_characteristics_cell
-  - verify_every_nrm_activity_to_characteristic_cell
   - verify_attribute_to_characteristic_relationships_from_authorized_source
-  - verify_source_locations_for_structured_definitions
-  - compare_extracted_elements_against_the_official_summary_sheet
+  - compare_all_extracted_elements_against_the_official_summary_sheet
+  - final_phase_2_integrity_check
 
 copyright:
   full_guide: protected
