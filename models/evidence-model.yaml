@@ -1,0 +1,30 @@
+model:
+  id: spectrum-evidence-model
+  version: 1
+  interpretation_level: spectrum_architecture
+  purpose: Preserve attributable evidence and its relation to observations.
+
+Evidence:
+  required: [id, evidence_kind, subject_refs]
+  fields:
+    id: stable identifier
+    evidence_kind: source_fact | project_fact | artifact | absence | contradiction | derived
+    subject_refs: objects concerned by the evidence
+    source_refs: originating sources
+    fragment_refs: addressable source fragments
+    supports_refs: observations or findings supported
+    contradicts_refs: observations or findings contradicted
+    provenance: origin, method, recorded_at, recorded_by
+    status: available | partial | conflicting | unavailable
+
+SourceFragment:
+  required: [id, source_ref, locator]
+  fields: [id, source_ref, locator, extracted_text, extraction_method]
+
+EvidenceRules:
+  - source_fact_requires_source_reference
+  - derived_evidence_requires_input_references
+  - absence_is_not_proof_of_nonconformity
+  - contradiction_is_preserved_not_silently_resolved
+  - evidence_does_not_equal_decision
+  - confidence_does_not_replace_provenance
