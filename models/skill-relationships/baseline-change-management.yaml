@@ -1,0 +1,56 @@
+source:
+  id: incose-gtwr-v4-2023
+  title: INCOSE Guide to Writing Requirements v4
+  document_number: INCOSE-TP-2010-006-04
+  version: 4
+  revision: 4
+  authority: INCOSE Requirements Working Group
+  source_basis: official_incose_publication
+
+interpretation_level: spectrum_skill_mapping
+
+skill: baseline-change-management
+
+purpose: >-
+  Define the source-backed relationship between baseline/change management
+  analysis in SPECTRUM and the lifecycle-management attributes and NRM
+  activities explicitly represented in the INCOSE GtWR v4 corpus.
+
+attribute_scope: [A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, A31, A34, A35, A36, A37, A38, A39, A40]
+
+source_activity_scope:
+  - "6.3 Baseline and Manage Design Input Requirements"
+  - "14.2.1 Baseline Needs, Requirements, and Specifications"
+
+activity_characteristics:
+  "6.3 Baseline and Manage Design Input Requirements": [C1, C3, C4, C6, C8, C10, C11, C12, C13, C14, C15]
+  "14.2.1 Baseline Needs, Requirements, and Specifications": [C1, C3, C4, C6, C8, C10, C11, C12, C13, C14, C15]
+
+qualification: >-
+  The activity-to-characteristic relationships are transcribed from the official
+  GtWR v4 NRM Concepts and Activities to Characteristics matrix. The lifecycle
+  grouping, baseline/change observation schema, statuses, and workflow boundaries
+  are SPECTRUM-derived behavior. Detailed attribute semantics remain in the NRM
+  when not exposed by the GtWR Summary Sheet.
+
+boundaries:
+  - inventory_is_not_project_policy
+  - no_invented_baseline
+  - no_invented_change_authority
+  - requirement_status_distinct_from_implementation_status
+  - approval_requires_attributable_evidence
+  - policy_dependent_judgments_preserve_uncertainty
+  - downstream_traceability_verification_validation_remain_specialized
+  - no_global_readiness_decision
+
+controlled_local_sources:
+  attributes: knowledge/sources/incose-gtwr-v4-2023/attributes.yaml
+  matrices: knowledge/sources/incose-gtwr-v4-2023/matrices.yaml
+  skill: skills/baseline-change-management/SKILL.md
+  contract: evaluation/contracts/incose-gtwr-v4-baseline-change-management.yaml
+  cases: evaluation/cases/incose-gtwr-v4-baseline-change-management.yaml
+
+verification_sources:
+  - "INCOSE GtWR v4 Summary Sheet, page 6"
+  - "INCOSE GtWR v4 Summary Sheet, page 7"
+  - "INCOSE GtWR v4 NRM Concepts and Activities to Characteristics Cross Reference Matrix"
