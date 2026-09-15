@@ -18,9 +18,9 @@ This is a SPECTRUM analytical capability derived from the official INCOSE Guide 
 Authoritative source boundary:
 
 - INCOSE Guide to Writing Requirements v4, `INCOSE-TP-2010-006-04`.
-- INCOSE GtWR v4 Summary Sheet, especially pages 1–7.
+- INCOSE GtWR v4 Summary Sheet, June 2023, pages 1–7.
 - Official NRM Concepts and Activities → Characteristics matrix.
-- Official attribute inventory where traceability-related attributes are listed.
+- Official GtWR v4 attribute inventory and cross-reference information where traceability-related attributes are listed.
 
 Local controlled representations:
 
@@ -219,13 +219,13 @@ Each finding must identify:
 
 ## Source-backed scope
 
-The official Summary Sheet defines a requirement expression as a requirement statement plus associated attributes, and defines requirement statements as the result of formal transformation from sources, needs, or higher-level requirements. citeturn502689view0
+The official GtWR v4 Summary Sheet defines a requirement expression as a requirement statement plus associated attributes, and defines requirement statements as the result of formal transformation from sources, needs, or higher-level requirements. Source: INCOSE GtWR v4 Summary Sheet, page 1.
 
-The official NRM matrix explicitly includes `6.2.2 Establish Traceability`, `6.2.2.1 Establishing Traceability Between Dependent Peer Requirements`, `6.4.3 Allocation – Flow Down of Requirements`, `6.4.4 Defining Child Requirements that Meet the Intent of the Allocated Parents`, `6.4.7 Use of Traceability and Allocation to Manage Requirements`, `14.2.7 Combine Allocation and Traceability to Manage Requirements`, and `14.2.8 Managing Interfaces`. citeturn163892view0
+The official NRM Concepts and Activities → Characteristics matrix includes the traceability, dependent-peer, interface, allocation, child-requirement, and management activities listed in Procedure 9. Source: INCOSE GtWR v4 Summary Sheet, pages 5–6.
 
-The official characteristics define correctness of an individual requirement in relation to the need, source, or higher-level requirement from which it was transformed, and set-level correctness in relation to the corresponding higher-level sources. citeturn502689view0
+The official characteristics define correctness of an individual requirement in relation to the need, source, or higher-level requirement from which it was transformed, and set-level correctness in relation to the corresponding higher-level sources. Source: INCOSE GtWR v4 Summary Sheet, page 2.
 
-The official attribute inventory includes traceability-relevant attributes such as Trace to Parent, Trace to Source, Trace to Interface Definition, and Trace to Dependent Peer Requirements. Their detailed attribute guidance belongs to the NRM and is not redefined by this Skill.
+The official attribute inventory includes traceability-relevant attributes such as A2 Trace to Parent, A3 Trace to Source, A32 Trace to Interface Definition, and A33 Trace to Dependent Peer Requirements. Their detailed attribute guidance belongs to the NRM and is not redefined by this Skill. Source: INCOSE GtWR v4 Summary Sheet, page 7 and Appendix E.
 
 ## Analysis logic
 
