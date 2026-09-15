@@ -1,0 +1,49 @@
+source:
+  reference: ISO/IEC/IEEE 29148:2018
+  rules: rules/sources/iso-iec-ieee-29148-2018/rules.yaml
+  skills_root: skills/
+
+checks:
+  skill_unit:
+    - stable_name
+    - explicit_type
+    - explicit_role
+    - discriminating_description
+    - bounded_responsibility
+    - declared_inputs
+    - declared_preconditions
+    - bounded_operations
+    - rule_refs_present
+    - outputs_declared
+    - findings_declared
+    - evidence_expectations_defined
+    - dependencies_and_relations_defined
+    - exit_conditions_defined
+    - non_goals_defined
+    - references_defined
+    - evaluation_cases_defined
+
+  integrity:
+    - every_rule_ref_exists
+    - every_skill_reference_resolves
+    - every_workflow_reference_resolves
+    - every_control_R001_to_R017_mapped
+    - no_orphan_skill_reference
+    - no_duplicate_skill_name
+    - no_platform_specific_skill_definition
+    - no_final_readiness_decision_inside_component
+
+negative_cases:
+  - missing_context
+  - contradictory_context
+  - insufficient_evidence
+  - not_applicable
+  - regression
+
+done:
+  - all_17_controls_mapped
+  - every_concrete_skill_has_SKILL_md
+  - every_skill_has_references
+  - all_relationships_resolve
+  - workflow_is_explicit
+  - decision_boundary_preserved

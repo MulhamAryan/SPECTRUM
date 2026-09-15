@@ -1,0 +1,84 @@
+source:
+  reference: ISO/IEC/IEEE 29148:2018
+
+relationships:
+  - from: multi-source-context
+    relation: feeds
+    to: requirement-context
+  - from: requirement-context
+    relation: feeds
+    to: elicitation-gap
+  - from: requirement-context
+    relation: feeds
+    to: requirement-expression
+  - from: requirement-context
+    relation: feeds
+    to: requirement-relationship-traceability
+  - from: requirement-context
+    relation: feeds
+    to: verification-analysis
+  - from: requirement-context
+    relation: feeds
+    to: validation-analysis
+  - from: stakeholder-scenario-context
+    relation: feeds
+    to: validation-analysis
+  - from: requirement-expression
+    relation: feeds
+    to: verification-analysis
+  - from: requirement-relationship-traceability
+    relation: feeds
+    to: verification-analysis
+  - from: requirement-relationship-traceability
+    relation: feeds
+    to: validation-analysis
+  - from: elicitation-gap
+    relation: feeds
+    to: iso29148-readiness
+  - from: stakeholder-scenario-context
+    relation: feeds
+    to: iso29148-readiness
+  - from: requirement-expression
+    relation: feeds
+    to: iso29148-readiness
+  - from: requirement-relationship-traceability
+    relation: feeds
+    to: iso29148-readiness
+  - from: verification-analysis
+    relation: feeds
+    to: iso29148-readiness
+  - from: validation-analysis
+    relation: feeds
+    to: iso29148-readiness
+  - from: requirements-engineering-context
+    relation: feeds
+    to: iso29148-readiness
+  - from: conformance-governance
+    relation: validates
+    to: iso29148-readiness
+
+control_to_skill:
+  ISO29148-R001: [requirement-context]
+  ISO29148-R002: [requirement-context]
+  ISO29148-R003: [requirement-expression]
+  ISO29148-R004: [requirement-relationship-traceability]
+  ISO29148-R005: [requirement-relationship-traceability]
+  ISO29148-R006: [requirement-relationship-traceability]
+  ISO29148-R007: [elicitation-gap]
+  ISO29148-R008: [validation-analysis]
+  ISO29148-R009: [verification-analysis]
+  ISO29148-R010: [requirements-engineering-context]
+  ISO29148-R011: [requirements-engineering-context]
+  ISO29148-R012: [stakeholder-scenario-context]
+  ISO29148-R013: [requirement-context]
+  ISO29148-R014: [stakeholder-scenario-context]
+  ISO29148-R015: [requirement-context]
+  ISO29148-R016: [multi-source-context]
+  ISO29148-R017: [conformance-governance]
+
+principles:
+  - rules_are_defined_once
+  - conditional_controls_remain_conditional
+  - evidence_and_provenance_are_preserved
+  - workflows_select_applicable_skills
+  - decisions_are_outside_the_skill_control_layer
