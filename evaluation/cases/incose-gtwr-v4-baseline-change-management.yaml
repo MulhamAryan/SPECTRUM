@@ -1,0 +1,88 @@
+source:
+  id: incose-gtwr-v4-2023
+  basis: official_incose_publication
+  references:
+    - "INCOSE Guide to Writing Requirements v4, INCOSE-TP-2010-006-04"
+    - "INCOSE GtWR v4 Summary Sheet, June 2023"
+    - "INCOSE Needs and Requirements Manual, version 2, December 2024, when authorized detailed guidance is required"
+
+skill: baseline-change-management
+
+cases:
+  - id: baseline-001
+    title: established_baseline_and_version
+    intent: Establish a target, baseline reference, version, and attributable state from supplied evidence.
+    expected_status: baseline_state_established
+
+  - id: baseline-002
+    title: missing_baseline_reference
+    intent: Do not invent a baseline when the reference state cannot be established.
+    expected_status: baseline_state_missing
+    expected_findings: [baseline_reference_missing]
+
+  - id: baseline-003
+    title: change_proposal_linked_to_target
+    intent: Preserve an explicit change proposal linked to the affected requirement and current version.
+    expected_status: baseline_state_established
+
+  - id: baseline-004
+    title: missing_change_target
+    intent: Detect a change record that cannot be reliably attributed to a target object.
+    expected_findings: [change_target_missing]
+
+  - id: baseline-005
+    title: conflicting_versions
+    intent: Detect incompatible version assertions for the same target when both are attributable.
+    expected_status: change_state_conflicting
+    expected_findings: [version_history_inconsistent]
+
+  - id: baseline-006
+    title: inconsistent_change_dates
+    intent: Detect an impossible or unsupported ordering between entry and last-change dates when both are comparable.
+    expected_status: change_state_conflicting
+    expected_findings: [change_date_inconsistent]
+
+  - id: baseline-007
+    title: approval_without_authority_evidence
+    intent: Do not infer approval solely from an approval date or status label.
+    expected_status: baseline_state_partial
+    expected_findings: [approval_evidence_missing]
+
+  - id: baseline-008
+    title: authority_mismatch
+    intent: Detect an approval or change attributed to an authority that conflicts with an explicit project policy.
+    expected_status: change_state_conflicting
+    expected_findings: [approval_authority_mismatch]
+
+  - id: baseline-009
+    title: requirement_status_distinct_from_implementation_status
+    intent: Keep A30 status of the need or requirement distinct from A31 status of implementation.
+    expected_status: baseline_state_established
+
+  - id: baseline-010
+    title: owner_policy_conflict
+    intent: Detect a lifecycle ownership inconsistency when project policy explicitly establishes the owner or responsible authority.
+    expected_status: change_state_conflicting
+    expected_findings: [owner_authority_inconsistent]
+
+  - id: baseline-011
+    title: change_impact_requires_traceability
+    intent: Preserve downstream impact references rather than claiming that a change has no effect when impacted relationships are unknown.
+    expected_status: baseline_state_partial
+    expected_findings: [change_impact_untraced]
+
+  - id: baseline-012
+    title: optional_lifecycle_attribute_not_failure
+    intent: Do not report a non-conformity solely because an optional lifecycle attribute is absent and no project policy makes it applicable.
+    expected_status: baseline_state_established
+
+  - id: baseline-013
+    title: missing_project_policy
+    intent: Treat lifecycle-policy-dependent judgments as inconclusive when the project policy is unavailable.
+    expected_status: change_context_missing
+    expected_findings: [change_context_missing]
+
+  - id: baseline-014
+    title: no_invented_change_control
+    intent: Do not invent a change board, approval workflow, state transition, or mandatory artifact merely from the INCOSE attribute inventory.
+    expected_status: change_context_missing
