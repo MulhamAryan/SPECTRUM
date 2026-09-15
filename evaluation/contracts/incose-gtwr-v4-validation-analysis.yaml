@@ -29,7 +29,8 @@ contract:
     - validation_contradicted
     - validation_context_missing
     - not_applicable
-  characteristic_scope: [C14]
+  individual_characteristic_scope: [C3, C6, C8]
+  set_characteristic_scope: [C10, C12, C13, C14, C15]
   source_activity_scope:
     - "3.2.1.7 System Verification and System Validation"
     - "5.2 Needs Validation"
