@@ -1,0 +1,75 @@
+source_basis: incose-gtwr-v4-2023
+skill: requirements-context
+
+cases:
+  - id: context-001
+    title: context_established
+    intent: Establish entity, level, source or parent, relevant conditions, terminology, and applicable constraints from supplied project evidence.
+    expected_status: context_established
+
+  - id: context-002
+    title: missing_entity_definition
+    intent: Detect that the entity to which the candidate applies cannot be established from the available evidence.
+    expected_status: context_missing
+    expected_findings: [entity_not_established]
+
+  - id: context-003
+    title: missing_abstraction_level
+    intent: Detect that the applicable abstraction, organization, or architecture level is not established.
+    expected_status: context_missing
+    expected_findings: [abstraction_level_not_established]
+    expected_characteristics: [C2]
+
+  - id: context-004
+    title: missing_source_or_parent
+    intent: Detect missing transformation evidence needed to assess necessity or correctness without inferring either characteristic.
+    expected_status: context_missing
+    expected_findings: [source_or_parent_not_established, source_alignment_not_established]
+    expected_characteristics: [C1, C8]
+
+  - id: context-005
+    title: conflicting_source_evidence
+    intent: Detect materially conflicting authoritative project sources that prevent reliable interpretation.
+    expected_status: context_conflicting
+    expected_findings: [context_source_conflict]
+
+  - id: context-006
+    title: missing_condition_context
+    intent: Detect missing condition-of-use or state/mode information when the supplied candidate depends on it.
+    expected_status: context_missing
+    expected_findings: [condition_of_use_missing]
+
+  - id: context-007
+    title: missing_constraints_and_risk_basis
+    intent: Identify missing entity constraints or risk evidence needed for a feasibility assessment without declaring infeasibility.
+    expected_status: context_missing
+    expected_findings: [constraint_context_missing, risk_basis_missing]
+    expected_characteristics: [C6]
+
+  - id: context-008
+    title: undefined_project_term
+    intent: Detect a project term that cannot be resolved against supplied glossary, data dictionary, ontology, or model evidence.
+    expected_status: context_missing
+    expected_findings: [term_definition_missing]
+
+  - id: context-009
+    title: stakeholder_context_missing
+    intent: Detect missing stakeholder or agreement evidence when the declared analysis scope depends on it, without inventing approval.
+    expected_status: context_missing
+    expected_findings: [stakeholder_context_missing]
+
+  - id: context-010
+    title: context_sufficient_but_wording_defective
+    intent: Demonstrate that sufficient context does not make a defective requirement statement conformant; wording analysis remains with the statement-quality skill.
+    expected_status: context_established
+
+  - id: context-011
+    title: generic_checklist_false_positive
+    intent: Do not report missing context solely because a generic checklist names an artifact that the supplied project scope does not require.
+    expected_status: context_partially_established
+
+  - id: context-012
+    title: no_synthetic_traceability_characteristic
+    intent: Verify that trace evidence can support C1/C8 and contextual reasoning without creating a new INCOSE traceability characteristic.
+    expected_characteristics: [C1, C8]
+    expected_prohibitions: [create_new_INCOSE_characteristics]
