@@ -134,9 +134,9 @@ Une affirmation du type « conforme à INCOSE » sans référence à une règle,
 
 ## Handoff
 Vers :
-- `requirement-context` lorsque le résultat dépend du contexte de l'entité, des conditions, de l'état ou du niveau ;
+- `requirements-context` lorsque le résultat dépend du contexte de l'entité, des conditions, de l'état ou du niveau ;
 - `verification-analysis` lorsque la vérifiabilité doit être approfondie ;
-- `validation-analysis` lorsque la pertinence par rapport au besoin ou aux objectifs doit être établie ;
+- `validation-analysis` lorsque la validation du niveau ensemble doit être approfondie ;
 - `elicitation-gap` lorsque l'analyse est bloquée par une information métier absente ;
 - une future analyse de niveau ensemble pour C10–C15.
 
