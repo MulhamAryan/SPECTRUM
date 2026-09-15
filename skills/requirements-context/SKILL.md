@@ -211,11 +211,11 @@ Each finding must state:
 
 ## Source-backed scope
 
-The official GtWR v4 Summary Sheet defines an entity and explicitly situates needs and requirements in relation to lifecycle concepts, sources, needs, higher-level requirements, constraints, and acceptable risk. It also defines characteristics such as C1 Necessary, C2 Appropriate, C4 Complete, C6 Feasible, C8 Correct, and C9 Conforming in ways that depend on contextual or transformation information rather than wording alone. citeturn422206view0
+The official GtWR v4 Summary Sheet defines an entity and situates needs and requirements in relation to lifecycle concepts, sources, needs, higher-level requirements, constraints, and acceptable risk. It defines C1 Necessary, C2 Appropriate, C4 Complete, C6 Feasible, C8 Correct, and C9 Conforming in ways that depend on contextual or transformation information rather than wording alone.
 
-The same official source states that underlying analysis from which a need or requirement was derived is as important as how well the statement is formed. Its NRM cross-reference matrix associates activities including analysis from which needs and requirements are derived, managing unknowns, appropriate-to-level analysis, feasibility/risk, stakeholder agreement, and baseline/manage activities with relevant characteristics. citeturn422206view0turn217354view0
+The same source states that the underlying analysis from which a need or requirement was derived is as important as how well the statement is formed. The NRM Concepts and Activities → Characteristics matrix links activities such as analysis from which needs and requirements are derived, managing unknowns, appropriate-to-level analysis, feasibility/risk, stakeholder agreement, and baseline/manage activities to relevant characteristics.
 
-The official attribute inventory also includes Rationale (A1), Trace to Parent (A2), Trace to Source (A3), States and Modes (A4), Condition of Use (A12), and other contextual or management attributes. These attributes are identified as defined in the NRM; SPECTRUM does not redefine them here. citeturn236298view0
+The official attribute inventory includes A1 Rationale, A2 Trace to Parent, A3 Trace to Source, A4 States and Modes, A12 Condition of Use, and other contextual or management attributes. The Summary Sheet identifies these attributes as defined in the NRM; SPECTRUM does not redefine them here.
 
 ## Analysis logic
 
