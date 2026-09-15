@@ -1,0 +1,268 @@
+source:
+  id: iso-iec-ieee-29148-2018
+  title: ISO/IEC/IEEE 29148:2018
+  authority: ISO/IEC/IEEE
+  role: normative_reference
+  provenance: official_iso_online_browsing_platform
+  normative_status: published_standard
+  evidence_boundary: public_source_only
+
+purpose:
+  statement: >-
+    Ce catalogue contient uniquement des contrôles SPECTRUM dérivés de concepts
+    et d'éléments explicitement vérifiables dans la partie publiquement visible
+    de l'ISO/IEC/IEEE 29148:2018. Il ne prétend pas reproduire ni couvrir de
+    manière exhaustive les prescriptions du texte intégral de la norme.
+
+rule_schema:
+  id: identifiant_stable_de_la_regle
+  source: source_normative
+  source_section: section_verifiee
+  classification: type_de_regle
+  applicability: contexte_d_application
+  check: condition_que_spectrum_peut_evaluer
+  finding: type_de_resultat_si_condition_non_satisfaite
+  product_adaptation: adaptation_specifique_a_spectrum
+
+rules:
+  - id: ISO29148-R001
+    source_section: "3.1.19"
+    classification: source_grounded_rule
+    applicability: requirement_extracted
+    check: >-
+      Un élément identifié comme exigence doit être relié à un système, un
+      logiciel, un service ou un autre élément d'intérêt explicite.
+    finding: missing_system_of_interest
+    product_adaptation: >-
+      SPECTRUM signale l'absence de cible explicite plutôt que d'en inventer
+      une à partir du contexte.
+
+  - id: ISO29148-R002
+    source_section: "3.1.19"
+    classification: source_grounded_rule
+    applicability: requirement_extracted
+    check: >-
+      Lorsque l'élément est traité comme une exigence, ses besoins associés,
+      contraintes et conditions doivent pouvoir être identifiés dans le
+      contexte disponible.
+    finding: requirement_context_incomplete
+    product_adaptation: >-
+      SPECTRUM distingue ce qui est explicitement présent de ce qui est
+      seulement inféré.
+
+  - id: ISO29148-R003
+    source_section: "3.1.19"
+    classification: source_grounded_rule
+    applicability: requirement_extracted
+    check: >-
+      Une exigence doit pouvoir être représentée comme une expression
+      spécifique, précise et non ambiguë de besoin.
+    finding: requirement_expression_unclear
+    product_adaptation: >-
+      Les méthodes concrètes de détection d'ambiguïté seront définies plus
+      tard et ne sont pas encore confondues avec les règles INCOSE.
+
+  - id: ISO29148-R004
+    source_section: "3.1.10"
+    classification: source_grounded_rule
+    applicability: requirement_relationship_analysis
+    check: >-
+      Une exigence identifiée comme dérivée doit pouvoir être reliée à une
+      exigence de niveau supérieur ou à son contexte de dérivation.
+    finding: derived_requirement_without_parent
+    product_adaptation: >-
+      SPECTRUM conserve la relation parent-enfant lorsque la preuve de cette
+      relation existe ; il ne crée pas de parent artificiel.
+
+  - id: ISO29148-R005
+    source_section: "3.1.23"
+    classification: source_grounded_rule
+    applicability: traceability_analysis
+    check: >-
+      Lorsqu'une relation de traçabilité est disponible, son chemin de
+      dérivation vers le niveau supérieur ou d'allocation vers le niveau
+      inférieur doit être représentable.
+    finding: traceability_gap
+    product_adaptation: >-
+      La relation est stockée comme donnée de traçabilité, avec sa source et
+      son niveau de confiance.
+
+  - id: ISO29148-R006
+    source_section: "3.1.24"
+    classification: source_grounded_rule
+    applicability: traceability_artifact
+    check: >-
+      Une matrice de traçabilité, lorsqu'elle est utilisée, doit relier les
+      exigences aux besoins ou exigences de niveau supérieur et/ou aux éléments
+      d'implémentation de niveau inférieur pertinents.
+    finding: incomplete_traceability_mapping
+    product_adaptation: >-
+      SPECTRUM peut produire cette représentation comme artefact ; l'existence
+      obligatoire d'une RTM dans tous les projets n'est pas déduite de cette
+      seule règle.
+
+  - id: ISO29148-R007
+    source_section: "3.1.20"
+    classification: source_grounded_rule
+    applicability: elicitation_context
+    check: >-
+      Lorsque les besoins ne sont pas encore suffisamment identifiés,
+      SPECTRUM doit pouvoir signaler qu'une activité d'élicitation ou une
+      collecte supplémentaire est nécessaire plutôt que de compléter les
+      exigences par invention.
+    finding: elicitation_needed
+    product_adaptation: >-
+      Ce finding devient une entrée possible du futur moteur de décision de
+      readiness.
+
+  - id: ISO29148-R008
+    source_section: "3.1.25, 3.1.36"
+    classification: source_grounded_rule
+    applicability: validation_analysis
+    check: >-
+      La validation porte sur le fait que les exigences définissent le bon
+      système attendu et, dans son contexte de validation, qu'une utilisation
+      prévue est satisfaite avec des preuves objectives.
+    finding: validation_basis_missing
+    product_adaptation: >-
+      SPECTRUM doit distinguer validation du bon besoin/système et simple
+      vérification de la forme de l'exigence.
+
+  - id: ISO29148-R009
+    source_section: "3.1.26, 3.1.37"
+    classification: source_grounded_rule
+    applicability: verification_analysis
+    check: >-
+      La vérification doit pouvoir s'appuyer sur l'examen de la conformité des
+      exigences ou éléments considérés et sur des preuves objectives lorsqu'une
+      vérification est revendiquée.
+    finding: verification_basis_missing
+    product_adaptation: >-
+      SPECTRUM enregistre séparément le critère vérifié et la preuve disponible.
+
+  - id: ISO29148-R010
+    source_section: "3.1.21"
+    classification: source_grounded_rule
+    applicability: requirements_engineering_scope
+    check: >-
+      L'analyse d'un ticket doit pouvoir couvrir, selon le contexte, les
+      activités pertinentes de découverte, élicitation, développement,
+      analyse, vérification, validation, communication, documentation et
+      gestion des exigences.
+    finding: requirements_engineering_activity_missing
+    product_adaptation: >-
+      Cette règle décrit la couverture fonctionnelle visée par SPECTRUM ; elle
+      ne détermine pas encore le workflow d'exécution.
+
+  - id: ISO29148-R011
+    source_section: "3.1.22"
+    classification: source_grounded_rule
+    applicability: lifecycle_management
+    check: >-
+      Lorsqu'un jeu d'exigences est suivi dans le temps, les activités de
+      maintien, communication, traçabilité et suivi doivent pouvoir être
+      représentées.
+    finding: requirements_management_gap
+    product_adaptation: >-
+      SPECTRUM pourra utiliser ce contrôle pour les informations de contexte
+      disponibles dans le projet ; il ne suppose pas que Jira seul constitue
+      tout le système de gestion des exigences.
+
+  - id: ISO29148-R012
+    source_section: "3.1.17"
+    classification: source_grounded_rule
+    applicability: scenario_analysis
+    check: >-
+      Lorsqu'un scénario opérationnel est disponible, il peut être utilisé
+      comme élément de contexte pour évaluer des exigences et contribuer à leur
+      vérification ou validation.
+    finding: operational_scenario_context_missing
+    product_adaptation: >-
+      L'absence d'un scénario n'est signalée comme problème que si le contexte
+      du ticket indique qu'un scénario est nécessaire pour comprendre ou
+      vérifier le comportement.
+
+  - id: ISO29148-R013
+    source_section: "3.1.6, 3.1.7, 3.1.30"
+    classification: source_grounded_rule
+    applicability: requirement_context_analysis
+    check: >-
+      Les conditions, contraintes et états pertinents d'une exigence doivent
+      rester distinguables lorsqu'ils sont nécessaires à son interprétation.
+    finding: condition_or_constraint_ambiguity
+    product_adaptation: >-
+      SPECTRUM représente séparément ces éléments dans son modèle de données
+      lorsqu'ils sont identifiés avec une preuve suffisante.
+
+  - id: ISO29148-R014
+    source_section: "3.1.28"
+    classification: source_grounded_rule
+    applicability: stakeholder_analysis
+    check: >-
+      Les parties prenantes pertinentes doivent pouvoir être identifiées lorsque
+      leur besoin ou leurs attentes conditionnent l'analyse de l'exigence.
+    finding: stakeholder_context_missing
+    product_adaptation: >-
+      SPECTRUM ne crée pas automatiquement un rôle de partie prenante sur la
+      seule base du nom d'une personne trouvée dans un ticket.
+
+  - id: ISO29148-R015
+    source_section: "3.1.29, 3.1.33"
+    classification: source_grounded_rule
+    applicability: specification_context
+    check: >-
+      Lorsqu'une exigence appartient à une collection structurée de type
+      spécification de besoins, son niveau (partie prenante, système ou
+      logiciel) doit rester identifiable.
+    finding: requirement_level_unclear
+    product_adaptation: >-
+      SPECTRUM conserve le niveau comme attribut explicite ; le ticket Jira
+      n'est pas présumé être une spécification complète.
+
+  - id: ISO29148-R016
+    source_section: "5, 6, 7, 8"
+    classification: source_grounded_rule
+    applicability: ticket_analysis
+    check: >-
+      Une analyse de préparation ne doit pas considérer uniquement le texte du
+      ticket si des informations de contexte, processus ou information items
+      pertinents sont nécessaires pour interpréter les exigences.
+    finding: context_insufficient
+    product_adaptation: >-
+      Cette règle justifie la recherche de contexte dans les dépôts, documents,
+      décisions d'architecture, exigences liées et autres sources autorisées.
+
+  - id: ISO29148-R017
+    source_section: "4.5"
+    classification: source_grounded_rule
+    applicability: tailored_project_use
+    check: >-
+      Une application adaptée de la norme doit conserver la distinction entre
+      les éléments issus de la norme et les choix de tailoring propres au projet.
+    finding: provenance_or_tailoring_unclear
+    product_adaptation: >-
+      Chaque règle SPECTRUM porte une provenance et un statut d'adaptation
+      explicites.
+
+non_rules:
+  - id: ISO29148-N001
+    statement: >-
+      READY, READY WITH INVESTIGATION et NOT READY/BLOCKED ne sont pas des
+      catégories définies ici comme termes de l'ISO 29148. Ce sont des décisions
+      produit SPECTRUM à définir séparément.
+  - id: ISO29148-N002
+    statement: >-
+      Les critères C1-C14 du guide INCOSE ne sont pas inclus dans ce catalogue.
+      Ils appartiennent au référentiel INCOSE GtWR et seront traités séparément.
+  - id: ISO29148-N003
+    statement: >-
+      Les mécanismes d'implémentation propres à Claude, Codex, Gemini ou à un
+      autre agent ne sont pas dérivés de cette norme.
+
+coverage:
+  status: partial_and_explicit
+  reason: >-
+    Le catalogue exploite des éléments et définitions vérifiables dans la vue
+    publique officielle. La page ISO indique que seul le contenu informatif
+    public est consultable en ligne et que le texte complet doit être acheté.
+  exhaustive_standard_text_coverage: false
