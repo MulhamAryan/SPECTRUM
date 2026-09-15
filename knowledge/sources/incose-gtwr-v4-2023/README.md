@@ -1,0 +1,1 @@
+INCOSE GtWR v4 source baseline and structured extraction live in this directory. The canonical knowledge artifact is `catalog.yaml`. Phase 2 remains in controlled extraction until the official cross-reference matrices and source locations are verified.
