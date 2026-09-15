@@ -194,6 +194,37 @@ skills:
       necessity from link presence alone, and it does not make every traceability
       artifact universally mandatory.
 
+  verification-analysis:
+    purpose: >-
+      Analyser la base de vérification d'un besoin ou d'une exigence et
+      déterminer si des preuves objectives permettent d'établir une vérification
+      exploitable.
+    characteristic_scope: [C7]
+    set_characteristic_scope: [C14]
+    rule_scope: []
+    source_activity_scope:
+      - "3.2.1.7 System Verification and System Validation"
+      - "5.1.2 Perform Needs Verification"
+      - "6.2.5 Plan for System Verification"
+      - "7.1.2 Perform Design Input Requirements Verification"
+      - "8.4 Design Verification"
+      - "14.2.9 Managing System Verification and System Validation"
+    source_basis:
+      characteristics: knowledge/sources/incose-gtwr-v4-2023/characteristics.yaml
+      relationships: knowledge/sources/incose-gtwr-v4-2023/matrices.yaml
+      official_matrix: "INCOSE GtWR v4 Summary Sheet pages 2, 5-6"
+    qualification: >-
+      C7 is the primary individual verifiability characteristic. C14 is a
+      set-level characteristic and must remain distinct from C7 and from a
+      generic verification pass/fail judgment. The listed NRM activities are
+      source relationships; the verification evidence chain, statuses, and
+      coverage model are SPECTRUM-derived behavior.
+    derived_behavior_boundary: >-
+      The Skill evaluates the verification target, basis, criterion, evidence
+      linkage, and coverage supplied for the declared scope. It does not invent
+      tests, thresholds, results, or acceptance criteria, and it does not execute
+      verification activities.
+
 source_discrepancy:
   id: R14-label
   canonical_rule_identity: Correct Punctuation
