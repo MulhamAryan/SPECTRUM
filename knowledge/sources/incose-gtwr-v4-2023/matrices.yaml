@@ -75,9 +75,9 @@ matrices:
       "3.2.1.3 Managing Sets of Needs And Requirements": [C4, C13]
       "3.2.1.5 Attributes": [C1, C13]
       "3.2.1.6 Formal, Binding Agreement": [C1, C3, C4, C6, C7, C13, C14]
-      "3.2.1.7 System Verification and System Validation": [C1, C7]
+      "3.2.1.7 System Verification and System Validation": [C7, C14]
       "3.2.2.1 Analysis from Which Needs and Requirements are Derived": [C1, C6, C8, C10, C11, C12, C13, C14, C15]
-      "3.2.2.2 Completeness": [C10, C11, C13]
+      "3.2.2.2 Completeness": [C10, C11, C13, C14]
       "3.2.2.3 Consistency": [C11, C13, C14]
       "3.2.2.4 Identity and Manage Interdependencies": [C8, C11, C13, C14, C15]
       "3.2.2.5 Support Simulations": [C7, C13, C14]
@@ -123,8 +123,8 @@ matrices:
       "7.1.2 Perform Design Input Requirements Verification": [C1, C3, C4, C7, C9, C10, C11, C14]
       "7.2 Design Input Requirements Validation": [C14]
       "7.2.2 Perform Design Input Requirements Validation": [C1, C3, C4, C6, C8, C10, C11, C12, C13, C14, C15]
-      "8.1 Design Definition Process Overview": [C1, C3, C4, C6, C7, C8, C10, C11, C12, C13, C14, C15]
-      "8.2 Early System Verification and System Validation": [C1, C3, C4, C6, C7, C8, C10, C11, C12, C13, C14, C15]
+      "8.1 Design Definition Process Overview": [C3, C4, C6, C7, C8, C10, C11, C12, C13, C14, C15]
+      "8.2 Early System Verification and System Validation": [C3, C4, C6, C7, C8, C10, C11, C12, C13, C14, C15]
       "8.4 Design Verification": [C3, C4, C6, C7, C8, C10, C11]
       "8.5 Design Validation": [C10, C11, C12, C13, C14]
       "14.2.1 Baseline Needs, Requirements, and Specifications": [C1, C3, C4, C6, C8, C10, C11, C12, C13, C14, C15]
@@ -145,6 +145,7 @@ matrices:
       section/activity identifiers are preserved and no relationship is inferred.
     verification_sources:
       - "INCOSE GtWR v4 Summary Sheet, pages 5-6"
+      - "INCOSE GtWR v4, NRM Concepts and Activities to Characteristics Cross Reference Matrix"
 
   attributes_to_characteristics:
     source: "INCOSE GtWR v4 Appendix E; Summary Sheet page 7 attribute inventory"
