@@ -1,0 +1,45 @@
+model: spectrum-canonical-data-model
+contract_version: 1
+
+invariants:
+  - id: CDM-001
+    rule: every_object_has_stable_id_and_type
+  - id: CDM-002
+    rule: every_reference_resolves_to_a_canonical_object
+  - id: CDM-003
+    rule: source_provenance_is_preserved_for_source_backed_claims
+  - id: CDM-004
+    rule: evidence_is_distinct_from_observation
+  - id: CDM-005
+    rule: observation_is_distinct_from_finding
+  - id: CDM-006
+    rule: finding_is_distinct_from_decision
+  - id: CDM-007
+    rule: C1_to_C9_are_individual_characteristics_and_C10_to_C15_are_set_characteristics
+  - id: CDM-008
+    rule: C14_is_not_attached_to_an_individual_requirement_as_an_individual_characteristic
+  - id: CDM-009
+    rule: requirement_status_is_distinct_from_implementation_status
+  - id: CDM-010
+    rule: source_facts_are_not_created_from_derived_observations
+  - id: CDM-011
+    rule: unresolved_context_is_represented_as_uncertainty_or_missing_evidence_not_invented_fact
+  - id: CDM-012
+    rule: decision_requires_explicit_policy_or_workflow_reference
+
+negative_controls:
+  - id: CDM-N001
+    reject: create_incoSE_characteristic_C16
+  - id: CDM-N002
+    reject: treat_skill_status_as_global_readiness_decision
+  - id: CDM-N003
+    reject: mark_missing_optional_attribute_as_nonconformity_without_applicability_basis
+  - id: CDM-N004
+    reject: infer_C12_or_C15_from_requirement_wording_alone
+  - id: CDM-N005
+    reject: treat_verification_evidence_as_validation_evidence_without_basis
+
+acceptance:
+  schema_scope: canonical_objects_and_cross_object_invariants
+  source_authority: SPECTRUM_architecture_using_existing_authoritative_source_records
+  readiness_decision: explicitly_out_of_scope
