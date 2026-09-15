@@ -1,0 +1,51 @@
+model: spectrum-canonical-data-model
+
+cases:
+  - id: cdm-001
+    title: stable_identity
+    input: objects_have_id_and_type
+    expected: valid
+  - id: cdm-002
+    title: unresolved_reference
+    input: relationship_points_to_unknown_object
+    expected: invalid
+  - id: cdm-003
+    title: evidence_observation_separation
+    input: evidence_supports_observation
+    expected: valid
+  - id: cdm-004
+    title: finding_decision_separation
+    input: finding_exists_without_decision
+    expected: valid
+  - id: cdm-005
+    title: decision_requires_policy
+    input: decision_without_policy_reference
+    expected: invalid
+  - id: cdm-006
+    title: individual_characteristics
+    input: requirement_has_individual_characteristics
+    expected: valid
+  - id: cdm-007
+    title: set_characteristics
+    input: requirement_set_has_set_characteristics
+    expected: valid
+  - id: cdm-008
+    title: set_only_characteristic_scope
+    input: individual_requirement_claims_set_only_characteristic
+    expected: invalid
+  - id: cdm-009
+    title: implementation_status_separation
+    input: requirement_status_and_implementation_status_are_distinct
+    expected: valid
+  - id: cdm-010
+    title: uncertainty_preserved
+    input: missing_context_without_invention
+    expected: valid
+  - id: cdm-011
+    title: source_provenance
+    input: source_backed_claim_links_to_source
+    expected: valid
+  - id: cdm-012
+    title: no_synthetic_source_characteristic
+    input: invented_source_characteristic
+    expected: invalid
