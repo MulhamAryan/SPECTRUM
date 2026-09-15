@@ -1,0 +1,75 @@
+source:
+  id: incose-gtwr-v4-2023
+  source: gtwr-v4-summary-sheet
+  source_basis: official_incose_publication
+  source_date: 2023-06
+
+phase:
+  number: 2
+  name: structured_knowledge_extraction
+  status: controlled_extraction
+
+scope:
+  individual:
+    ids: [C1, C2, C3, C4, C5, C6, C7, C8, C9]
+    characteristics:
+      C1:
+        name: Necessary
+        basis: Formal Transformation
+      C2:
+        name: Appropriate
+        basis: Formal Transformation
+      C3:
+        name: Unambiguous
+        basis: Agreed-to Obligation
+      C4:
+        name: Complete
+        basis: Agreed-to Obligation
+      C5:
+        name: Singular
+        basis: Formal Transformation
+      C6:
+        name: Feasible
+        basis: Agreed-to Obligation
+      C7:
+        name: Verifiable
+        basis: Agreed-to Obligation
+      C8:
+        name: Correct
+        basis: Formal Transformation
+      C9:
+        name: Conforming
+        basis: Formal Transformation
+  sets:
+    ids: [C10, C11, C12, C13, C14, C15]
+    characteristics:
+      C10:
+        name: Complete
+        basis: Formal Transformation
+      C11:
+        name: Consistent
+        basis: Formal Transformation
+      C12:
+        name: Feasible
+        basis: Agreed-to Obligation
+      C13:
+        name: Comprehensible
+        basis: Agreed-to Obligation
+      C14:
+        name: Able to be validated
+        basis: Agreed-to Obligation
+      C15:
+        name: Correct
+        basis: Formal Transformation
+
+interpretation_note: >-
+  The GtWR Summary Sheet states that the characteristics result from both the
+  writing rules in the GtWR and the activities associated with the INCOSE Needs
+  and Requirements Manual and Guide to Needs and Requirements. The underlying
+  analysis used to derive a need or requirement is therefore part of the quality
+  basis and is not reducible to wording checks alone.
+
+source_locations:
+  characteristics: "Summary Sheet page 2"
+  rules_relation: "Summary Sheet page 4"
+  nrm_relation: "Summary Sheet pages 5-6"
