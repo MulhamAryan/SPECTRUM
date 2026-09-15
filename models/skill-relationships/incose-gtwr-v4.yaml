@@ -52,7 +52,8 @@ skills:
       caractéristiques de set et des règles du GtWR v4 qui présentent une
       relation explicite avec ces caractéristiques.
     characteristic_scope: [C10, C11, C12, C13, C14, C15]
-    rule_scope: [R1, R3, R4, R6, R9, R11, R18, R20, R26, R29, R30, R33, R34, R35, R36, R37, R38, R39, R40, R41, R42]
+    rule_scope: [R3, R4, R26, R29, R30, R33, R34, R36, R37, R38, R39, R40, R41, R42]
+    not_in_scope_rules: [R1, R2, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, R27, R28, R31, R32, R35]
     primary_set_rules: [R29, R30, R41, R42]
     source_basis:
       characteristics: knowledge/sources/incose-gtwr-v4-2023/characteristics.yaml
@@ -61,10 +62,10 @@ skills:
       official_matrix: "INCOSE GtWR v4 Summary Sheet page 4"
       nrm_matrix: "INCOSE GtWR v4 Summary Sheet pages 5-6"
     official_relationship_scope: >-
-      The Skill may assess a rule for a set-level characteristic only where the
-      official cross-reference matrix marks the corresponding C10-C15 cell. It
-      does not infer set applicability from the wording or quality-focus label of
-      a rule.
+      The rule scope is exactly the set of rules for which the official page 4
+      matrix contains at least one marked C10-C15 cell. A rule is included only
+      because of those marked set cells; no additional relationship is inferred
+      from its name or quality-focus category.
     qualification: >-
       C10-C15 are characteristics of sets. C12 Feasible and C15 Correct require
       contextual or source evidence beyond cross-member wording inspection. C14
