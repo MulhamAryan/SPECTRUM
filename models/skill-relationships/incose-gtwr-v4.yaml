@@ -230,7 +230,8 @@ skills:
       Analyser la base permettant d'établir qu'un besoin, une exigence ou un
       ensemble correspond à l'utilisation prévue, aux objectifs et aux attentes
       applicables.
-    characteristic_scope: [C14]
+    individual_characteristic_scope: [C3, C6, C8]
+    set_characteristic_scope: [C10, C12, C13, C14, C15]
     rule_scope: []
     source_activity_scope:
       - "3.2.1.7 System Verification and System Validation"
@@ -246,11 +247,13 @@ skills:
       official_matrix: "INCOSE GtWR v4 Summary Sheet pages 2, 5-6"
       supporting_guide: "INCOSE Guide to Verification and Validation, INCOSE-TP-2021-004-01"
     qualification: >-
-      C14 is a set-level characteristic in the GtWR v4. The validation activity
-      mapping is source-backed; validation reference construction, evidence
-      linkage, statuses, and coverage model are SPECTRUM-derived behavior. The
-      supporting GtVV is treated as an official supporting guide, not as a silent
-      replacement for the GtWR/NRM source mapping.
+      The individual versus set characteristic scopes are taken from the official
+      NRM activity matrix. C3, C6, and C8 are used for individual-target
+      validation only where the applicable validation activity marks them; C10,
+      C12, C13, C14, and C15 are set-level characteristics. Validation reference
+      construction, evidence linkage, statuses, and coverage model are
+      SPECTRUM-derived behavior. The supporting GtVV is treated as an official
+      supporting guide, not as a silent replacement for the GtWR/NRM mapping.
     derived_behavior_boundary: >-
       The Skill evaluates intended use, objectives, validation references,
       criteria, evidence linkage, and coverage for the declared target. It does
