@@ -125,7 +125,7 @@ matrices:
       "7.2.2 Perform Design Input Requirements Validation": [C1, C3, C4, C6, C8, C10, C11, C12, C13, C14, C15]
       "8.1 Design Definition Process Overview": [C3, C4, C6, C7, C8, C10, C11, C12, C13, C14, C15]
       "8.2 Early System Verification and System Validation": [C3, C4, C6, C7, C8, C10, C11, C12, C13, C14, C15]
-      "8.4 Design Verification": [C3, C4, C6, C7, C8, C10, C11, C12, C13]
+      "8.4 Design Verification": [C3, C4, C6, C7, C8, C10, C11]
       "8.5 Design Validation": [C10, C11, C12, C13, C14]
       "14.2.1 Baseline Needs, Requirements, and Specifications": [C1, C3, C4, C6, C8, C10, C11, C12, C13, C14, C15]
       "14.2.4 Managing Unknowns": [C3, C4, C6, C7, C8, C11, C15]
