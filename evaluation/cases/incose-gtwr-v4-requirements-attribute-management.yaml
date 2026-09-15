@@ -1,0 +1,182 @@
+source:
+  id: incose-gtwr-v4-2023
+  basis: official_incose_publication
+  references:
+    - "INCOSE Guide to Writing Requirements v4, INCOSE-TP-2010-006-04"
+    - "INCOSE GtWR v4 Summary Sheet, page 7"
+
+skill: requirements-attribute-management
+
+cases:
+  - id: rationale-present
+    target: requirement-r1
+    input:
+      attributes:
+        A1: "Approved rationale reference"
+      applicability:
+        A1: required_by_project
+    expected:
+      status: attributes_sufficient
+      findings: []
+      characteristic_relationships: [C1, C3, C12]
+
+  - id: source-trace-missing
+    target: requirement-r2
+    input:
+      attributes: {}
+      applicability:
+        A3: required_by_project
+    expected:
+      status: attributes_missing
+      findings: [attribute_missing]
+
+  - id: optional-attribute-not-failure
+    target: requirement-r3
+    input:
+      attributes: {}
+      applicability:
+        A34: supported_but_optional
+    expected:
+      status: attributes_sufficient
+      findings: []
+
+  - id: applicability-unknown
+    target: requirement-r4
+    input:
+      attributes: {}
+      applicability:
+        A19: applicability_unknown
+    expected:
+      status: attribute_applicability_unknown
+      findings: [attribute_applicability_unknown]
+
+  - id: conflicting-values
+    target: requirement-r5
+    input:
+      attributes:
+        A23:
+          - value: "2.1"
+            source: source-a
+          - value: "2.2"
+            source: source-b
+      applicability:
+        A23: required_by_project
+    expected:
+      status: attributes_conflicting
+      findings: [attribute_conflict]
+
+  - id: attribute-source-missing
+    target: requirement-r6
+    input:
+      attributes:
+        A1:
+          value: "Rationale text"
+          source: null
+      applicability:
+        A1: required_by_project
+    expected:
+      status: attributes_partial
+      findings: [attribute_source_missing]
+
+  - id: source-mismatch
+    target: requirement-r7
+    input:
+      attributes:
+        A2:
+          value: "REQ-100"
+          source: approved-parent-set
+      authoritative_parent: "REQ-200"
+      applicability:
+        A2: required_by_project
+    expected:
+      status: attributes_conflicting
+      findings: [attribute_source_mismatch]
+
+  - id: owner-status-inconsistent
+    target: requirement-r8
+    input:
+      attributes:
+        A19: "Team A"
+        A30: "approved"
+      project_policy:
+        owner: "Team B"
+        allowed_status: [draft, proposed]
+      applicability:
+        A19: required_by_project
+        A30: required_by_project
+    expected:
+      status: attributes_conflicting
+      findings: [attribute_owner_missing, attribute_status_inconsistent]
+
+  - id: lifecycle-policy-unknown
+    target: requirement-r9
+    input:
+      attributes:
+        A26: "volatile"
+      project_policy: null
+      applicability:
+        A26: applicability_unknown
+    expected:
+      status: attribute_applicability_unknown
+      findings: [attribute_applicability_unknown]
+
+  - id: traceability-handoff
+    target: requirement-r10
+    input:
+      attributes:
+        A32: "IF-12"
+      applicability:
+        A32: required_by_project
+    expected:
+      status: attributes_sufficient
+      findings: []
+      handoff: requirement-relationship-traceability
+
+  - id: verification-handoff
+    target: requirement-r11
+    input:
+      attributes:
+        A6: "verification-plan-42"
+      applicability:
+        A6: required_by_project
+    expected:
+      status: attributes_sufficient
+      handoff: verification-analysis
+
+  - id: validation-handoff
+    target: requirement-r12
+    input:
+      attributes:
+        A8: "validation-method-7"
+      applicability:
+        A8: required_by_project
+    expected:
+      status: attributes_sufficient
+      handoff: validation-analysis
+
+  - id: unmapped-attribute-no-false-positive
+    target: requirement-r13
+    input:
+      attributes:
+        A15: "REQ-13"
+      applicability:
+        A15: supported_but_optional
+    expected:
+      status: attributes_sufficient
+      findings: []
+
+  - id: absent-optional-attribute
+    target: requirement-r14
+    input:
+      attributes: {}
+      applicability:
+        A37: supported_but_optional
+    expected:
+      status: attributes_sufficient
+      findings: []
+
+assertions:
+  - "Do not interpret the official attribute inventory as a universal mandatory-field list."
+  - "Do not infer attribute applicability without project or process evidence."
+  - "Preserve attribute provenance and conflicts."
+  - "Keep attribute-level findings distinct from relationship-level and verification/validation findings."
