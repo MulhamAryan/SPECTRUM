@@ -1,0 +1,72 @@
+source:
+  id: incose-gtwr-v4-2023
+  authority: official_incose_publication
+skill: verification-analysis
+
+cases:
+  - id: verification-001
+    title: verifiable_requirement_with_objective_evidence
+    intent: Verify a requirement with an identifiable target, criterion, method, attributable result, and applicable baseline.
+    expected_status: verification_basis_established
+    expected_characteristics: [C7]
+
+  - id: verification-002
+    title: verification_basis_missing
+    intent: Detect absence of an established verification basis without inventing a method or result.
+    expected_status: verification_basis_missing
+    expected_findings: [verification_method_missing]
+    expected_characteristics: [C7]
+
+  - id: verification-003
+    title: criterion_missing
+    intent: Detect an unestablished objective criterion while preserving the requirement and available method evidence.
+    expected_findings: [verification_criterion_missing]
+
+  - id: verification-004
+    title: verification_plan_without_result
+    intent: Distinguish a planned verification procedure from an executed verification result.
+    expected_findings: [verification_plan_without_result]
+
+  - id: verification-005
+    title: evidence_mismatch
+    intent: Detect evidence that exists but corresponds to a different target, property, or requirement.
+    expected_status: verification_evidence_mismatch
+    expected_findings: [verification_evidence_mismatch]
+
+  - id: verification-006
+    title: baseline_mismatch
+    intent: Detect verification evidence produced against an incompatible or different baseline/configuration when that information is available.
+    expected_findings: [verification_baseline_mismatch]
+
+  - id: verification-007
+    title: partial_coverage
+    intent: Detect verification evidence covering only part of the declared target scope.
+    expected_status: verification_basis_partial
+    expected_findings: [verification_partial_coverage]
+
+  - id: verification-008
+    title: unobservable_target
+    intent: Detect a target that cannot be objectively established from the requirement and supplied context without inventing a property or threshold.
+    expected_findings: [verification_target_not_observable]
+    expected_characteristics: [C7]
+
+  - id: verification-009
+    title: set_level_verification_scope
+    intent: Keep set-level verification activity distinct from C14 Able to be validated and do not treat C14 as an individual verification characteristic.
+    expected_characteristics: [C14]
+
+  - id: verification-010
+    title: missing_verification_context
+    intent: Do not force a verification conclusion when target, conditions, scope, or required context are not established.
+    expected_status: verification_context_missing
+    expected_findings: [verification_context_missing]
+
+  - id: verification-011
+    title: no_false_positive_from_missing_artifact
+    intent: Do not declare verification failure solely because a result artifact was not supplied when the evidence boundary does not establish that the artifact must be present.
+    expected_status: verification_context_missing
+
+  - id: verification-012
+    title: wording_defect_handed_to_statement_quality
+    intent: Preserve a wording defect as a downstream statement-quality issue when the verification target is blocked by the requirement expression itself.
+    expected_findings: [verification_target_not_observable]
