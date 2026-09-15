@@ -1,0 +1,41 @@
+source:
+  id: incose-gtwr-v4-2023
+  title: INCOSE Guide to Writing Requirements v4
+  document_number: INCOSE-TP-2010-006-04
+  version: 4
+  revision: 4
+  authority: INCOSE Requirements Working Group
+  source_basis: official_incose_publication
+
+interpretation_level: spectrum_skill_mapping
+
+purpose: >-
+  Define the traceable mapping from official INCOSE GtWR v4 characteristics and
+  writing rules to SPECTRUM analytical Skills. This file is a SPECTRUM-derived
+  architecture artifact; it is not an INCOSE publication and does not redefine
+  the source rules.
+
+principles:
+  - official_source_before_skill_behavior
+  - rules_are_not_rephrased_as_new_source_rules
+  - skill_behavior_is_explicitly_derived
+  - evidence_and_source_locations_are_preserved
+  - no_readiness_decision_inside_a_skill
+
+skills:
+  requirement-statement-quality:
+    purpose: >-
+      Examiner la qualité d'une expression individuelle de besoin ou d'exigence
+      au regard des caractéristiques individuelles et des règles de formulation
+      du GtWR v4 qui lui sont explicitement reliées.
+    characteristic_scope: [C3, C4, C5, C7, C8, C9]
+    rule_scope: [R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, R26, R27, R28, R32, R33, R34, R35, R36, R37, R38, R39, R40]
+    not_in_scope_rules: [R29, R30, R31, R41, R42]
+    source_basis:
+      characteristics: knowledge/sources/incose-gtwr-v4-2023/characteristics.yaml
+      rules: knowledge/sources/incose-gtwr-v4-2023/rules.yaml
+      relationships: knowledge/sources/incose-gtwr-v4-2023/matrices.yaml
+    derived_behavior_boundary: >-
+      The Skill checks the presence and quality of observable statement features
+      against the cited INCOSE rules. It does not invent missing business values,
+      approve a requirement, or claim formal compliance with INCOSE.
