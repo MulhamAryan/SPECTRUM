@@ -36,7 +36,7 @@ The official INCOSE publications remain authoritative.
 
 Keep these levels distinct:
 
-- `source_fact`: information explicitly represented in the INCOSE source.
+- `source_fact`: information explicitly represented in the official INCOSE source.
 - `spectrum_observation`: an observation produced from source facts and supplied project evidence.
 - `business_gap`: a missing project fact, objective, stakeholder expectation, scenario, validation basis, or evidence item.
 
@@ -44,7 +44,9 @@ A validation status, coverage criterion, evidence-quality rule, or recommendatio
 
 ## When to use
 
-Use this Skill when the question is whether the need, requirement, or requirement set is the right one for the intended system use and objectives, rather than merely whether it can be objectively checked against a stated requirement.
+Use this Skill when the question is whether a need or requirement is the right one for the intended system use and objectives, rather than merely whether it can be objectively checked against a stated requirement.
+
+For an individual need or requirement, use it to assess the validation-related characteristics that the official NRM activity matrix associates with the applicable needs-validation activity, particularly C3, C6, and C8. For a set, use the set-level characteristics associated with validation activities, particularly C10, C12, C13, C14, and C15.
 
 Use it when validation depends on:
 
@@ -156,19 +158,23 @@ Distinguish:
 
 Do not manufacture acceptance criteria, stakeholder goals, or operational outcomes.
 
-### 6. Assess individual-level validation
+### 6. Assess individual-target validation relationships
 
-For an individual need or requirement, use the source-backed characteristic `C14 Able to be validated` only when the applicable source context defines the target at set/process level; do not silently recast C14 as a generic individual wording characteristic.
+For an individual need or requirement, assess only the characteristics actually associated with the applicable validation activity in the official NRM matrix.
 
-Where individual validation depends on transformation correctness or source alignment, use the relevant contextual and relationship evidence. A well-written statement is not automatically validated.
+For needs validation, the official matrix associates `5.2.2 Perform Needs Validation` with C3, C6, and C8 at the individual level. Use these characteristics when the target and activity scope justify them.
+
+For design-input requirements validation, the official matrix likewise associates `7.2.2 Perform Design Input Requirements Validation` with C3, C6, and C8 at the individual level.
+
+Do not treat C14 as an individual-statement characteristic; C14 is a set-level characteristic in the GtWR v4.
 
 ### 7. Assess set-level validation
 
 For a need set or requirement set, evaluate whether the set can be validated against its applicable goals, stakeholder expectations, lifecycle concepts, and higher-level references.
 
-Use the official set characteristic `C14 Able to be validated` as the primary source-backed characteristic for this assessment.
+Use the official set characteristics associated with validation activities, including C10, C12, C13, C14, and C15 where the activity matrix marks them.
 
-Where set correctness or completeness is relevant, preserve C15/C10 evidence rather than collapsing all dimensions into a single validation status.
+Where set correctness or completeness is relevant, preserve the separate C15/C10 evidence rather than collapsing all dimensions into a single validation status.
 
 ### 8. Correlate with official NRM validation activities
 
@@ -186,7 +192,7 @@ The official matrix establishes activity-to-characteristic relationships. It doe
 
 ### 9. Separate validation from verification
 
-Do not treat a successful verification result as proof that the requirement is the right requirement for the intended use.
+Do not treat a successful verification result as proof that the need or requirement is the right one for the intended use.
 
 Do not treat stakeholder agreement as proof that every technical clause is verified.
 
@@ -230,9 +236,9 @@ Each finding must identify:
 
 ## Source-backed scope
 
-The official GtWR v4 Summary Sheet distinguishes set-level `C14 Able to be validated` from individual characteristics and links validation-related NRM activities to the characteristic matrix. The source therefore does not support collapsing validation into a generic wording check.
+The official GtWR v4 Summary Sheet identifies C1–C9 as individual need/requirement characteristics and C10–C15 as set characteristics. The NRM activity matrix then associates validation activities with the applicable characteristics. This Skill preserves that separation instead of assigning C14 to an individual statement.
 
-The official NRM matrix identifies `5.2 Needs Validation`, `5.2.2 Perform Needs Validation`, `7.2 Design Input Requirements Validation`, `7.2.2 Perform Design Input Requirements Validation`, `8.5 Design Validation`, and `14.2.9 Managing System Verification and System Validation` as validation-related activities with explicit characteristic relationships.
+The official NRM matrix associates `5.2.2 Perform Needs Validation` and `7.2.2 Perform Design Input Requirements Validation` with individual-level C3, C6, and C8 as well as set-level characteristics. It also associates `5.2 Needs Validation`, `7.2 Design Input Requirements Validation`, and `8.5 Design Validation` with set-level validation characteristics, including C14 where marked.
 
 The INCOSE Guide to Verification and Validation is an official supporting guide in the Requirements Working Group product family and provides practical guidance on verification and validation across the lifecycle. It may support interpretation when explicitly used, but it does not replace the source relationships recorded from the GtWR/NRM corpus.
 
@@ -382,7 +388,9 @@ Official source URLs:
 
 Minimum evaluation cases:
 
-- validatable_requirement_or_set_with_authoritative_reference;
+- validatable_individual_need_with_authoritative_validation_basis;
+- validatable_individual_requirement_with_authoritative_validation_basis;
+- validatable_set_with_authoritative_reference;
 - missing_intended_use;
 - missing_stakeholder_expectations;
 - missing_validation_objective;
