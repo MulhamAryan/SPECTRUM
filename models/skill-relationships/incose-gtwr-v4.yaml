@@ -46,6 +46,60 @@ skills:
       evidence against the cited INCOSE rules. It does not invent missing business
       values, approve a requirement, or claim formal compliance with INCOSE.
 
+  requirement-set-quality:
+    purpose: >-
+      Examiner la qualité d'un ensemble de besoins ou d'exigences au regard des
+      caractéristiques de set et des règles du GtWR v4 qui présentent une
+      relation explicite avec ces caractéristiques.
+    characteristic_scope: [C10, C11, C12, C13, C14, C15]
+    rule_scope: [R1, R3, R4, R6, R9, R11, R18, R20, R26, R29, R30, R33, R34, R35, R36, R37, R38, R39, R40, R41, R42]
+    primary_set_rules: [R29, R30, R41, R42]
+    source_basis:
+      characteristics: knowledge/sources/incose-gtwr-v4-2023/characteristics.yaml
+      rules: knowledge/sources/incose-gtwr-v4-2023/rules.yaml
+      relationships: knowledge/sources/incose-gtwr-v4-2023/matrices.yaml
+      official_matrix: "INCOSE GtWR v4 Summary Sheet page 4"
+      nrm_matrix: "INCOSE GtWR v4 Summary Sheet pages 5-6"
+    official_relationship_scope: >-
+      The Skill may assess a rule for a set-level characteristic only where the
+      official cross-reference matrix marks the corresponding C10-C15 cell. It
+      does not infer set applicability from the wording or quality-focus label of
+      a rule.
+    qualification: >-
+      C10-C15 are characteristics of sets. C12 Feasible and C15 Correct require
+      contextual or source evidence beyond cross-member wording inspection. C14
+      requires a validation basis appropriate to the type of set. The Skill must
+      return an inconclusive/context-dependent result where that evidence is
+      insufficient.
+    derived_behavior_boundary: >-
+      The Skill compares supplied set members, structure, terminology,
+      relationships, constraints, traceability, and supporting evidence against
+      the cited INCOSE relationships. The grouping of these checks into one Skill
+      is a SPECTRUM architecture decision, not an INCOSE rule.
+    relevant_nrm_activity_scope:
+      - "3.2.1.3 Managing Sets of Needs And Requirements"
+      - "3.2.2.1 Analysis from Which Needs and Requirements are Derived"
+      - "3.2.2.2 Completeness"
+      - "3.2.2.3 Consistency"
+      - "3.2.2.4 Identity and Manage Interdependencies"
+      - "4.4.3 Get Stakeholder Agreement"
+      - "4.4.4 Completeness"
+      - "4.6.2.3 Organizing the Integrated Set of Needs"
+      - "4.6.3.3 Completeness of the Integrated Set of Needs"
+      - "4.6.3.4 Needs Feasibility and Risk"
+      - "6.2.1.1 Organizing Sets of Design Input Requirements"
+      - "6.2.2 Establish Traceability"
+      - "6.2.6.2 Completeness, Correctness, and Consistency"
+      - "6.2.6.3 Requirements Feasibility and Risk"
+      - "6.3 Baseline and Manage Design Input Requirements"
+      - "6.4.3 Allocation – Flow Down of Requirements"
+      - "6.4.5 Budgeting of Performance, Resource, and Quality Requirements"
+      - "6.4.7 Use of Traceability and Allocation to Manage Requirements"
+      - "7.2.2 Perform Design Input Requirements Validation"
+      - "8.5 Design Validation"
+      - "14.2.7 Combine Allocation and Traceability to Manage Requirements"
+      - "14.2.8 Managing Interfaces"
+
 source_discrepancy:
   id: R14-label
   canonical_rule_identity: Correct Punctuation
