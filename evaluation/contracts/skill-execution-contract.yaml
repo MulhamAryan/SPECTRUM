@@ -3,11 +3,11 @@ contract_version: 1
 
 invariants:
   - id: SEC-001
-    rule: execution_has_skill_target_and_inputs
+    rule: execution_has_skill_version_target_inputs_and_status
   - id: SEC-002
-    rule: execution_has_attributable_outputs
+    rule: execution_has_attributable_provenance_and_outputs
   - id: SEC-003
-    rule: preconditions_are_explicit
+    rule: preconditions_are_explicit_and_evaluated
   - id: SEC-004
     rule: missing_evidence_preserves_uncertainty
   - id: SEC-005
@@ -22,10 +22,14 @@ invariants:
     rule: derived_outputs_retain_input_references
   - id: SEC-010
     rule: execution_state_transitions_do_not_erase_prior_outputs
+  - id: SEC-011
+    rule: blocked_or_failed_execution_has_attributable_reason
+  - id: SEC-012
+    rule: not_applicable_requires_explicit_applicability_basis
 
 negative_controls:
   - id: SEC-N001
-    reject: execute_skill_without_declared_skill_contract
+    reject: execute_skill_without_declared_skill_contract_or_version
   - id: SEC-N002
     reject: invent_missing_evidence_during_execution
   - id: SEC-N003
@@ -34,6 +38,12 @@ negative_controls:
     reject: execute_outside_declared_skill_scope
   - id: SEC-N005
     reject: create_ready_or_not_ready_from_skill_execution
+  - id: SEC-N006
+    reject: encode_blocked_execution_as_an_observation_status
+  - id: SEC-N007
+    reject: mark_not_applicable_without_explicit_applicability_basis
+  - id: SEC-N008
+    reject: erase_prior_outputs_when_execution_fails
 
 acceptance:
   scope: skill_execution_contract_and_execution_invariants
