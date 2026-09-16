@@ -1,0 +1,197 @@
+model:
+  id: spectrum-finding-engine
+  version: 1
+  interpretation_level: spectrum_architecture
+  purpose: >-
+    Define how SPECTRUM consolidates observations, evidence, relationships, and
+    source-aware analytical outputs into traceable findings without inventing
+    facts, silently merging contradictions, or creating readiness decisions.
+
+FindingAggregationRequest:
+  required:
+    - aggregation_id
+    - analysis_ref
+    - input_refs
+  fields:
+    aggregation_id: stable finding aggregation identifier
+    analysis_ref: analysis context or analysis revision being consolidated
+    input_refs: observations, evidence, findings, relationships, and relevant canonical targets
+    scope_refs: optional target scope limiting consolidation
+    policy_ref: optional explicit finding-consolidation policy
+    provenance: request origin, method, recorded_at, recorded_by
+
+FindingAggregationPlan:
+  required:
+    - plan_id
+    - input_groupings
+    - consolidation_strategy
+  fields:
+    plan_id: stable plan identifier
+    input_groupings: grouped inputs considered part of the same analytical condition
+    consolidation_strategy: explicit grouping and merge behavior
+    precedence_rules: optional policy-defined precedence for duplicate or equivalent findings
+    contradiction_rules: explicit preservation behavior for incompatible inputs
+    provenance: plan derivation and version
+
+FindingAggregationResult:
+  required:
+    - aggregation_id
+    - aggregation_status
+    - finding_refs
+  fields:
+    aggregation_id: aggregation request identifier
+    aggregation_status: completed | partial | blocked | failed | inconclusive
+    finding_refs: consolidated canonical Finding references
+    preserved_observation_refs: observations retained as supporting traceability
+    preserved_evidence_refs: evidence retained as supporting traceability
+    unresolved_refs: inputs that could not be consolidated safely
+    contradiction_refs: contradictions preserved through consolidation
+    uncertainty_refs: unresolved uncertainties preserved through consolidation
+    coverage: scope and input coverage achieved by the aggregation
+    provenance: execution and derivation metadata
+
+FindingGrouping:
+  required:
+    - grouping_id
+    - target_refs
+    - member_refs
+    - grouping_basis
+  fields:
+    grouping_id: stable grouping identifier
+    target_refs: canonical targets shared by grouped inputs
+    member_refs: finding, observation, evidence, or relationship inputs in the group
+    grouping_basis: explicit semantic, target, relationship, or policy basis
+    confidence: optional analytical confidence that does not replace provenance
+    provenance: grouping origin and method
+
+FindingConsolidation:
+  required:
+    - consolidation_id
+    - input_refs
+    - result_status
+  fields:
+    consolidation_id: stable consolidation identifier
+    input_refs: exact inputs used for the consolidation
+    result_status: created | merged | preserved_separately | unresolved | not_applicable
+    result_finding_ref: canonical Finding when one result is created
+    retained_finding_refs: findings intentionally retained separately
+    contradiction_refs: contradictions that prevent safe merge or require preservation
+    rationale: concise analytical explanation
+    provenance: consolidation method and execution metadata
+
+ConsolidationSemantics:
+  duplicate_or_equivalent:
+    behavior: >-
+      Findings may be merged only when target scope, semantic condition, and
+      supporting basis are sufficiently aligned under the declared grouping basis.
+      The merge must retain all contributing references and must not erase provenance.
+  same_target_different_basis:
+    behavior: >-
+      Findings concerning the same target must remain separate when their causes,
+      evidence bases, or analytical meanings differ materially.
+  contradiction:
+    behavior: >-
+      Contradictory findings or inputs are preserved and surfaced. A contradiction
+      must not be removed merely to simplify output.
+  uncertainty:
+    behavior: >-
+      Uncertainty is preserved when evidence is insufficient, contradictory, or
+      applicability remains unresolved. Consolidation must not convert uncertainty
+      into a positive fact.
+  positive_and_negative:
+    behavior: >-
+      Positive observations and issue/gap findings may coexist when they describe
+      different aspects of the same target or when the evidence does not establish
+      a single reconciled condition.
+  resolution:
+    behavior: >-
+      A finding may be marked resolved only through attributable resolution evidence
+      or an explicit resolution input; consolidation itself does not imply resolution.
+
+SafetyRules:
+  - no_new_source_fact_is_created
+  - every_consolidated_finding_retains_input_refs
+  - every_merge_has_explicit_grouping_basis
+  - material_contradictions_are_preserved
+  - unresolved_uncertainty_is_preserved
+  - absence_of_input_does_not_create_nonconformity
+  - finding_severity_is_not_used_as_readiness
+  - finding_status_is_not_used_as_readiness
+  - consolidation_does_not_create_decisions
+  - consolidation_does_not_modify_source_evidence
+  - consolidation_does_not_modify_original_observations
+  - failed_or_blocked_inputs_are_preserved_in_coverage_or_unresolved_refs
+
+DeduplicationRules:
+  required_basis:
+    - target_overlap
+    - semantic_equivalence
+    - compatible_evidence_basis
+  prohibited_shortcuts:
+    - merge_by_same_title_only
+    - merge_by_same_severity_only
+    - merge_by_same_source_only
+    - merge_because_findings_are_similar_in_wording_only
+    - discard_lower_severity_finding_without_policy
+
+InputBoundaries:
+  allowed_inputs:
+    - Observation
+    - Evidence
+    - Finding
+    - Relationship
+    - Requirement
+    - RequirementSet
+    - Context
+    - Source
+    - SourceFragment
+  rule: >-
+    Inputs retain their canonical identity. The Finding Engine consumes analytical
+    products and canonical context; it does not reinterpret source standards as new
+    SPECTRUM rules.
+
+OutputBoundary:
+  produces:
+    - Finding
+  supporting_outputs:
+    - FindingAggregationResult
+  does_not_produce:
+    - Decision
+    - ReadinessEvaluation
+    - ReadinessDecision
+
+Traceability:
+  required:
+    - aggregation_to_analysis
+    - aggregation_to_input_refs
+    - grouping_to_members
+    - consolidation_to_input_refs
+    - resulting_finding_to_evidence_or_observation_basis
+    - contradiction_to_original_inputs
+    - unresolved_input_to_coverage_or_unresolved_ref
+
+DecisionBoundary:
+  rule: >-
+    Finding consolidation is analytical normalization only. It must not determine
+    ticket readiness, implementation authorization, or any global decision.
+
+ObjectBoundary:
+  canonical_objects:
+    - Finding
+    - Observation
+    - Evidence
+    - Relationship
+    - Requirement
+    - RequirementSet
+    - Context
+    - Source
+    - SourceFragment
+  internal_architecture_objects:
+    - FindingAggregationRequest
+    - FindingAggregationPlan
+    - FindingAggregationResult
+    - FindingGrouping
+    - FindingConsolidation
+  rule: >-
+    Internal finding-engine structures are execution architecture and are not new
+    canonical data-model entities unless explicitly promoted by the canonical model.
