@@ -26,6 +26,12 @@ invariants:
     rule: unresolved_context_is_represented_as_uncertainty_or_missing_evidence_not_invented_fact
   - id: CDM-012
     rule: decision_requires_explicit_policy_or_workflow_reference
+  - id: CDM-013
+    rule: readiness_evaluation_references_traceable_analysis_result_and_policy
+  - id: CDM-014
+    rule: readiness_evaluation_is_distinct_from_decision_outcome
+  - id: CDM-015
+    rule: readiness_evaluation_status_is_distinct_from_decision_status
 
 negative_controls:
   - id: CDM-N001
@@ -38,8 +44,15 @@ negative_controls:
     reject: infer_C12_or_C15_from_requirement_wording_alone
   - id: CDM-N005
     reject: treat_verification_evidence_as_validation_evidence_without_basis
+  - id: CDM-N006
+    reject: treat_readiness_evaluation_as_readiness_decision
+  - id: CDM-N007
+    reject: create_readiness_evaluation_without_traceable_analysis_result_or_policy
+  - id: CDM-N008
+    reject: use_readiness_evaluation_status_as_decision_status
 
 acceptance:
   schema_scope: canonical_objects_and_cross_object_invariants
   source_authority: SPECTRUM_architecture_using_existing_authoritative_source_records
-  readiness_decision: explicitly_out_of_scope
+  readiness_evaluation: included_as_canonical_decision_input
+  readiness_decision: explicitly_outside_canonical_semantics
