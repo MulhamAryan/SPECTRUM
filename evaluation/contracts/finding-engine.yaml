@@ -1,5 +1,5 @@
 engine: spectrum-finding-engine
-contract_version: 1
+contract_version: 2
 
 invariants:
   - id: FE-001
@@ -32,6 +32,20 @@ invariants:
     rule: resolution_requires_attributable_resolution_input
   - id: FE-015
     rule: identical_input_refs_and_same_basis_are_reproducibly_grouped
+  - id: FE-016
+    rule: grouping_uses_explicit_target_semantic_scope_and_evidence_basis
+  - id: FE-017
+    rule: input_order_does_not_change_grouping_or_consolidation_result
+  - id: FE-018
+    rule: repeated_execution_with_same_revision_is_idempotent
+  - id: FE-019
+    rule: material_scope_or_temporal_difference_prevents_false_duplicate_merge
+  - id: FE-020
+    rule: conflict_classification_precedes_any_resolution_or_merge
+  - id: FE-021
+    rule: resolution_requires_explicit_authority_or_policy_when_inputs_conflict
+  - id: FE-022
+    rule: displaced_inputs_remain_traceable_after_policy_authorized_resolution
 
 negative_controls:
   - id: FE-N001
@@ -58,8 +72,20 @@ negative_controls:
     reject: mark_finding_resolved_without_attributable_resolution_basis
   - id: FE-N012
     reject: mutate_original_evidence_or_observation_objects_during_consolidation
+  - id: FE-N013
+    reject: merge_non_overlapping_scopes_as_duplicates
+  - id: FE-N014
+    reject: let_input_arrival_order_change_group_assignment
+  - id: FE-N015
+    reject: create_duplicate_result_on_idempotent_reexecution
+  - id: FE-N016
+    reject: resolve_conflicting_findings_without_authorized_basis
+  - id: FE-N017
+    reject: discard_displaced_source_traceability_after_resolution
+  - id: FE-N018
+    reject: normalize_away_material_temporal_or_applicability_difference
 
 acceptance:
-  scope: finding_grouping_consolidation_deduplication_conflict_preservation_uncertainty_traceability_and_decision_boundary
+  scope: finding_grouping_consolidation_deduplication_determinism_idempotency_conflict_preservation_uncertainty_traceability_and_decision_boundary
   readiness_semantics: out_of_scope
   source_semantics: delegated_to_canonical_models_and_source_specific_skills
