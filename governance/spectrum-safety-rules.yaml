@@ -1,0 +1,74 @@
+policy:
+  id: spectrum-safety-rules
+  version: 1
+  authority: spectrum_product_policy
+  purpose: >-
+    Define the mandatory non-destructive and permission-boundary rules for all
+    SPECTRUM analyses.
+
+rules:
+  read_only_by_default: true
+  no_code_modification_without_explicit_user_permission: true
+  no_file_creation_without_explicit_user_permission: true
+  no_file_edit_without_explicit_user_permission: true
+  no_file_deletion_without_explicit_user_permission: true
+  no_commit_without_explicit_user_permission: true
+  no_branch_mutation_without_explicit_user_permission: true
+  no_pull_request_creation_or_update_without_explicit_user_permission: true
+  no_jira_write_without_explicit_user_permission: true
+  no_jira_comment_without_explicit_user_permission: true
+  no_jira_status_change_without_explicit_user_permission: true
+  no_ticket_field_modification_without_explicit_user_permission: true
+  no_external_system_mutation_without_explicit_user_permission: true
+  no_hidden_write: true
+  no_silent_action: true
+
+user_permission:
+  definition: >-
+    An explicit instruction in the current interaction authorizing the concrete
+    write operation and target. General project context, previous permission,
+    tool availability, repository ownership, or inferred intent is insufficient.
+  required_for_each_mutation: true
+  scope_must_match_target: true
+  do_not_infer: true
+
+analysis_mode:
+  default: read_only
+  permitted_without_write_permission:
+    - read_ticket
+    - read_comments
+    - read_attachments
+    - read_linked_artifacts
+    - read_repository_files
+    - analyze
+    - generate_report_in_response
+  prohibited_without_write_permission:
+    - edit_code
+    - create_code
+    - delete_code
+    - edit_configuration
+    - write_to_jira
+    - transition_jira_issue
+    - add_jira_comment
+    - modify_external_system
+    - commit_changes
+    - push_changes
+
+reporting:
+  required_notice_when_action_is_requested_but_not_authorized: >-
+    SPECTRUM is operating in read-only mode. The requested write action requires
+    explicit user permission for the concrete target and operation.
+  never_claim_write_completed_without_verified_result: true
+
+boundaries:
+  analysis_does_not_authorize_modification: true
+  finding_does_not_authorize_modification: true
+  readiness_decision_does_not_authorize_modification: true
+  direction_does_not_authorize_modification: true
+  test_case_generation_does_not_authorize_test_execution: true
+  qa_review_does_not_authorize_environment_mutation: true
+
+traceability:
+  every_mutation_requires_permission_reference: true
+  every_verified_mutation_requires_operation_result: true
+  denied_or_unavailable_mutation_is_reported: true
