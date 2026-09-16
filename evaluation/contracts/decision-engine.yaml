@@ -1,0 +1,50 @@
+model: spectrum-decision-engine
+contract_version: 1
+
+invariants:
+  - id: DE-001
+    rule: decision_request_has_traceable_analysis_result_and_policy
+  - id: DE-002
+    rule: policy_identity_and_version_are_resolved
+  - id: DE-003
+    rule: policy_applicability_is_evaluated_before_outcome_criteria
+  - id: DE-004
+    rule: every_outcome_is_derived_from_explicit_policy_criteria
+  - id: DE-005
+    rule: missing_inputs_and_uncertainty_are_preserved
+  - id: DE-006
+    rule: conflicting_inputs_are_preserved_or_resolved_only_by_explicit_policy
+  - id: DE-007
+    rule: decision_references_evaluation_policy_and_inputs
+  - id: DE-008
+    rule: finding_severity_does_not_imply_decision_without_policy
+  - id: DE-009
+    rule: skill_execution_status_does_not_imply_decision
+  - id: DE-010
+    rule: policy_changes_create_new_policy_versions
+  - id: DE-011
+    rule: policy_error_does_not_create_fallback_decision
+  - id: DE-012
+    rule: decision_authority_is_attributable_when_required
+
+negative_controls:
+  - id: DE-N001
+    reject: create_decision_without_explicit_policy
+  - id: DE-N002
+    reject: create_decision_from_finding_severity_alone
+  - id: DE-N003
+    reject: create_decision_from_skill_status_alone
+  - id: DE-N004
+    reject: invent_missing_policy_threshold_or_outcome
+  - id: DE-N005
+    reject: silently_resolve_conflicting_evidence
+  - id: DE-N006
+    reject: use_unversioned_policy
+  - id: DE-N007
+    reject: create_fallback_decision_after_policy_error
+  - id: DE-N008
+    reject: lose_traceability_between_decision_evaluation_policy_and_findings
+
+acceptance:
+  scope: decision_request_policy_evaluation_criteria_outcomes_governance_and_traceability
+  ticket_readiness_policy: explicitly_out_of_scope
