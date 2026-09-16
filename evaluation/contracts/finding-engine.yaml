@@ -1,0 +1,65 @@
+engine: spectrum-finding-engine
+contract_version: 1
+
+invariants:
+  - id: FE-001
+    rule: aggregation_has_stable_identity_and_analysis_reference
+  - id: FE-002
+    rule: all_aggregation_inputs_are_explicitly_referenced
+  - id: FE-003
+    rule: finding_output_retains_attributable_observation_or_evidence_basis
+  - id: FE-004
+    rule: every_merge_has_explicit_grouping_basis
+  - id: FE-005
+    rule: same_target_different_material_basis_is_not_silently_merged
+  - id: FE-006
+    rule: contradictions_are_preserved_and_traceable
+  - id: FE-007
+    rule: unresolved_uncertainty_is_preserved
+  - id: FE-008
+    rule: consolidation_does_not_create_source_facts
+  - id: FE-009
+    rule: consolidation_does_not_modify_original_evidence_or_observations
+  - id: FE-010
+    rule: finding_status_and_severity_do_not_become_readiness_decisions
+  - id: FE-011
+    rule: failed_or_blocked_inputs_remain_visible_in_coverage_or_unresolved_refs
+  - id: FE-012
+    rule: consolidated_findings_are_distinct_from_decisions
+  - id: FE-013
+    rule: absence_of_input_does_not_create_nonconformity_finding_without_basis
+  - id: FE-014
+    rule: resolution_requires_attributable_resolution_input
+  - id: FE-015
+    rule: identical_input_refs_and_same_basis_are_reproducibly_grouped
+
+negative_controls:
+  - id: FE-N001
+    reject: merge_findings_by_title_only
+  - id: FE-N002
+    reject: merge_findings_by_severity_only
+  - id: FE-N003
+    reject: discard_lower_severity_finding_without_explicit_policy
+  - id: FE-N004
+    reject: convert_missing_input_into_positive_or_negative_fact
+  - id: FE-N005
+    reject: erase_source_or_observation_provenance_after_merge
+  - id: FE-N006
+    reject: silently_delete_contradictory_finding_after_consolidation
+  - id: FE-N007
+    reject: convert_uncertainty_into_satisfied_condition_without_new_evidence
+  - id: FE-N008
+    reject: infer_readiness_from_finding_count_or_severity
+  - id: FE-N009
+    reject: create_decision_inside_finding_engine
+  - id: FE-N010
+    reject: resolve_conflict_using_model_preference_or_parseability
+  - id: FE-N011
+    reject: mark_finding_resolved_without_attributable_resolution_basis
+  - id: FE-N012
+    reject: mutate_original_evidence_or_observation_objects_during_consolidation
+
+acceptance:
+  scope: finding_grouping_consolidation_deduplication_conflict_preservation_uncertainty_traceability_and_decision_boundary
+  readiness_semantics: out_of_scope
+  source_semantics: delegated_to_canonical_models_and_source_specific_skills
