@@ -41,15 +41,20 @@ skill_bindings:
     targets: [Requirement, RequirementSet, BusinessRule, Constraint, Scenario, Artifact]
     consumes: [BusinessRule, Source, SourceFragment, Evidence, Context, Scenario, Constraint, Relationship, Attribute, Baseline, Change]
     produces: [Challenge, Observation, Finding, Evidence]
+  spec-implementation-drift-analysis:
+    model: spectrum-spec-implementation-drift-analysis
+    targets: [Requirement, RequirementSet, BusinessRule, Constraint, Scenario, Artifact]
+    consumes: [Source, SourceFragment, Evidence, Context, Relationship, Baseline, Change, Attribute]
+    produces: [DriftAssessment, Observation, Finding, Evidence]
   cross-artifact-analysis:
     model: spectrum-cross-artifact-analysis
-    targets: [Ticket, Requirement, RequirementSet, Artifact, Baseline, Change, BusinessRule]
-    consumes: [Source, SourceFragment, Evidence, Context, Constraint, Scenario, Relationship, Attribute, BusinessRule]
+    targets: [Ticket, Requirement, RequirementSet, Artifact, Baseline, Change, BusinessRule, Challenge, DriftAssessment]
+    consumes: [Source, SourceFragment, Evidence, Context, Constraint, Scenario, Relationship, Attribute, BusinessRule, Challenge, DriftAssessment]
     produces: [Observation, Finding, Evidence]
 
 analysis_engine:
   model: spectrum-analysis-engine
-  consumes: [Ticket, Requirement, RequirementSet, BusinessRule, Source, SourceFragment, Evidence, Context, Constraint, Scenario, Stakeholder, Entity, Relationship, Attribute, Baseline, Change, Artifact]
+  consumes: [Ticket, Requirement, RequirementSet, BusinessRule, Source, SourceFragment, Evidence, Context, Constraint, Scenario, Stakeholder, Entity, Relationship, Attribute, Baseline, Change, Artifact, Challenge, DriftAssessment]
   orchestrates: [SkillExecution]
   produces: [Observation, Finding, Evidence]
   result: AnalysisResult
@@ -57,13 +62,13 @@ analysis_engine:
 
 multi_source_reasoning:
   model: spectrum-multi-source-reasoning
-  consumes: [Source, SourceFragment, Evidence, Observation, Context, Requirement, RequirementSet, BusinessRule]
+  consumes: [Source, SourceFragment, Evidence, Observation, Context, Requirement, RequirementSet, BusinessRule, Challenge, DriftAssessment]
   produces: [Evidence, Observation, Finding, Relationship, SourceResolution]
   decision_boundary: no_global_readiness_decision
 
 finding_engine:
   model: spectrum-finding-engine
-  consumes: [Observation, Evidence, Finding, Relationship, Requirement, RequirementSet, BusinessRule, Context, Source, SourceFragment]
+  consumes: [Observation, Evidence, Finding, Relationship, Requirement, RequirementSet, BusinessRule, Challenge, DriftAssessment, Context, Source, SourceFragment]
   produces: [Finding, FindingAggregationResult]
   decision_boundary: no_global_readiness_decision
 
@@ -76,7 +81,7 @@ decision_engine:
 
 ticket_readiness_engine:
   model: spectrum-ticket-readiness-engine
-  consumes: [AnalysisResult, Finding, Evidence, Context, Requirement, RequirementSet, BusinessRule]
+  consumes: [AnalysisResult, Finding, Evidence, Context, Requirement, RequirementSet, BusinessRule, DriftAssessment]
   requires: [ReadinessPolicy]
   policy_ref: policies/ticket-readiness-v1.yaml
   delegates_generic_decision_semantics_to: spectrum-decision-engine
@@ -86,9 +91,9 @@ ticket_readiness_engine:
 workflows:
   ticket-analysis:
     model: ticket-analysis
-    version: 4
+    version: 5
     consumes: [Ticket, Source, SourceFragment, Artifact, Evidence, BusinessRule]
-    orchestrates: [Context, Requirement, RequirementSet, BusinessRule, Challenge, SkillExecution, AnalysisResult, FindingAggregationResult, ReadinessEvaluation, Decision]
+    orchestrates: [Context, Requirement, RequirementSet, BusinessRule, Challenge, DriftAssessment, SkillExecution, AnalysisResult, FindingAggregationResult, ReadinessEvaluation, Decision]
     decision_boundary: readiness_only_after_explicit_policy_evaluation
 
 pipeline_roles:
@@ -97,6 +102,7 @@ pipeline_roles:
   requirement_representation: [Need, Requirement, RequirementSet, Attribute, Relationship]
   business_rule_representation: [BusinessRule, Relationship, Attribute]
   adversarial_analysis: [Challenge, Observation, Finding, Evidence]
+  specification_implementation_drift_analysis: [DriftAssessment, Observation, Finding, Evidence]
   analytical_execution: [SkillExecution, Observation]
   cross_artifact_analysis: [Comparison, Observation, Finding, Evidence, Relationship]
   multi_source_reasoning: [SourceObservation, Comparison, SourceResolution]
@@ -112,6 +118,7 @@ boundary:
   - Analysis Engine orchestrates Skill executions but does not redefine Skill semantics.
   - Business Rule Analysis establishes and assesses explicit domain rules but does not redefine requirements or readiness semantics.
   - Adversarial Requirement Analysis challenges declared requirements and context without treating hypothetical scenarios as project facts or creating readiness decisions.
+  - Specification Implementation Drift Analysis compares supplied specification and implementation artifacts without inventing runtime behavior or creating readiness decisions.
   - Cross-Artifact Analysis compares declared inputs and produces analytical results without rewriting source artifacts or creating readiness decisions.
   - Multi-Source Reasoning preserves source identity, contradiction, authority, scope, and temporal distinctions.
   - Finding Engine consolidates findings without changing source facts, deleting contradictions, or creating readiness decisions.
