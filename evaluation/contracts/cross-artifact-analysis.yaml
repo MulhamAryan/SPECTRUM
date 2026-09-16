@@ -1,0 +1,105 @@
+contract:
+  id: spectrum-cross-artifact-analysis-contract
+  version: 1
+  model_ref: models/cross-artifact-analysis.yaml
+  purpose: >-
+    Vérifier les invariants d'exécution, de comparaison, de provenance et de
+    séparation décisionnelle de l'analyse inter-artefacts.
+
+invariants:
+  - id: CAA-001
+    rule: analysis_requires_declared_artifacts
+    acceptance: Chaque analyse référence explicitement les artefacts effectivement comparés.
+  - id: CAA-002
+    rule: comparison_requires_declared_basis
+    acceptance: Chaque comparaison possède une base de comparaison applicable.
+  - id: CAA-003
+    rule: comparison_status_is_explicit
+    acceptance: Chaque comparaison utilise un statut du vocabulaire canonique.
+  - id: CAA-004
+    rule: evidence_is_preserved
+    acceptance: Toute divergence ou correspondance étayée conserve ses preuves.
+  - id: CAA-005
+    rule: representation_mapping_is_respected
+    acceptance: Une différence de représentation connue et explicitement mappée n'est pas classée comme mismatch.
+  - id: CAA-006
+    rule: absence_of_text_match_is_not_proof
+    acceptance: L'absence de correspondance textuelle n'est pas suffisante pour démontrer une absence sémantique.
+  - id: CAA-007
+    rule: scope_and_temporal_context_are_preserved
+    acceptance: Les différences de périmètre ou de période sont conservées lorsqu'elles expliquent l'écart.
+  - id: CAA-008
+    rule: contradictions_remain_attributable
+    acceptance: Une contradiction conserve les deux éléments et leurs provenances.
+  - id: CAA-009
+    rule: findings_are_derived_from_comparison_or_evidence
+    acceptance: Chaque finding inter-artefacts possède une base analytique traçable.
+  - id: CAA-010
+    rule: no_mapping_is_invented
+    acceptance: Une relation implicite supposée par le modèle n'est jamais transformée en mapping établi.
+  - id: CAA-011
+    rule: implementation_behavior_is_not_invented
+    acceptance: L'analyse ne déduit pas le comportement d'une implémentation non fournie.
+  - id: CAA-012
+    rule: readiness_is_not_created
+    acceptance: L'analyse ne produit aucune décision globale de readiness.
+  - id: CAA-013
+    rule: existing_relationships_are_used
+    acceptance: Les relations canoniques disponibles sont prises en compte avant de déclarer une correspondance manquante.
+  - id: CAA-014
+    rule: version_difference_is_not_automatically_a_contradiction
+    acceptance: Deux versions différentes ne sont contradictoires que si leur contenu applicable est incompatible dans un même périmètre.
+  - id: CAA-015
+    rule: one_to_many_mapping_is_supported
+    acceptance: Une exigence peut être reliée à plusieurs artefacts lorsque les relations le justifient.
+  - id: CAA-016
+    rule: comparison_is_repeatable_for_same_inputs
+    acceptance: Même révision, mêmes identités d'entrée, même périmètre et même base de comparaison produisent les mêmes classifications.
+
+negative_controls:
+  - id: CAA-N001
+    forbidden: READY_FROM_MISMATCH_COUNT
+    rationale: Un nombre de mismatches ne définit pas une politique de readiness.
+  - id: CAA-N002
+    forbidden: SCORE_BASED_GLOBAL_VERDICT
+    rationale: L'analyse inter-artefacts ne crée pas de score global décisionnel.
+  - id: CAA-N003
+    forbidden: MISSING_TEXT_MATCH_EQUALS_ORPHAN_REQUIREMENT
+    rationale: Une recherche textuelle négative ne constitue pas à elle seule une preuve d'orphelinage.
+  - id: CAA-N004
+    forbidden: REPRESENTATION_VARIANT_EQUALS_CONTRADICTION
+    rationale: Les conventions de représentation peuvent être différentes sans divergence sémantique.
+  - id: CAA-N005
+    forbidden: SEVERITY_EQUALS_READINESS_BLOCK
+    rationale: La gravité d'un finding ne détermine pas à elle seule un blocage de readiness.
+  - id: CAA-N006
+    forbidden: UNDOCUMENTED_IMPLEMENTATION_FACT
+    rationale: Aucun fait sur une implémentation absente des entrées ne peut être inventé.
+  - id: CAA-N007
+    forbidden: SILENT_SOURCE_REWRITE
+    rationale: Une comparaison ne modifie ni l'artefact original ni sa provenance.
+  - id: CAA-N008
+    forbidden: CONTRADICTION_DELETION
+    rationale: La résolution d'une contradiction ne doit pas supprimer les éléments contradictoires d'origine.
+  - id: CAA-N009
+    forbidden: IMPLICIT_MAPPING_AS_ESTABLISHED_RELATION
+    rationale: Une association proposée doit rester une hypothèse ou une observation tant qu'elle n'est pas établie.
+  - id: CAA-N010
+    forbidden: ANALYSIS_FAILURE_AS_DECISION
+    rationale: Une exécution bloquée, partielle ou échouée n'est pas une décision de readiness.
+
+acceptance_scope:
+  included:
+    - structure de l'analyse
+    - base de comparaison
+    - statuts de comparaison
+    - préservation de la provenance
+    - gestion des variantes de représentation
+    - distinctions absence/mismatch/contradiction/inconclusif
+    - traçabilité des findings
+    - séparation avec la décision
+  excluded:
+    - définition de la politique de readiness
+    - définition des seuils métier
+    - jugement de conformité réglementaire non fourni
+    - analyse détaillée du code lorsque son contenu n'est pas une entrée
