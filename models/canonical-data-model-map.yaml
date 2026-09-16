@@ -46,6 +46,12 @@ multi_source_reasoning:
   produces: [Evidence, Observation, Finding, Relationship, SourceResolution]
   decision_boundary: no_global_readiness_decision
 
+finding_engine:
+  model: spectrum-finding-engine
+  consumes: [Observation, Evidence, Finding, Relationship, Requirement, RequirementSet, Context, Source, SourceFragment]
+  produces: [Finding, FindingAggregationResult]
+  decision_boundary: no_global_readiness_decision
+
 decision_engine:
   model: spectrum-decision-engine
   consumes: [AnalysisResult, Finding, Evidence]
@@ -65,9 +71,9 @@ ticket_readiness_engine:
 workflows:
   ticket-analysis:
     model: ticket-analysis
-    version: 1
+    version: 2
     consumes: [Ticket, Source, SourceFragment, Artifact, Evidence]
-    orchestrates: [Context, Requirement, RequirementSet, SkillExecution, AnalysisResult, ReadinessEvaluation, Decision]
+    orchestrates: [Context, Requirement, RequirementSet, SkillExecution, AnalysisResult, FindingAggregationResult, ReadinessEvaluation, Decision]
     decision_boundary: readiness_only_after_explicit_policy_evaluation
 
 pipeline_roles:
@@ -76,7 +82,7 @@ pipeline_roles:
   requirement_representation: [Need, Requirement, RequirementSet, Attribute, Relationship]
   analytical_execution: [SkillExecution, Observation]
   multi_source_reasoning: [SourceObservation, Comparison, SourceResolution]
-  issue_aggregation: [Finding]
+  issue_aggregation: [Finding, FindingAggregationResult]
   policy_decision: [Decision, DecisionEvaluation]
   ticket_readiness: [ReadinessEvaluation, Decision]
   handoff: [Artifact]
@@ -87,6 +93,7 @@ boundary:
   - Canonical model does not imply that every object or attribute is mandatory for every ticket.
   - Analysis Engine orchestrates Skill executions but does not redefine Skill semantics.
   - Multi-Source Reasoning preserves source identity, contradiction, authority, scope, and temporal distinctions.
+  - Finding Engine consolidates findings without changing source facts, deleting contradictions, or creating readiness decisions.
   - Decision Engine applies only explicit versioned policy semantics and does not invent outcomes.
   - Ticket Readiness Engine does not redefine generic Decision Engine semantics; it supplies readiness-specific policy and dimensions.
   - Ticket readiness is a SPECTRUM decision policy, not an INCOSE characteristic, rule, or automatic consequence of analysis coverage.
