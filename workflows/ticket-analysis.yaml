@@ -1,13 +1,14 @@
 workflow:
   id: ticket-analysis
-  version: 6
+  version: 7
   interpretation_level: spectrum_workflow
   purpose: >-
     Orchestrate end-to-end analysis of a software-development ticket from source
     ingestion and canonicalization through scoped analytical Skills, business-rule
     analysis, adversarial requirement analysis, cross-artifact analysis,
-    specification-implementation drift analysis, multi-source reasoning,
-    finding consolidation, and explicit ticket-readiness decision evaluation.
+    specification-implementation drift analysis, independent analysis,
+    multi-source reasoning, finding consolidation, and explicit ticket-readiness
+    decision evaluation.
 
 inputs:
   required:
@@ -19,6 +20,7 @@ inputs:
     - adversarial_profile
     - implementation_artifacts
     - drift_profile
+    - independent_analysis_profile
     - analysis_profile
     - readiness_policy_ref
   provenance: required
@@ -97,6 +99,19 @@ stages:
     skills: [spec-implementation-drift-analysis]
     produces: [DriftAssessment, Observation, Finding, Evidence]
 
+  - id: analyze_independent
+    purpose: perform a distinct analysis on the declared scope and compare it with a reference analysis without granting either analysis superior authority
+    depends_on:
+      - analyze_requirements
+      - analyze_verification_validation
+      - analyze_lifecycle_change
+      - analyze_business_rules
+      - analyze_adversarial_requirements
+      - analyze_cross_artifacts
+      - analyze_spec_implementation_drift
+    skills: [independent-analysis]
+    produces: [IndependentAnalysis, OpinionResult, Observation, Finding, Evidence]
+
   - id: multi_source_reasoning
     purpose: compare and reconcile information from multiple attributable sources while preserving conflicts and uncertainty
     depends_on:
@@ -108,6 +123,7 @@ stages:
       - analyze_adversarial_requirements
       - analyze_cross_artifacts
       - analyze_spec_implementation_drift
+      - analyze_independent
     engine: spectrum-multi-source-reasoning
     produces: [Evidence, Observation, Finding, Relationship, SourceResolution]
 
@@ -121,12 +137,13 @@ stages:
       - analyze_adversarial_requirements
       - analyze_cross_artifacts
       - analyze_spec_implementation_drift
+      - analyze_independent
       - multi_source_reasoning
     engine: spectrum-finding-engine
     produces: [Finding, FindingAggregationResult]
 
   - id: consolidate
-    purpose: produce a complete AnalysisResult while preserving evidence, findings, uncertainty, coverage, challenge coverage, and drift coverage
+    purpose: produce a complete AnalysisResult while preserving evidence, findings, uncertainty, coverage, challenge coverage, drift coverage, and independent-analysis coverage
     depends_on: [consolidate_findings]
     engine: spectrum-analysis-engine
     produces: [AnalysisResult]
@@ -148,6 +165,7 @@ execution_model:
     - adversarial_analysis_runs_after_required_context_and_business_rule_inputs_are_available
     - cross_artifact_analysis_runs_after_requirement_context_and_scoped_analyses
     - spec_implementation_drift_runs_after_cross_artifact_mapping_and_required_specification_inputs
+    - independent_analysis_runs_after_declared_primary_analysis_scope_is_available
     - stage_failure_does_not_erase_prior_outputs
     - blocked_dependency_propagates_blocked_or_partial_state
     - every_stage_records_execution_and_provenance
@@ -180,6 +198,9 @@ handoffs:
     - business_rule_analysis_to_cross_artifact_analysis
     - adversarial_analysis_to_cross_artifact_analysis
     - cross_artifact_analysis_to_spec_implementation_drift
+    - spec_implementation_drift_to_independent_analysis
+    - analysis_scope_to_independent_analysis
+    - independent_analysis_to_multi_source_reasoning
     - spec_implementation_drift_to_multi_source_reasoning
     - cross_artifact_analysis_to_multi_source_reasoning
     - multi_source_reasoning_to_consolidate_findings
@@ -198,6 +219,7 @@ failure_paths:
   adversarial_analysis_failure: continue_with_preserved_inputs_and_mark_adversarial_coverage_partial
   cross_artifact_failure: continue_with_preserved_inputs_and_mark_cross_artifact_coverage_partial
   spec_implementation_drift_failure: continue_with_preserved_inputs_and_mark_drift_coverage_partial
+  independent_analysis_failure: continue_with_preserved_inputs_and_mark_independent_coverage_partial
   multi_source_failure: continue_with_preserved_inputs_and_mark_finding_coverage_partial
   finding_engine_failure: analysis_result_blocked_or_partial_without_erasing_prior_findings
   analysis_failure: no_readiness_decision_unless_policy_explicitly_allows_terminal_non_success_input
@@ -212,6 +234,8 @@ outputs:
     - BusinessRule
     - Challenge
     - DriftAssessment
+    - IndependentAnalysis
+    - OpinionResult
     - Observation
     - Finding
     - Evidence
@@ -243,6 +267,11 @@ boundaries:
     Specification Implementation Drift Analysis compares supplied specification
     and implementation evidence. It does not invent runtime behavior, silently
     treat missing evidence as proven absence, or create readiness decisions.
+  IndependentAnalysis: >-
+    Independent Analysis provides a separately attributable analytical execution
+    and an explicit comparison with another analysis when scopes are comparable.
+    Agreement is not truth, disagreement is not proof of error, and the analysis
+    has no decision authority.
   MultiSourceReasoning: >-
     Multi-source reasoning compares attributable inputs and preserves source-aware
     contradictions and uncertainty; internal comparison objects do not become canonical entities.
