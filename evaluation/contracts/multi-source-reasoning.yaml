@@ -47,7 +47,7 @@ negative_controls:
   - id: MSR-N009
     reject: create_readiness_decision_from_source_comparison_alone
   - id: MSR-N010
-    reject: convert_corrobation_into_single_synthetic_source_fact
+    reject: convert_corroboration_into_single_synthetic_source_fact
 
 acceptance:
   scope: source_observation_comparison_corroboration_contradiction_resolution_provenance_and_decision_boundary
