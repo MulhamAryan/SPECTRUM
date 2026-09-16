@@ -1,0 +1,69 @@
+model: spectrum-ticket-readiness-engine
+contract_version: 1
+
+invariants:
+  - id: TRE-001
+    rule: readiness_request_references_traceable_analysis_result_and_versioned_policy
+  - id: TRE-002
+    rule: readiness_policy_applicability_is_evaluated_before_readiness_criteria
+  - id: TRE-003
+    rule: every_applicable_readiness_criterion_has_an_attributable_result
+  - id: TRE-004
+    rule: missing_information_is_preserved_and_not_invented
+  - id: TRE-005
+    rule: ambiguity_is_not_silently_resolved
+  - id: TRE-006
+    rule: contradictory_inputs_are_preserved_or_resolved_only_by_explicit_policy
+  - id: TRE-007
+    rule: verification_and_acceptance_basis_is_evaluated_only_when_policy_applicable
+  - id: TRE-008
+    rule: design_owned_details_are_not_declared_missing_requirements_without_policy_basis
+  - id: TRE-009
+    rule: finding_severity_does_not_imply_readiness_blocking
+  - id: TRE-010
+    rule: analysis_coverage_does_not_imply_readiness
+  - id: TRE-011
+    rule: readiness_outcome_is_derived_only_from_explicit_policy_semantics
+  - id: TRE-012
+    rule: readiness_decision_references_policy_version_evaluation_and_inputs
+  - id: TRE-013
+    rule: readiness_policy_exceptions_are_explicitly_authorized
+  - id: TRE-014
+    rule: readiness_evaluation_status_is_distinct_from_readiness_decision_status
+  - id: TRE-015
+    rule: non_applicable_dimensions_require_explicit_applicability_basis
+  - id: TRE-016
+    rule: readiness_engine_does_not_modify_findings_or_evidence
+
+negative_controls:
+  - id: TRE-N001
+    reject: mark_ticket_ready_because_all_skills_completed
+  - id: TRE-N002
+    reject: mark_ticket_not_ready_because_high_severity_finding_exists_without_policy_rule
+  - id: TRE-N003
+    reject: invent_missing_business_rule_or_context
+  - id: TRE-N004
+    reject: silently_select_one_side_of_a_requirement_contradiction
+  - id: TRE-N005
+    reject: invent_acceptance_test_threshold_or_verification_result
+  - id: TRE-N006
+    reject: require_every_incosе_characteristic_or_attribute_without_applicability_policy
+  - id: TRE-N007
+    reject: classify_design_owned_implementation_detail_as_ticket_gap_without_policy_basis
+  - id: TRE-N008
+    reject: treat_analysis_coverage_as_readiness_score
+  - id: TRE-N009
+    reject: use_unversioned_readiness_policy
+  - id: TRE-N010
+    reject: create_readiness_outcome_without_traceable_evaluation
+  - id: TRE-N011
+    reject: treat_evaluation_status_as_readiness_outcome
+  - id: TRE-N012
+    reject: treat_non_applicable_as_satisfied_without_basis
+  - id: TRE-N013
+    reject: mutate_findings_or_evidence_during_readiness_evaluation
+
+acceptance:
+  scope: readiness_request_policy_applicability_dimensions_criteria_evaluation_and_decision_traceability
+  implementation_design_details: policy_defined_or_out_of_scope
+  generic_decision_engine_semantics: inherited_and_out_of_scope
