@@ -1,0 +1,100 @@
+report:
+  id: ticket-analysis-report
+  version: 1
+  purpose: >-
+    Define the minimum user-facing report produced by SPECTRUM after ticket
+    analysis. The report combines readiness diagnosis with operational direction,
+    developer actions, derived test cases, and a QA review.
+
+sections:
+  direction:
+    required: true
+    fields:
+      action: START_IMPLEMENTATION | RESOLVE_BEFORE_DEV | CLARIFY_WITH_PRODUCT | PREPARE_QA | INSUFFICIENT_INPUT
+      why: traceable explanation
+      next_owner: product | analyst | developer | qa | unknown
+      next_actions: ordered actionable steps
+    rule: direction translates analysis into the next action and does not replace readiness semantics.
+
+  developer_action_plan:
+    required: true
+    fields:
+      id: stable local action identifier
+      owner: product | analyst | developer | qa | unknown
+      action: concrete action derived from findings or requirements
+      depends_on: action references when applicable
+      done_when: observable completion condition
+    rules:
+      - every_action_has_a_source_or_finding_basis
+      - no_generic_project_management_work
+      - no_invented_requirement
+
+  test_cases:
+    required: true
+    purpose: >-
+      Provide executable test scenarios derived from established ticket behavior,
+      acceptance criteria, business rules, permissions, validation, and error paths.
+    categories:
+      - happy_path
+      - negative
+      - boundary
+      - validation
+      - error_handling
+      - permissions_or_roles
+      - regression
+      - test_not_derivable
+    fields:
+      id: stable local test identifier
+      title: concise scenario title
+      category: applicable category
+      priority: critical | high | medium | low
+      preconditions: required established state
+      steps: ordered test actions
+      expected_result: observable expected behavior
+      source_refs: evidence/source references
+      finding_refs: related findings when applicable
+    rules:
+      - tests_are_derived_not_invented
+      - no_invented_data_values_thresholds_or_messages
+      - unresolved_behavior_is_not_assumed
+      - un-specifiable_required_test_is_explicitly_marked_test_not_derivable
+      - every_test_has_traceability
+
+  qa_review:
+    required: true
+    fields:
+      testability_status: testable | partially_testable | not_testable
+      coverage_summary: concise coverage statement
+      ready_for_test_execution: yes | no
+      test_cases_to_execute: references to derived test cases
+      missing_test_inputs: unresolved test data or expectations
+      environment_or_dependency_needs: external systems or setup actually required
+      high_risk_scenarios: supported risk scenarios
+      regression_scope: established regression areas
+      qa_blockers: conditions preventing test execution
+    rules:
+      - distinguish_test_preparation_from_test_execution
+      - qa_does_not_invent_missing_behavior
+      - qa_blockers_require_evidence_or_traceable_dependency
+
+  open_questions:
+    required: true
+    fields:
+      question: concise decision question
+      owner: product | analyst | developer | unknown
+      blocking: yes | no
+      related_refs: finding, dimension, or test references
+    rule: questions must be actionable and traceable.
+
+traceability:
+  direction_to_findings: required
+  action_to_finding_or_requirement: required
+  test_to_requirement_or_acceptance_basis: required
+  qa_blocker_to_evidence_or_dependency: required
+  question_to_related_reference: required
+
+non_goals:
+  - no readiness score
+  - no invented acceptance criteria
+  - no invented implementation design
+  - no replacement of the canonical Finding or Decision models
