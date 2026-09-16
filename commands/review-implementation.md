@@ -7,15 +7,12 @@ argument-hint: [chemin-du-ticket-et-des-artefacts]
 
 Analyse la spécification et les artefacts d'implémentation explicitement fournis.
 
-Utilise la compétence d'analyse des écarts spécification ↔ implémentation et les modèles de preuves, constats et relations.
+## Exécution et rendu
 
-Retourne en français :
-- périmètre comparé ;
-- correspondances ;
-- écarts avérés ;
-- éléments non vérifiables ;
-- preuves et références ;
-- impact potentiel ;
-- actions recommandées.
+Utilise le superviseur SPECTRUM et les Skills autorisés pour cette revue. Transmets ensuite les résultats normalisés au moteur central `${CLAUDE_PLUGIN_ROOT}/reporting/report-renderer.md`.
+
+Le rapport utilisateur doit respecter `${CLAUDE_PLUGIN_ROOT}/models/reporting-pipeline.yaml`.
+
+Retourne en français : périmètre comparé, correspondances, écarts avérés, éléments non vérifiables, preuves et références, impact potentiel et actions recommandées.
 
 Une absence de résultat n'est pas une preuve d'absence fonctionnelle. Ne simule pas un comportement d'exécution qui n'a pas été fourni. Ne modifie aucun code, fichier, dépôt ou système externe sans autorisation explicite.
