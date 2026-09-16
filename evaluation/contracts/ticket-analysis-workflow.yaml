@@ -1,5 +1,5 @@
 workflow: ticket-analysis
-contract_version: 2
+contract_version: 3
 
 invariants:
   - id: TAW-001
@@ -40,6 +40,12 @@ invariants:
     rule: finding_engine_failure_does_not_erase_prior_analytical_outputs
   - id: TAW-019
     rule: multi_source_conflicts_and_uncertainty_remain_traceable_through_finding_consolidation
+  - id: TAW-020
+    rule: cross_artifact_analysis_occurs_before_multi_source_reasoning
+  - id: TAW-021
+    rule: cross_artifact_analysis_receives_declared_artifact_scope
+  - id: TAW-022
+    rule: cross_artifact_outputs_are_preserved_as_analytical_inputs_to_downstream_stages
 
 negative_controls:
   - id: TAW-N001
@@ -70,7 +76,15 @@ negative_controls:
     reject: convert_source_conflict_into_silently_selected_finding_basis
   - id: TAW-N014
     reject: treat_finding_engine_output_as_readiness_decision
+  - id: TAW-N015
+    reject: treat_cross_artifact_missing_correspondence_as_proven_semantic_absence
+  - id: TAW-N016
+    reject: classify_representation_mapping_as_mismatch_without_mapping_analysis
+  - id: TAW-N017
+    reject: bypass_cross_artifact_analysis_when_artifact_comparison_is_declared_in_scope
+  - id: TAW-N018
+    reject: promote_cross_artifact_result_directly_to_readiness_decision
 
 acceptance:
-  scope: workflow_structure_dependencies_handoffs_failure_isolation_multi_source_integration_finding_consolidation_traceability_and_readiness_boundary
+  scope: workflow_structure_dependencies_handoffs_failure_isolation_cross_artifact_integration_multi_source_integration_finding_consolidation_traceability_and_readiness_boundary
   source_semantics: delegated_to_skills_and_engines
