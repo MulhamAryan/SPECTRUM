@@ -32,11 +32,19 @@ skill_bindings:
     consumes: [Attribute, Evidence, Artifact, Relationship]
     produces: [Observation, Finding, Baseline, Change]
 
+analysis_engine:
+  model: spectrum-analysis-engine
+  consumes: [Ticket, Requirement, RequirementSet, Source, SourceFragment, Evidence, Context, Constraint, Scenario, Stakeholder, Entity, Relationship, Attribute, Baseline, Change, Artifact]
+  orchestrates: [SkillExecution]
+  produces: [Observation, Finding, Evidence]
+  result: AnalysisResult
+  decision_boundary: no_global_readiness_decision
+
 pipeline_roles:
   source_ingestion: [Source, SourceFragment, Artifact]
   contextualization: [Context, Stakeholder, Entity, Constraint, Scenario]
   requirement_representation: [Need, Requirement, RequirementSet, Attribute, Relationship]
-  analytical_execution: [Observation]
+  analytical_execution: [SkillExecution, Observation]
   issue_aggregation: [Finding]
   policy_decision: [Decision]
   handoff: [Artifact]
@@ -45,3 +53,4 @@ boundary:
   - Skills do not own Decision creation semantics.
   - Evidence remains attributable to its source or declared project origin.
   - Canonical model does not imply that every object or attribute is mandatory for every ticket.
+  - Analysis Engine orchestrates Skill executions but does not redefine Skill semantics.
