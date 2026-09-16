@@ -1,0 +1,80 @@
+skill: independent-analysis
+contract_version: 1
+
+invariants:
+  - id: IA-001
+    rule: independence_basis_is_explicit_and_versioned
+  - id: IA-002
+    rule: independence_boundary_is_declared
+  - id: IA-003
+    rule: execution_identity_is_preserved
+  - id: IA-004
+    rule: inputs_are_explicit_and_traceable
+  - id: IA-005
+    rule: prior_conclusions_are_not_silently_treated_as_facts
+  - id: IA-006
+    rule: source_authority_remains_source_specific
+  - id: IA-007
+    rule: agreement_does_not_prove_truth
+  - id: IA-008
+    rule: disagreement_does_not_prove_error
+  - id: IA-009
+    rule: comparable_scope_and_revision_are_required_for_direct_comparison
+  - id: IA-010
+    rule: temporal_and_scope_differences_are_preserved
+  - id: IA-011
+    rule: evidence_and_provenance_are_preserved
+  - id: IA-012
+    rule: unresolved_disagreement_remains_inconclusive
+  - id: IA-013
+    rule: analysis_failure_is_distinct_from_analytical_divergence
+  - id: IA-014
+    rule: independent_analysis_does_not_create_readiness_decision
+  - id: IA-015
+    rule: derived_findings_reference_analysis_or_evidence_basis
+  - id: IA-016
+    rule: same_mechanism_and_same_context_do_not_create_independence
+
+negative_controls:
+  - id: IA-N001
+    reject: mark_two_runs_as_independent_without_distinct_independence_basis
+  - id: IA-N002
+    reject: select_one_analysis_as_truth_based_only_on_agreement_count
+  - id: IA-N003
+    reject: select_one_analysis_as_wrong_based_only_on_disagreement
+  - id: IA-N004
+    reject: use_different_versions_as_direct_contradiction_without_alignment
+  - id: IA-N005
+    reject: promote_unverified_prior_finding_to_project_fact
+  - id: IA-N006
+    reject: override_source_evidence_with_model_confidence
+  - id: IA-N007
+    reject: treat_missing_evidence_as_proof_of_wrong_analysis
+  - id: IA-N008
+    reject: treat_tool_failure_as_analytical_disagreement
+  - id: IA-N009
+    reject: compare_non_comparable_scopes_as_correlated_results
+  - id: IA-N010
+    reject: promote_independent_opinion_directly_to_readiness_decision
+  - id: IA-N011
+    reject: erase_unresolved_divergence_during_consolidation
+  - id: IA-N012
+    reject: invent_independence_from_delay_or_context_reset
+
+evaluation_scope:
+  includes:
+    - independence_boundary
+    - execution_identity
+    - input_provenance
+    - scope_and_revision_alignment
+    - observation_alignment
+    - finding_alignment
+    - evidence_alignment
+    - disagreement_preservation
+    - uncertainty_preservation
+    - reproducibility
+  excludes:
+    - global_quality_score
+    - automatic_truth_selection
+    - readiness_policy
+    - decision_outcome_ranking
