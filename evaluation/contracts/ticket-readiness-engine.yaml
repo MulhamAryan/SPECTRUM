@@ -47,7 +47,7 @@ negative_controls:
   - id: TRE-N005
     reject: invent_acceptance_test_threshold_or_verification_result
   - id: TRE-N006
-    reject: require_every_incosе_characteristic_or_attribute_without_applicability_policy
+    reject: require_every_incose_characteristic_or_attribute_without_applicability_policy
   - id: TRE-N007
     reject: classify_design_owned_implementation_detail_as_ticket_gap_without_policy_basis
   - id: TRE-N008
