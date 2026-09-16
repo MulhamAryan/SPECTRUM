@@ -1,0 +1,51 @@
+model: spectrum-analysis-engine
+
+cases:
+  - id: ae-001
+    title: explicit_skill_selection
+    input: analysis_scope_references_registered_skills
+    expected: valid
+  - id: ae-002
+    title: unregistered_skill
+    input: analysis_plan_references_unknown_skill
+    expected: invalid
+  - id: ae-003
+    title: cyclic_dependency
+    input: execution_nodes_form_dependency_cycle
+    expected: invalid
+  - id: ae-004
+    title: independent_parallel_execution
+    input: two_skill_nodes_have_no_dependency
+    expected: valid
+  - id: ae-005
+    title: explicit_handoff
+    input: downstream_skill_consumes_prior_skill_output_through_explicit_reference
+    expected: valid
+  - id: ae-006
+    title: missing_required_input
+    input: required_skill_input_is_unavailable
+    expected: blocked_or_partial_with_reason
+  - id: ae-007
+    title: isolated_failure
+    input: one_independent_skill_fails_while_another_can_execute
+    expected: unaffected_execution_continues
+  - id: ae-008
+    title: provenance_preservation
+    input: skill_outputs_reference_execution_inputs_and_sources
+    expected: valid
+  - id: ae-009
+    title: conflicting_findings
+    input: independent_skills_produce_conflicting_findings
+    expected: preserve_both_with_provenance
+  - id: ae-010
+    title: coverage_without_readiness
+    input: analysis_completes_with_partial_skill_coverage
+    expected: coverage_recorded_without_global_readiness
+  - id: ae-011
+    title: failure_preserves_prior_outputs
+    input: skill_produces_output_then_fails
+    expected: prior_output_preserved
+  - id: ae-012
+    title: no_readiness_decision
+    input: engine_attempts_to_emit_ready_or_not_ready
+    expected: invalid
