@@ -1,0 +1,193 @@
+model:
+  id: spectrum-ticket-readiness-engine
+  version: 1
+  interpretation_level: spectrum_architecture
+  purpose: >-
+    Define the specialized decision layer that evaluates whether a ticket contains
+    sufficient reliable, coherent, verifiable, and contextualized information for
+    implementation to begin, using an explicit versioned readiness policy rather
+    than embedding readiness semantics in Skills or Findings.
+
+ReadinessRequest:
+  required:
+    - readiness_id
+    - analysis_result_ref
+    - readiness_policy_ref
+  fields:
+    readiness_id: stable readiness evaluation identifier
+    analysis_result_ref: terminal AnalysisResult being evaluated
+    readiness_policy_ref: explicit versioned ticket-readiness policy
+    scope_refs: ticket and requirement scope covered by the assessment
+    additional_evidence_refs: additional evidence explicitly permitted by policy
+    provenance: request origin, method, recorded_at, recorded_by
+
+ReadinessPolicy:
+  required:
+    - policy_id
+    - policy_version
+    - applicability
+    - dimensions
+    - criteria
+    - outcomes
+  fields:
+    policy_id: registered readiness policy identifier
+    policy_version: immutable policy version
+    applicability: explicit conditions for applying the policy
+    dimensions: readiness dimensions evaluated by the policy
+    criteria: explicit criteria and evidence requirements for each dimension
+    exclusions: explicitly excluded or design-owned concerns
+    precedence: conflict and blocking precedence when defined
+    outcomes: permitted readiness decision statuses and their meanings
+    exceptions: explicitly authorized exceptions and their authority requirements
+    provenance: policy origin and authority
+  rule: >-
+    Readiness semantics are SPECTRUM policy semantics. The engine must not infer
+    mandatory criteria, thresholds, weights, exceptions, or outcome meanings
+    from source standards, Skill names, finding severity, or model confidence.
+
+ReadinessDimensions:
+  dimensions:
+    - requirement_definition
+    - business_and_stakeholder_context
+    - scope_and_boundaries
+    - dependencies_and_relationships
+    - constraints_and_conditions
+    - verification_and_acceptance_basis
+    - validation_and_intended_outcome
+    - contradictions_and_uncertainties
+    - implementation_relevant_attributes
+  semantics: >-
+    Dimensions organize the decision evidence. They do not by themselves make
+    every dimension mandatory; applicability and policy criteria determine scope.
+
+ReadinessEvaluation:
+  required:
+    - evaluation_id
+    - readiness_request_ref
+    - analysis_result_ref
+    - policy_ref
+    - dimension_results
+    - evaluation_status
+  fields:
+    evaluation_id: stable readiness evaluation identifier
+    readiness_request_ref: ReadinessRequest evaluated
+    analysis_result_ref: exact AnalysisResult evaluated
+    policy_ref: exact readiness policy identity and version
+    dimension_results: attributable result for every applicable readiness dimension
+    blocking_findings: findings explicitly classified as blocking by policy
+    material_uncertainties: uncertainties relevant to applicable criteria
+    contradictions: unresolved or policy-resolved contradictions
+    exclusions: criteria or dimensions excluded with applicability basis
+    evaluation_status: completed | partial | blocked | failed | inconclusive
+    provenance: evaluation origin, method, recorded_at, recorded_by
+  rule: >-
+    Every applicable policy criterion must have an attributable result. Missing
+    evidence remains missing or uncertain; it is never converted into a positive
+    readiness fact.
+
+ReadinessDecision:
+  canonical_type: Decision
+  fields:
+    decision_status: policy-defined readiness outcome
+    target_refs: ticket or explicitly scoped implementation target
+    finding_refs: findings considered by the readiness policy
+    policy_refs: exact readiness policy/version
+    rationale: concise traceable explanation of the outcome
+    evidence_refs: evidence supporting the decision
+    evaluation_ref: ReadinessEvaluation that produced the decision
+  rule: >-
+    A readiness decision is a specialized Decision. Its status vocabulary and
+    outcome meanings are defined only by the selected readiness policy.
+
+DecisionSemantics:
+  sufficient_information:
+    behavior: >-
+      Permit an implementation-readiness outcome only when all applicable policy
+      criteria are satisfied and no policy-defined blocking condition remains.
+  missing_information:
+    behavior: >-
+      Record the missing information and affected criteria. Do not infer that the
+      missing information is irrelevant unless the policy explicitly says so.
+  ambiguity:
+    behavior: >-
+      Record the ambiguity as a finding or uncertainty and evaluate its materiality
+      using explicit policy criteria. Do not silently choose an interpretation.
+  contradiction:
+    behavior: >-
+      Preserve the conflicting evidence and apply only policy-defined resolution
+      or blocking semantics.
+  unverifiable_outcome:
+    behavior: >-
+      Record the absence or weakness of a verification or acceptance basis when
+      the policy makes it applicable. Do not invent a test, threshold, or result.
+  missing_context:
+    behavior: >-
+      Preserve the contextual gap and evaluate it against the policy. Do not
+      manufacture stakeholder, system, dependency, constraint, or scenario facts.
+  design_owned_detail:
+    behavior: >-
+      Do not classify an implementation detail as a readiness gap merely because
+      the ticket does not specify a design choice that the policy leaves to design.
+  non_applicable_dimension:
+    behavior: record_not_applicable_with_explicit_basis
+
+BlockingSemantics:
+  rules:
+    - only_policy_defined_conditions_are_blocking
+    - finding_severity_is_not_blocking_by_default
+    - positive_observation_does_not_cancel_a_blocking_condition
+    - uncertainty_is_blocking_only_when_policy_defines_it_as_such
+    - contradiction_is_blocking_only_when_policy_defines_it_as_such
+    - unresolved_applicability_prevents_assuming_non_applicability
+
+DecisionBoundary:
+  upstream:
+    - Skills produce observations and findings
+    - Analysis Engine produces AnalysisResult and coverage
+  decision_engine:
+    - generic Decision Engine evaluates explicit policy semantics
+  readiness_layer:
+    - Ticket Readiness Engine supplies the readiness-specific policy/profile
+    - readiness evaluation produces a specialized Decision through explicit policy
+  rule: >-
+    Ticket readiness is not an INCOSE characteristic, rule, or automatic
+    consequence of analysis coverage. It is a SPECTRUM decision policy applied
+    to traceable analytical results.
+
+Governance:
+  rules:
+    - readiness_policy_identity_and_version_are_immutable_for_an_evaluation
+    - readiness_policy_changes_create_new_policy_versions
+    - readiness_decision_retains_policy_version_and_evaluation_reference
+    - readiness_outcome_must_be_attributable_to_policy_criteria
+    - exceptions_require_explicit_policy_authority
+    - design_owned_scope_must_be_declared_by_policy
+
+Traceability:
+  request_to_analysis_result: required
+  request_to_readiness_policy: required
+  evaluation_to_policy_version: required
+  evaluation_to_analysis_result: required
+  dimension_result_to_criteria: required
+  dimension_result_to_findings_or_evidence: required_when_present
+  decision_to_evaluation: required
+  decision_to_policy: required
+  decision_to_findings: required_when_present
+  decision_to_evidence: required_when_present
+
+Boundaries:
+  INCOSE: >-
+    INCOSE characteristics, rules, attributes, and activity references may provide
+    evidence or analytical findings, but they do not define ticket readiness.
+  AnalysisEngine: >-
+    Analysis coverage is an input to readiness evaluation, not a readiness score
+    or decision.
+  FindingModel: >-
+    Findings identify analytical conditions. They become blocking or outcome-
+    relevant only when an explicit readiness policy says so.
+  DecisionEngine: >-
+    Ticket Readiness specializes the generic Decision Engine with an explicit
+    readiness policy. It must not duplicate generic policy-evaluation semantics.
+  SPECTRUM: >-
+    Readiness dimensions, applicability, blocking semantics, design-owned scope,
+    and readiness outcome policy are SPECTRUM architecture.
