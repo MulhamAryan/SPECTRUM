@@ -142,10 +142,19 @@ entities:
   Decision:
     purpose: Policy- or workflow-level conclusion derived from findings and applicable decision logic.
     required: [id, type, decision_status, target_refs]
-    fields: [id, type, decision_status, target_refs, finding_refs, policy_refs, rationale, evidence_refs, decided_at, decided_by]
+    fields: [id, type, decision_status, target_refs, finding_refs, policy_refs, rationale, evidence_refs, decided_at, decided_by, evaluation_ref]
     boundary: >-
       Decision is outside Skills. A decision is valid only when the applicable
       policy/workflow defines the decision semantics and its inputs are traceable.
+
+  ReadinessEvaluation:
+    purpose: Structured evaluation of ticket implementation readiness before a Decision is produced.
+    required: [id, type, target_refs, policy_refs, analysis_result_ref, evaluation_status]
+    fields: [id, type, target_refs, policy_refs, analysis_result_ref, dimension_results, blocking_finding_refs, material_uncertainty_refs, contradiction_refs, exclusion_refs, evaluation_status, evidence_refs, provenance]
+    evaluation_status_values: [completed, partial, blocked, failed, inconclusive]
+    boundary: >-
+      ReadinessEvaluation is an analytical decision-input record. It does not
+      define readiness outcome semantics independently of the applicable policy.
 
   Artifact:
     purpose: External or generated object participating in analysis or handoff.
@@ -176,6 +185,9 @@ reference_integrity:
     - requirement_set_members_must_be_requirements_or_needs
     - requirement_parent_refs_must_resolve
     - source_fragment_source_must_resolve
+    - readiness_evaluation_analysis_result_must_resolve
+    - readiness_evaluation_policy_must_resolve
+    - decision_evaluation_ref_must_resolve_when_present
 
 status_semantics:
   observation: >-
@@ -183,6 +195,9 @@ status_semantics:
     readiness decision.
   finding: >-
     Describes an analytical issue or observation that may feed decision logic.
+  readiness_evaluation: >-
+    Describes the execution state and criterion results of readiness evaluation;
+    it is not itself the readiness outcome.
   decision: >-
     Applies explicit policy/workflow semantics to findings. It must not be
     inferred merely from a Skill status.
@@ -194,4 +209,5 @@ source_boundary:
     rules.
   SPECTRUM: >-
     Object types, identifiers, evidence semantics, observation/finding structures,
-    relationship vocabulary, and decision separation are SPECTRUM architecture.
+    relationship vocabulary, readiness evaluation structure, and decision separation
+    are SPECTRUM architecture.
