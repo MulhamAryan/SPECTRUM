@@ -1,0 +1,59 @@
+model: spectrum-decision-engine
+
+cases:
+  - id: de-001
+    title: explicit_policy
+    input: decision_request_references_versioned_policy
+    expected: valid
+  - id: de-002
+    title: missing_policy
+    input: decision_request_has_no_policy_reference
+    expected: invalid
+  - id: de-003
+    title: unversioned_policy
+    input: policy_identity_cannot_be_resolved_to_version
+    expected: invalid
+  - id: de-004
+    title: policy_applicability
+    input: policy_does_not_apply_to_target
+    expected: blocked_or_inconclusive_without_decision
+  - id: de-005
+    title: explicit_criteria
+    input: applicable_policy_defines_criterion_and_outcome
+    expected: valid
+  - id: de-006
+    title: severity_not_decision
+    input: high_severity_finding_without_policy_rule
+    expected: no_decision
+  - id: de-007
+    title: skill_status_not_decision
+    input: all_skill_executions_completed_without_decision_policy
+    expected: no_decision
+  - id: de-008
+    title: missing_input
+    input: required_policy_input_is_unavailable
+    expected: blocked_or_inconclusive_with_uncertainty
+  - id: de-009
+    title: conflicting_evidence
+    input: conflicting_inputs_without_policy_resolution
+    expected: conflict_preserved
+  - id: de-010
+    title: explicit_conflict_resolution
+    input: policy_defines_authorized_conflict_resolution
+    expected: resolution_traceable_to_policy
+  - id: de-011
+    title: policy_error
+    input: policy_evaluation_fails
+    expected: failed_without_fallback_decision
+  - id: de-012
+    title: decision_traceability
+    input: decision_created_from_evaluation
+    expected: decision_references_policy_evaluation_findings_and_inputs
+  - id: de-013
+    title: policy_revision
+    input: policy_changes_between_evaluations
+    expected: distinct_policy_versions_preserved
+  - id: de-014
+    title: authority_attribution
+    input: policy_requires_decision_authority
+    expected: decision_authority_recorded
