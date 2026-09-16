@@ -237,3 +237,63 @@ cases:
     title: drift_deviation_boundary
     input: documented_approved_deviation_between_specification_and_implementation
     expected: deviation_context_is_preserved_and_not_silently_reclassified
+  - id: taw-060
+    title: independent_stage_present
+    input: workflow_version_7
+    expected: explicit_independent_analysis_stage_exists_and_uses_declared_skill
+  - id: taw-061
+    title: independent_basis_and_boundary
+    input: second_analysis_with_distinct_versioned_mechanism
+    expected: independence_basis_and_isolation_boundary_are_explicit
+  - id: taw-062
+    title: independent_after_primary_analysis
+    input: independent_stage_requested_before_required_primary_analysis_scope
+    expected: execution_is_blocked_until_declared_primary_analysis_scope_is_available
+  - id: taw-063
+    title: independent_comparable_scope
+    input: primary_and_independent_analyses_share_comparable_scope_and_revision
+    expected: opinion_result_can_be_created_with_explicit_comparison_basis
+  - id: taw-064
+    title: independent_scope_difference
+    input: primary_and_independent_analyses_cover_different_scopes
+    expected: scope_difference_is_preserved_and_not_classified_as_direct_contradiction
+  - id: taw-065
+    title: independent_agreement_boundary
+    input: analyses_reach_same_supported_conclusion
+    expected: corroboration_is_recorded_without_claiming_truth
+  - id: taw-066
+    title: independent_disagreement_boundary
+    input: comparable_analyses_reach_different_conclusions
+    expected: divergence_is_preserved_without_selecting_a_winner
+  - id: taw-067
+    title: independent_failure_isolation
+    input: independent_analysis_fails_after_prior_analysis_stages_succeed
+    expected: prior_outputs_are_preserved_and_independent_failure_is_visible
+  - id: taw-068
+    title: independent_no_direct_readiness
+    input: independent_analysis_produces_critical_finding
+    expected: finding_is_forwarded_without_creating_readiness_decision
+  - id: taw-069
+    title: independent_shared_input_bias
+    input: both_analyses_use_same_authoritative_source_fragment
+    expected: shared_input_dependency_is_preserved_and_not_described_as_independent_evidence
+  - id: taw-070
+    title: independent_tool_failure_boundary
+    input: independent_analysis_tool_fails
+    expected: execution_failure_is_not_classified_as_analytical_divergence
+  - id: taw-071
+    title: independent_prior_finding_boundary
+    input: prior_analysis_contains_unverified_finding
+    expected: prior_finding_is_not_promoted_to_project_fact
+  - id: taw-072
+    title: independent_provenance
+    input: independent_analysis_produces_observation_and_finding
+    expected: execution_identity_inputs_outputs_and_provenance_remain_traceable
+  - id: taw-073
+    title: independent_temporal_boundary
+    input: primary_and_independent_analyses_target_different_requirement_revisions
+    expected: revision_difference_is_preserved_during_comparison
+  - id: taw-074
+    title: independent_inconclusive
+    input: analyses_disagree_without_sufficient_evidence_to_resolve
+    expected: opinion_result_remains_inconclusive
