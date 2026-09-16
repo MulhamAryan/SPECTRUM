@@ -40,6 +40,12 @@ analysis_engine:
   result: AnalysisResult
   decision_boundary: no_global_readiness_decision
 
+multi_source_reasoning:
+  model: spectrum-multi-source-reasoning
+  consumes: [Source, SourceFragment, Evidence, Observation, Context, Requirement, RequirementSet]
+  produces: [Evidence, Observation, Finding, Relationship, SourceResolution]
+  decision_boundary: no_global_readiness_decision
+
 decision_engine:
   model: spectrum-decision-engine
   consumes: [AnalysisResult, Finding, Evidence]
@@ -69,6 +75,7 @@ pipeline_roles:
   contextualization: [Context, Stakeholder, Entity, Constraint, Scenario]
   requirement_representation: [Need, Requirement, RequirementSet, Attribute, Relationship]
   analytical_execution: [SkillExecution, Observation]
+  multi_source_reasoning: [SourceObservation, Comparison, SourceResolution]
   issue_aggregation: [Finding]
   policy_decision: [Decision, DecisionEvaluation]
   ticket_readiness: [ReadinessEvaluation, Decision]
@@ -79,6 +86,7 @@ boundary:
   - Evidence remains attributable to its source or declared project origin.
   - Canonical model does not imply that every object or attribute is mandatory for every ticket.
   - Analysis Engine orchestrates Skill executions but does not redefine Skill semantics.
+  - Multi-Source Reasoning preserves source identity, contradiction, authority, scope, and temporal distinctions.
   - Decision Engine applies only explicit versioned policy semantics and does not invent outcomes.
   - Ticket Readiness Engine does not redefine generic Decision Engine semantics; it supplies readiness-specific policy and dimensions.
   - Ticket readiness is a SPECTRUM decision policy, not an INCOSE characteristic, rule, or automatic consequence of analysis coverage.
