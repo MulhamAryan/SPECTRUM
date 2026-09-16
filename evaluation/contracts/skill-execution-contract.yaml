@@ -23,7 +23,7 @@ invariants:
   - id: SEC-010
     rule: execution_state_transitions_do_not_erase_prior_outputs
   - id: SEC-011
-    rule: blocked_or_failed_execution_has_attributable_reason
+    rule: blocked_failed_or_partial_execution_has_attributable_reason
   - id: SEC-012
     rule: not_applicable_requires_explicit_applicability_basis
 
@@ -44,6 +44,8 @@ negative_controls:
     reject: mark_not_applicable_without_explicit_applicability_basis
   - id: SEC-N008
     reject: erase_prior_outputs_when_execution_fails
+  - id: SEC-N009
+    reject: create_cross_skill_handoff_without_explicit_references
 
 acceptance:
   scope: skill_execution_contract_and_execution_invariants
