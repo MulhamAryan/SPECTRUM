@@ -1,0 +1,149 @@
+model:
+  id: spectrum-multi-source-reasoning
+  version: 1
+  interpretation_level: spectrum_architecture
+  purpose: >-
+    Define how SPECTRUM compares, combines, corroborates, and preserves information
+    from multiple sources while retaining source identity, authority, version,
+    contradictions, uncertainty, and derivation traceability.
+
+MultiSourceAnalysis:
+  required:
+    - analysis_id
+    - target_refs
+    - source_refs
+  fields:
+    analysis_id: stable multi-source analysis identifier
+    target_refs: canonical objects whose claims or context are compared
+    source_refs: sources included in the comparison
+    fragment_refs: source fragments used when available
+    evidence_refs: attributable evidence participating in reasoning
+    policy_ref: optional explicit source-resolution policy
+    provenance: analysis origin, method, recorded_at, recorded_by
+
+SourceObservation:
+  required:
+    - observation_id
+    - source_ref
+    - claim
+  fields:
+    observation_id: stable observation identifier
+    source_ref: originating source
+    fragment_ref: precise source fragment when available
+    claim: normalized claim extracted from the source
+    scope_refs: targets or conditions to which the claim applies
+    source_version: source version or revision at observation time
+    authority_level: copied from canonical Source metadata, not inferred from content
+    evidence_ref: evidence record representing the observation
+
+Comparison:
+  required:
+    - comparison_id
+    - target_ref
+    - input_observation_refs
+    - comparison_status
+  fields:
+    comparison_id: stable comparison identifier
+    target_ref: canonical target under comparison
+    input_observation_refs: source observations being compared
+    comparison_status: corroborated | compatible | conflicting | incomplete | inconclusive | not_applicable
+    dimensions: semantic, scope, temporal, authority, version, applicability
+    rationale: concise explanation of comparison result
+    evidence_refs: evidence supporting the comparison
+    provenance: comparison method and execution metadata
+
+SourceResolution:
+  required:
+    - resolution_id
+    - comparison_ref
+    - resolution_status
+  fields:
+    resolution_id: stable resolution identifier
+    comparison_ref: comparison being resolved
+    resolution_status: unresolved | resolved_by_policy | resolved_by_authorized_source | unresolved_authority
+    selected_basis_refs: evidence or source observations used by the resolution
+    policy_ref: explicit policy when policy-based resolution is used
+    authority_ref: authorized authority when authority-based resolution is used
+    discarded_refs: optional references to inputs not selected as governing basis
+    rationale: resolution explanation
+    provenance: decision origin and method
+  rule: >-
+    A source conflict must not be resolved merely because one source is easier to
+    parse, more recent-looking, or more probable to an AI model. Resolution requires
+    explicit policy or attributable authorized authority.
+
+ReasoningSemantics:
+  corroboration:
+    behavior: >-
+      Record independent compatible observations as corroborating evidence without
+      collapsing their distinct provenance.
+  compatibility:
+    behavior: >-
+      Preserve compatible claims separately while recording their shared target and scope.
+  contradiction:
+    behavior: >-
+      Preserve contradictory claims and create a contradiction record; do not silently
+      select a single claim.
+  incomplete_sources:
+    behavior: >-
+      Preserve partial coverage and do not infer missing content from another source
+      unless an explicit derivation relationship or policy permits it.
+  temporal_difference:
+    behavior: >-
+      Distinguish true contradiction from claims that apply to different versions,
+      dates, states, or lifecycle conditions.
+  scope_difference:
+    behavior: >-
+      Distinguish contradiction from claims whose applicability scopes do not overlap.
+  authority:
+    behavior: >-
+      Carry source authority metadata from the canonical Source object. Do not infer
+      authority from wording, confidence, popularity, or model preference.
+  uncertainty:
+    behavior: >-
+      Preserve unresolved uncertainty when source content cannot be reconciled or
+      applicability cannot be established.
+
+SourcePrecedence:
+  rules:
+    - no_global_precedence_exists_without_explicit_policy
+    - policy_must_define_applicability_before_precedence
+    - precedence_cannot_create_new_source_fact
+    - precedence_must_preserve_displaced_source_traceability
+    - authority_based_resolution_requires_attributable_authority
+
+DerivedOutputs:
+  produces:
+    - Evidence
+    - Observation
+    - Finding
+    - Relationship
+    - SourceResolution
+  rules:
+    - every_derived_output_references_input_sources_or_observations
+    - contradiction_is_not_deleted_when_resolution_exists
+    - resolution_does_not_rewrite_original_source_observations
+    - confidence_does_not_replace_provenance
+
+DecisionBoundary:
+  rule: >-
+    Multi-source reasoning may produce comparisons, corroboration, contradictions,
+    uncertainty, and policy-governed source resolutions. It does not by itself create
+    ticket readiness or any global implementation decision.
+
+Boundaries:
+  Source: >-
+    Canonical Source metadata remains authoritative for source identity, version,
+    revision, authority level, and access basis.
+  Evidence: >-
+    Evidence remains the attributable information used by reasoning and is not replaced
+    by a synthesized claim.
+  Finding: >-
+    Findings are downstream analytical products; source comparison does not automatically
+    convert every disagreement into a finding without a relevant target or basis.
+  DecisionEngine: >-
+    Any policy-driven resolution requiring a formal decision belongs to the decision
+    layer and must not be embedded as an implicit preference here.
+  SPECTRUM: >-
+    Comparison semantics, corroboration handling, conflict preservation, and explicit
+    source-resolution mechanics are SPECTRUM architecture.
