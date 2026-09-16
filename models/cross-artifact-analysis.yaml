@@ -21,6 +21,7 @@ CrossArtifactAnalysis:
     target_refs: objets canoniques concernés
     artifact_refs: artefacts effectivement comparés
     requirement_refs: exigences concernées lorsqu'elles sont identifiables
+    business_rule_refs: règles métier concernées lorsqu'elles sont identifiables
     relationship_refs: relations explicites utilisées pour relier les artefacts
     comparison_scope: périmètre déclaré de la comparaison
     comparison_basis: critères de comparaison applicables
@@ -92,8 +93,9 @@ FalsePositiveControls:
     - API_field_may_be_computed_without_direct_database_column
     - camel_case_and_snake_case_may_be_declared_representation_mapping
     - artifact_may_be_versioned_independently_with_explicit_relation
-    - requirement_may_be_intentionally_deferred_with_explicit_scope_evidence
+    - requirement_may_be_intentionally_deferred_with_scope_evidence
     - one_requirement_may_map_to_multiple_downstream_artifacts
+    - one_business_rule_may_apply_to_multiple_requirements_or_entities
     - one_artifact_may_contain_multiple_requirements
     - absent_text_match_does_not_prove_absent_semantics
 
@@ -102,6 +104,7 @@ Scope:
     - Ticket
     - Requirement
     - RequirementSet
+    - BusinessRule
     - Artifact
     - Source
     - SourceFragment
@@ -115,8 +118,13 @@ Scope:
   typical_comparisons:
     - Ticket_vs_Requirement
     - Requirement_vs_Requirement
+    - Requirement_vs_BusinessRule
+    - BusinessRule_vs_BusinessRule
+    - BusinessRule_vs_Scenario
+    - BusinessRule_vs_Constraint
+    - BusinessRule_vs_Acceptance_Basis
+    - BusinessRule_vs_Artifact
     - Requirement_vs_Acceptance_Basis
-    - Requirement_vs_Business_Rule
     - Requirement_vs_API_Artifact
     - Requirement_vs_Data_Artifact
     - Artifact_vs_Artifact
