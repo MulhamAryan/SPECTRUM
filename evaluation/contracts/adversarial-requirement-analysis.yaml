@@ -1,0 +1,74 @@
+analysis: spectrum-adversarial-requirement-analysis
+contract_version: 1
+
+invariants:
+  - id: ARA-001
+    rule: analysis_has_explicit_targets_scope_and_categories
+  - id: ARA-002
+    rule: each_challenge_identifies_target_and_category
+  - id: ARA-003
+    rule: challenge_question_is_explicit
+  - id: ARA-004
+    rule: analysis_uses_only_declared_inputs_and_scope
+  - id: ARA-005
+    rule: project_facts_are_not_invented
+  - id: ARA-006
+    rule: implementation_behavior_is_not_invented
+  - id: ARA-007
+    rule: missing_specification_is_distinguished_from_proven_failure
+  - id: ARA-008
+    rule: uncertainty_is_distinguished_from_contradiction
+  - id: ARA-009
+    rule: edge_case_is_not_automatically_classified_as_defect
+  - id: ARA-010
+    rule: temporal_and_lifecycle_applicability_are_preserved
+  - id: ARA-011
+    rule: explicit_exceptions_are_preserved
+  - id: ARA-012
+    rule: existing_relationships_are_used_before_dependency_inference
+  - id: ARA-013
+    rule: material_claims_retain_supporting_evidence
+  - id: ARA-014
+    rule: findings_retain_challenge_and_evidence_traceability
+  - id: ARA-015
+    rule: analysis_does_not_create_readiness_decisions
+  - id: ARA-016
+    rule: same_inputs_and_configuration_produce_reproducible_analysis_structure
+
+negative_controls:
+  - id: ARA-N001
+    reject: treat_every_unmentioned_negative_scenario_as_a_gap
+  - id: ARA-N002
+    reject: invent_scale_failure_without_applicable_scale_context
+  - id: ARA-N003
+    reject: declare_implementation_failure_without_implementation_evidence
+  - id: ARA-N004
+    reject: convert_high_finding_severity_into_not_ready
+  - id: ARA-N005
+    reject: silently_select_one_of_two_conflicting_rules
+  - id: ARA-N006
+    reject: discard_temporal_version_distinction
+  - id: ARA-N007
+    reject: claim_dependency_without_declared_or_derived_basis
+  - id: ARA-N008
+    reject: treat_hypothetical_adversarial_actor_as_project_fact
+  - id: ARA-N009
+    reject: mutate_source_artifacts_during_analysis
+  - id: ARA-N010
+    reject: emit_global_quality_score_or_readiness_verdict
+
+scope:
+  includes:
+    - challenge_generation
+    - boundary_and_exception_analysis
+    - state_and_lifecycle_edges
+    - temporal_edges
+    - actor_and_authorization_boundaries
+    - dependency_and_failure_conditions
+    - volume_and_scale_conditions_when_applicable
+    - evidence_and_uncertainty_preservation
+  excludes:
+    - readiness_policy_semantics
+    - final_decision_semantics
+    - unsupported_regulatory_conformance
+    - detailed_implementation_testing_without_implementation_inputs
