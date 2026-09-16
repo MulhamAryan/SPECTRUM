@@ -1,0 +1,91 @@
+model: spectrum-evidence-model
+
+cases:
+  - id: em-001
+    title: stable_evidence_identity
+    input: evidence_has_required_identity_kind_and_subjects
+    expected: valid
+  - id: em-002
+    title: source_fact_requires_source
+    input: source_fact_has_no_source_reference
+    expected: invalid
+  - id: em-003
+    title: project_fact_origin
+    input: project_fact_has_declared_project_origin
+    expected: valid
+  - id: em-004
+    title: project_fact_missing_origin
+    input: project_fact_has_no_declared_origin
+    expected: invalid
+  - id: em-005
+    title: project_artifact_reference
+    input: project_artifact_evidence_has_artifact_reference
+    expected: valid
+  - id: em-006
+    title: derived_evidence_inputs
+    input: derived_evidence_references_input_evidence_or_observations
+    expected: valid
+  - id: em-007
+    title: derived_evidence_missing_inputs
+    input: derived_evidence_has_no_input_references
+    expected: invalid
+  - id: em-008
+    title: contradiction_preserved
+    input: evidence_conflicts_with_another_attributable_evidence_record
+    expected: conflicting_inputs_remain_traceable
+  - id: em-009
+    title: absence_is_not_nonconformity
+    input: expected_information_is_absent
+    expected: absence_recorded_without_automatic_nonconformity
+  - id: em-010
+    title: evidence_observation_separation
+    input: evidence_is_used_as_basis_for_an_observation
+    expected: evidence_and_observation_remain_distinct
+  - id: em-011
+    title: evidence_finding_separation
+    input: evidence_supports_a_finding
+    expected: evidence_and_finding_remain_distinct
+  - id: em-012
+    title: evidence_decision_separation
+    input: evidence_is_used_by_decision_evaluation
+    expected: evidence_does_not_become_decision_without_policy
+  - id: em-013
+    title: confidence_not_provenance
+    input: unsupported_claim_has_high_model_confidence
+    expected: provenance_requirement_remains_unsatisfied
+  - id: em-014
+    title: source_fragment_resolution
+    input: evidence_references_source_fragment
+    expected: fragment_resolves_to_source
+  - id: em-015
+    title: invalid_source_fragment
+    input: evidence_references_nonexistent_source_fragment
+    expected: invalid_reference
+  - id: em-016
+    title: support_link_traceability
+    input: evidence_supports_observation_or_finding
+    expected: support_reference_is_explicit
+  - id: em-017
+    title: contradiction_link_traceability
+    input: evidence_contradicts_observation_or_finding
+    expected: contradiction_reference_is_explicit
+  - id: em-018
+    title: extraction_status
+    input: evidence_extraction_is_partial_or_conflicting
+    expected: extraction_status_preserved
+  - id: em-019
+    title: source_provenance_conditionality
+    input: project_origin_evidence_has_no_official_source
+    expected: project_origin_is_preserved_without_inventing_source_provenance
+  - id: em-020
+    title: derived_chain_traceability
+    input: evidence_is_derived_from_prior_evidence_chain
+    expected: complete_input_chain_is_recoverable
+  - id: em-021
+    title: immutable_source_basis
+    input: source_backed_evidence_is_reused_by_multiple_observations
+    expected: source_basis_remains_shared_and_attributable
+  - id: em-022
+    title: no_automatic_decision
+    input: evidence_contains_strong_support_for_a_policy_criterion
+    expected: no_decision_created_by_evidence_model
