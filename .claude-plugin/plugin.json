@@ -1,7 +1,7 @@
 {
   "name": "spectrum",
-  "version": "0.2.0",
-  "description": "Requirements engineering and developer-readiness plugin for AI coding agents.",
+  "version": "0.3.0",
+  "description": "Requirements engineering and developer-readiness analysis for software-development tickets.",
   "author": {
     "name": "Mulham Aryan"
   },
