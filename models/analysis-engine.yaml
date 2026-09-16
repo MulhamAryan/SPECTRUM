@@ -1,0 +1,169 @@
+model:
+  id: spectrum-analysis-engine
+  version: 1
+  interpretation_level: spectrum_architecture
+  purpose: >-
+    Define the orchestration layer that plans and executes applicable analytical
+    Skills over canonical ticket data while preserving independence, provenance,
+    uncertainty, failures, and explicit cross-Skill handoffs.
+
+AnalysisRequest:
+  required:
+    - analysis_id
+    - ticket_ref
+    - input_refs
+    - skill_scope
+  fields:
+    analysis_id: stable analysis identifier
+    ticket_ref: Ticket being analyzed
+    input_refs: canonical objects and evidence available to analysis
+    skill_scope: explicit Skill selection scope or declared analysis profile
+    source_refs: sources available to the analysis
+    policy_refs: optional workflow policy references; not used to create decisions
+    provenance: request origin, method, recorded_at, recorded_by
+
+AnalysisPlan:
+  required:
+    - analysis_id
+    - selected_skill_refs
+    - execution_nodes
+    - dependencies
+  fields:
+    analysis_id: analysis identifier
+    selected_skill_refs: registered Skills selected for this analysis
+    execution_nodes: planned Skill execution nodes with target and input requirements
+    dependencies: explicit dependency edges between execution nodes
+    parallel_groups: independent nodes eligible for concurrent execution
+    excluded_skills: declared Skills considered but excluded with attributable reason
+    coverage_scope: intended analytical coverage
+    provenance: plan origin and method
+
+SkillSelection:
+  rules:
+    - select_only_registered_skills
+    - selection_must_resolve_skill_contract_and_version
+    - selection_must_respect_declared_skill_scope
+    - selection_must_respect_target_type_and_input_contract
+    - selection_reason_must_be_traceable_to_explicit_scope_or_analysis_profile
+    - excluded_applicability_must_not_be_silently_treated_as_completed_analysis
+    - selection_does_not_imply_positive_or_negative_finding
+
+DependencyResolution:
+  dependency_sources:
+    - explicit_skill_dependency
+    - required_input_produced_by_prior_execution
+    - explicit_cross_skill_handoff
+  rules:
+    - dependency_graph_must_be_acyclic_for_executable_plan
+    - dependency_edges_must_reference_existing_execution_nodes
+    - a_skill_cannot_be_invoked_implicitly_by_another_skill
+    - dependent_execution_waits_for_required_handoff_or_input
+    - independent_execution_nodes_may_be_parallelized
+    - blocked_dependency_propagates_blocked_or_partial_state_to_dependents_when_required_input_is_unavailable
+
+InputAssembly:
+  rules:
+    - every_execution_input_must_resolve
+    - required_inputs_come_from_analysis_request_or_explicit_handoff
+    - source_and_evidence_scope_must_be_preserved
+    - no_engine_step_may_invent_missing_input
+    - derived_inputs_retain_their_provenance
+    - execution_receives_only_inputs_allowed_by_its_skill_contract
+
+Execution:
+  unit: SkillExecution
+  rules:
+    - each_planned_node_creates_at_most_one_execution_instance_per_analysis_revision
+    - execution_uses_declared_skill_version
+    - execution_preconditions_are_evaluated_before_procedure
+    - skill_execution_isolated_from_other_skill_internal_state
+    - observations_findings_and_evidence_are_collected_without_loss
+    - execution_failure_does_not_erase_prior_outputs
+    - failure_of_one_independent_skill_does_not_cancel_other_independent_skills
+    - execution_never_creates_global_readiness_decision
+
+OutputConsolidation:
+  outputs:
+    skill_executions: completed execution records including blocked, failed, partial, or not_applicable states
+    observations: all attributable observations produced by executions
+    findings: all attributable findings produced by executions
+    evidence: all newly recorded evidence with provenance
+    uncertainties: unresolved uncertainty references
+    handoffs: explicit cross-Skill handoff references
+    coverage: planned versus executed analytical scope
+  rules:
+    - preserve_original_execution_identity
+    - preserve_output_provenance
+    - do_not_silently_merge_conflicting_findings
+    - duplicate_detection_must_not_destroy_distinct_evidence
+    - consolidation_must_not_convert_findings_into_decisions
+
+Coverage:
+  dimensions:
+    - selected_skills
+    - executed_skills
+    - completed_executions
+    - blocked_executions
+    - failed_executions
+    - partial_executions
+    - not_applicable_executions
+    - target_coverage
+    - declared_scope_coverage
+  semantics: >-
+    Coverage describes what the Analysis Engine attempted and executed. It does
+    not describe ticket readiness or quality.
+
+FailureIsolation:
+  rules:
+    - independent_node_failure_isolated
+    - dependent_node_blocked_when_required_dependency_unavailable
+    - unaffected_nodes_continue
+    - all_failure_reasons_are_preserved
+    - partial_results_are_preserved
+    - engine_failure_is_distinct_from_skill_failure
+
+Termination:
+  completion_requires:
+    - every_required_execution_node_is_completed_or_has_terminal_non_success_state
+    - all_produced_outputs_are_collected
+    - all_handoffs_are_recorded
+    - coverage_is_recorded
+    - unresolved_uncertainty_is_preserved
+  terminal_states:
+    - completed
+    - partial
+    - blocked
+    - failed
+
+DecisionBoundary:
+  rule: >-
+    The Analysis Engine consolidates analytical execution only. It must not
+    create READY, NOT_READY, PASS, FAIL, or equivalent global ticket decisions.
+    Decision semantics belong to a later explicit Decision Engine and policy.
+
+Traceability:
+  analysis_to_ticket: required
+  plan_to_skill_contract: required
+  execution_to_plan_node: required
+  execution_to_inputs: required
+  execution_to_outputs: required
+  handoff_to_producer_and_consumer: required_when_handoff_exists
+  coverage_to_plan: required
+  terminal_failure_to_reason: required
+
+Boundary:
+  SkillExecution: >-
+    SkillExecution defines the contract and lifecycle of one Skill execution.
+    The Analysis Engine orchestrates multiple executions but does not redefine
+    Skill semantics.
+  CanonicalDataModel: >-
+    All exchanged analytical objects must conform to the canonical data model.
+  Evidence: >-
+    Evidence remains attributable and is not manufactured by orchestration.
+  Finding: >-
+    Findings are consolidated analytical outputs and are not decisions.
+  Decision: >-
+    Decision creation is outside the Analysis Engine.
+  SPECTRUM: >-
+    Planning, selection, dependency resolution, parallelization, input assembly,
+    isolation, consolidation, coverage, and termination semantics are SPECTRUM architecture.
