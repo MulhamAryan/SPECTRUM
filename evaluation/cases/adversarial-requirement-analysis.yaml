@@ -1,0 +1,83 @@
+analysis: spectrum-adversarial-requirement-analysis
+
+cases:
+  - id: ara-001
+    title: implicit_assumption_unverified
+    input: requirement_depends_on_unstated_state
+    expected: concern_or_insufficient_evidence_without_inventing_project_fact
+  - id: ara-002
+    title: boundary_condition_unspecified
+    input: requirement_has_explicit_threshold_but_no_boundary_behavior
+    expected: gap_identified_with_requirement_and_evidence_traceability
+  - id: ara-003
+    title: exception_path_unspecified
+    input: business_rule_has_exception_but_requirement_does_not_define_handling
+    expected: gap_or_inconclusive_with_exception_preserved
+  - id: ara-004
+    title: unexpected_input
+    input: requirement_accepts_external_input_without_defined_invalid_input_behavior
+    expected: concern_or_gap_without_claiming_implementation_failure
+  - id: ara-005
+    title: actor_misuse
+    input: applicable_actor_can_repeat_or_misuse_action
+    expected: challenge_recorded_and_result_classified_without_assuming_attack_success
+  - id: ara-006
+    title: authorization_boundary
+    input: requirement_changes_actor_or_permission_state
+    expected: authorization_boundary_challenged_and_traceable
+  - id: ara-007
+    title: conflicting_rules
+    input: two_applicable_business_rules_define_incompatible_outcomes
+    expected: contradiction_identified_with_rule_sources_and_scope_preserved
+  - id: ara-008
+    title: temporal_edge
+    input: rule_has_expiration_or_effective_date
+    expected: temporal_edge_analyzed_without_merging_versions
+  - id: ara-009
+    title: lifecycle_edge
+    input: requirement_applies_during_state_transition
+    expected: lifecycle_edge_challenged_with_state_context
+  - id: ara-010
+    title: dependency_failure
+    input: requirement_depends_on_external_service_with_known_failure_context
+    expected: failure_condition_analyzed_and_gap_or_concern_traced
+  - id: ara-011
+    title: scale_without_context
+    input: wording_implies_high_volume_but_no_applicable_volume_context_exists
+    expected: insufficient_evidence_not_scale_failure
+  - id: ara-012
+    title: explicit_deferred_scope
+    input: requirement_explicitly_defers_a_negative_scenario_to_later_scope
+    expected: not_reported_as_current_gap
+  - id: ara-013
+    title: version_difference
+    input: two_requirement_versions_define_different_behavior_for_different_effective_periods
+    expected: temporal_or_version_distinction_preserved_not_contradiction
+  - id: ara-014
+    title: missing_negative_scenario
+    input: requirement_has_no_negative_scenario_but_no_basis_requires_one
+    expected: no_automatic_gap_or_defect
+  - id: ara-015
+    title: implementation_failure_not_inferable
+    input: adversarial_case_is_possible_but_no_implementation_artifact_is_supplied
+    expected: specification_concern_only_no_implementation_failure
+  - id: ara-016
+    title: insufficient_evidence
+    input: relevant_challenge_has_no_supporting_context_or_source
+    expected: insufficient_evidence_and_uncertainty_preserved
+  - id: ara-017
+    title: finding_traceability
+    input: challenge_produces_material_finding
+    expected: finding_links_to_challenge_and_supporting_evidence
+  - id: ara-018
+    title: no_readiness_decision
+    input: several_adversarial_findings_include_high_severity
+    expected: findings_forwarded_without_readiness_decision
+  - id: ara-019
+    title: reproducibility
+    input: same_targets_scope_categories_and_inputs_reexecuted
+    expected: same_challenge_structure_and_statuses_when_inputs_are_equivalent
+  - id: ara-020
+    title: no_global_score
+    input: many_challenges_have_mixed_results
+    expected: no_global_quality_score_or_ranking_is_emitted
