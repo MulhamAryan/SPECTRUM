@@ -1,0 +1,194 @@
+model:
+  id: spectrum-spec-implementation-drift-analysis
+  version: 1
+  interpretation_level: spectrum_architecture
+  purpose: >-
+    Définir l'analyse permettant de confronter une spécification ou un
+    ensemble d'exigences avec des artefacts d'implémentation disponibles afin
+    d'identifier des correspondances, écarts, absences de correspondance,
+    divergences de comportement et incertitudes sans inventer le comportement
+    du système ni créer directement une décision de readiness.
+
+SpecImplementationDriftAnalysis:
+  required:
+    - analysis_id
+    - analysis_revision
+    - specification_refs
+    - implementation_refs
+    - comparison_scope
+  fields:
+    analysis_id: identifiant stable de l'analyse
+    analysis_revision: révision de l'analyse
+    specification_refs: exigences, règles, scénarios ou artefacts représentant l'intention
+    implementation_refs: artefacts d'implémentation effectivement disponibles
+    relationship_refs: relations explicites utilisées pour établir les correspondances
+    comparison_scope: périmètre déclaré de la comparaison
+    comparison_basis: bases de comparaison applicables
+    drift_refs: évaluations d'écart produites
+    observation_refs: observations produites
+    finding_refs: findings produits
+    evidence_refs: preuves utilisées
+    uncertainty_refs: incertitudes préservées
+    provenance: origine, méthode, date et acteur d'exécution
+
+ComparisonBasis:
+  allowed:
+    - existence
+    - structure
+    - interface
+    - data_mapping
+    - behavior
+    - validation
+    - constraint
+    - business_rule
+    - scenario
+    - error_handling
+    - authorization
+    - temporal_behavior
+    - lifecycle_behavior
+    - traceability
+  rule: >-
+    Une base de comparaison ne peut être utilisée que si les deux côtés et le
+    contexte nécessaire sont effectivement disponibles.
+
+DriftAssessment:
+  required:
+    - id
+    - specification_ref
+    - implementation_ref
+    - basis
+    - status
+  fields:
+    id: identifiant du rapprochement
+    specification_ref: élément spécifié comparé
+    implementation_ref: élément d'implémentation comparé
+    basis: base de comparaison
+    status: résultat du rapprochement
+    evidence_refs: preuves du statut
+    relationship_refs: mappings ou relations utilisés
+    rationale: justification analytique
+    uncertainty_refs: incertitudes associées
+  statuses:
+    - aligned
+    - partially_aligned
+    - drift_observed
+    - specification_without_implementation_evidence
+    - implementation_without_specification_basis
+    - ambiguous_mapping
+    - not_comparable
+    - inconclusive
+
+AnalysisRules:
+  - compare_only_declared_scope
+  - preserve_specification_identity
+  - preserve_implementation_artifact_identity
+  - distinguish_absence_of_evidence_from_proven_absence
+  - distinguish_drift_from_version_difference
+  - distinguish_drift_from_intentional_deviation_when_explicitly_documented
+  - verify_mapping_before_claiming_drift
+  - do_not_infer_runtime_behavior_without_implementation_evidence
+  - do_not_infer_missing_code_from_missing_text_match
+  - preserve_temporal_and_baseline_scope
+  - preserve_relationship_and_mapping_evidence
+  - derived_findings_retain_drift_and_evidence_refs
+  - no_direct_readiness_decision
+
+FalsePositiveControls:
+  examples:
+    - requirement_may_map_to_multiple_implementation_artifacts
+    - implementation_artifact_may_serve_multiple_requirements
+    - generated_code_may_not_contain_requirement_text
+    - behavior_may_be_delegated_to_framework_or_library
+    - api_contract_field_may_be_transformed_between_layers
+    - database_state_may_be_computed_or_projected
+    - explicit_feature_flag_may_make_behavior_conditionally applicable
+    - a_documented_deviation_is_not_automatically_drift
+    - an_unavailable_runtime_dependency_is_not_proven_by_static_absence
+
+Scope:
+  specification_types:
+    - Requirement
+    - RequirementSet
+    - BusinessRule
+    - Constraint
+    - Scenario
+    - AcceptanceBasis
+    - Artifact
+  implementation_types:
+    - Artifact
+  typical_comparisons:
+    - Requirement_vs_Code
+    - Requirement_vs_API
+    - Requirement_vs_Data
+    - Requirement_vs_Configuration
+    - BusinessRule_vs_Code
+    - Scenario_vs_Test
+    - AcceptanceBasis_vs_Test
+    - Requirement_vs_Implementation_Artifact
+    - Specification_vs_Artifact
+
+OutputSemantics:
+  aligned: >-
+    Une correspondance d'implémentation est suffisamment établie et aucun écart
+    observable n'est identifié pour le périmètre comparé.
+  partially_aligned: >-
+    Une partie du comportement ou de la structure est établie tandis qu'une autre
+    partie reste insuffisamment couverte ou démontrée.
+  drift_observed: >-
+    Une différence observable entre la spécification et l'implémentation est
+    suffisamment étayée pour être rapportée comme écart.
+  specification_without_implementation_evidence: >-
+    La spécification existe mais les artefacts fournis ne permettent pas d'établir
+    une implémentation correspondante. Cet état ne prouve pas que l'implémentation
+    n'existe pas.
+  implementation_without_specification_basis: >-
+    Un comportement ou artefact d'implémentation est observable sans base de
+    spécification correspondante dans le périmètre fourni.
+  ambiguous_mapping: >-
+    Une ou plusieurs correspondances plausibles existent mais ne sont pas
+    suffisamment établies pour attribuer l'implémentation à la spécification.
+  not_comparable: >-
+    Les éléments ne partagent pas une base de comparaison pertinente.
+  inconclusive: >-
+    Les preuves disponibles ne permettent pas de conclure.
+
+FindingDerivation:
+  finding_types:
+    - issue
+    - gap
+    - contradiction
+    - positive_observation
+    - uncertainty
+  examples:
+    - implementation_drift
+    - specification_coverage_gap
+    - undocumented_implementation_behavior
+    - ambiguous_specification_implementation_mapping
+    - implementation_evidence_missing
+    - temporal_drift_uncertain
+    - acceptance_implementation_gap
+  rule: >-
+    Les findings dérivés doivent conserver les références vers le drift assessment
+    ou les preuves utilisées.
+
+Traceability:
+  analysis_to_specification: required
+  analysis_to_implementation: required
+  comparison_to_basis: required
+  comparison_to_relationships: required_when_mapping_exists
+  comparison_to_evidence: required_when_evidence_exists
+  finding_to_drift_or_evidence: required
+  finding_to_source: required_when_source_backed
+
+Boundary:
+  specification_layer: >-
+    Les exigences, règles, scénarios et autres sources de spécification conservent
+    leur identité et leur provenance. L'analyse ne les réécrit pas.
+  implementation_layer: >-
+    Les artefacts d'implémentation sont observés comme entrées fournies. L'analyse
+    n'invente pas ce qui n'est pas observable depuis ces entrées.
+  analytical_layer: >-
+    Cette analyse produit DriftAssessments, Observations, Evidence dérivées et Findings.
+  decision_layer: >-
+    Aucun drift observé ne vaut à lui seul READY, NOT_READY, PASS, FAIL ou équivalent.
+    Toute conséquence de readiness relève d'une politique explicite.
