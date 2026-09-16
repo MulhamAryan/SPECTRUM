@@ -1,0 +1,40 @@
+model: spectrum-skill-execution-contract
+contract_version: 1
+
+invariants:
+  - id: SEC-001
+    rule: execution_has_skill_target_and_inputs
+  - id: SEC-002
+    rule: execution_has_attributable_outputs
+  - id: SEC-003
+    rule: preconditions_are_explicit
+  - id: SEC-004
+    rule: missing_evidence_preserves_uncertainty
+  - id: SEC-005
+    rule: source_conflicts_are_preserved
+  - id: SEC-006
+    rule: skill_respects_declared_source_and_scope_boundary
+  - id: SEC-007
+    rule: cross_skill_handoff_is_explicit
+  - id: SEC-008
+    rule: skill_cannot_create_global_readiness_decision
+  - id: SEC-009
+    rule: derived_outputs_retain_input_references
+  - id: SEC-010
+    rule: execution_state_transitions_do_not_erase_prior_outputs
+
+negative_controls:
+  - id: SEC-N001
+    reject: execute_skill_without_declared_skill_contract
+  - id: SEC-N002
+    reject: invent_missing_evidence_during_execution
+  - id: SEC-N003
+    reject: silently_resolve_source_conflict
+  - id: SEC-N004
+    reject: execute_outside_declared_skill_scope
+  - id: SEC-N005
+    reject: create_ready_or_not_ready_from_skill_execution
+
+acceptance:
+  scope: skill_execution_contract_and_execution_invariants
+  readiness_decision: explicitly_out_of_scope
