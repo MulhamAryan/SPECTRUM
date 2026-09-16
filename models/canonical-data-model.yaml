@@ -1,19 +1,18 @@
-model:
-  id: spectrum-canonical-data-model
-  version: 1
-  interpretation_level: spectrum_architecture
-  purpose: >-
-    Define the canonical objects exchanged across SPECTRUM analysis, preserving
-    source provenance, evidence, relationships, observations, findings, and
-    decisions without embedding product-specific readiness policy.
-  principles:
-    - source_facts_are_not_decisions
-    - evidence_is_first_class
-    - findings_are_not_decisions
-    - references_are_explicit
-    - uncertainty_is_preserved
-    - lifecycle_state_is_distinct_from_implementation_state
-    - source_provenance_is_preserved
+model: spectrum-canonical-data-model
+version: 1
+interpretation_level: spectrum_architecture
+purpose: >-
+  Define the canonical objects exchanged across SPECTRUM analysis, preserving
+  source provenance, evidence, relationships, observations, findings, challenges,
+  and decisions without embedding product-specific readiness policy.
+principles:
+  - source_facts_are_not_decisions
+  - evidence_is_first_class
+  - findings_are_not_decisions
+  - references_are_explicit
+  - uncertainty_is_preserved
+  - lifecycle_state_is_distinct_from_implementation_state
+  - source_provenance_is_preserved
 
 identity:
   id_format: "<type>:<stable-local-id>"
@@ -62,12 +61,6 @@ entities:
     purpose: Semantic specialization of a Requirement object for a need.
     canonical_representation: Requirement
     kind: need
-
-  BusinessRule:
-    purpose: Explicit domain rule that constrains, authorizes, calculates, classifies, derives, orders, validates, or otherwise governs business behavior.
-    required: [id, type, statement]
-    fields: [id, type, statement, rule_kind, scope_refs, condition_refs, constraint_refs, source_refs, evidence_refs, relationship_refs, applicability, effective_from, effective_to, priority, status, provenance]
-    rule_kind_values: [authorization, eligibility, obligation, prohibition, calculation, derivation, classification, sequencing, validation, constraint, temporal, unknown]
 
   Source:
     purpose: Authoritative or project source from which information is derived.
@@ -132,6 +125,18 @@ entities:
     required: [id, type, target_refs]
     fields: [id, type, target_refs, proposal_refs, authority_refs, previous_baseline_ref, resulting_baseline_ref, impact_refs, evidence_refs]
 
+  BusinessRule:
+    purpose: Explicitly identified domain rule governing behavior, calculation, authorization, classification, condition, or derivation within an applicable scope.
+    required: [id, type, expression]
+    fields: [id, type, expression, rule_kind, applicability, condition, exception_refs, effective_from, effective_to, priority, source_refs, evidence_refs, relationship_refs]
+    rule_kind_values: [constraint, computation, inference, derivation, authorization, classification, condition, other, unknown]
+
+  Challenge:
+    purpose: Explicit adversarial question and execution record used to test the robustness of a target requirement, rule, context, scenario, constraint, or artifact.
+    required: [id, type, target_ref, category, question, status]
+    fields: [id, type, target_ref, category, question, preconditions, scenario_refs, evidence_refs, status, observation_refs, finding_refs, uncertainty_refs, rationale, provenance]
+    status_values: [supported, concern_identified, contradiction_identified, gap_identified, not_applicable, inconclusive, insufficient_evidence]
+
   Observation:
     purpose: Machine- or analyst-produced observation about a target based on supplied inputs and evidence.
     required: [id, type, target_refs, status]
@@ -194,19 +199,24 @@ reference_integrity:
     - readiness_evaluation_analysis_result_must_resolve
     - readiness_evaluation_policy_must_resolve
     - decision_evaluation_ref_must_resolve_when_present
+    - challenge_target_must_resolve
+    - challenge_finding_refs_must_resolve_when_present
+    - challenge_observation_refs_must_resolve_when_present
 
 status_semantics:
   observation: >-
     Describes what was observed by a Skill; it is not a global quality or
     readiness decision.
+  challenge: >-
+    Describes an adversarial question and its analytical execution state; it is
+    not itself evidence that a defect exists.
   finding: >-
     Describes an analytical issue or observation that may feed decision logic.
   readiness_evaluation: >-
     Describes the execution state and criterion results of readiness evaluation;
     it is not itself the readiness outcome.
   decision: >-
-    Applies explicit policy/workflow semantics to findings. It must not be
-    inferred merely from a Skill status.
+    Applies explicit policy/workflow semantics to findings. It must not be inferred merely from a Skill status.
 
 source_boundary:
   INCOSE: >-
@@ -214,6 +224,6 @@ source_boundary:
     references. This model does not create additional INCOSE characteristics or
     rules.
   SPECTRUM: >-
-    Object types, identifiers, evidence semantics, observation/finding structures,
-    relationship vocabulary, readiness evaluation structure, and decision separation
-    are SPECTRUM architecture.
+    Object types, identifiers, evidence semantics, observation/finding/challenge
+    structures, relationship vocabulary, readiness evaluation structure, and
+    decision separation are SPECTRUM architecture.
