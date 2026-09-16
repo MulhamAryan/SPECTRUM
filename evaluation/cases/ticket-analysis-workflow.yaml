@@ -73,3 +73,35 @@ cases:
     title: reproducibility
     input: same_ticket_revision_and_same_policy_version_are_reexecuted
     expected: workflow_inputs_and_policy_identity_are_reproducible
+  - id: taw-019
+    title: multi_source_stage_present
+    input: workflow_version_2
+    expected: explicit_multi_source_reasoning_stage_exists_and_uses_declared_engine
+  - id: taw-020
+    title: multi_source_before_findings
+    input: multi_source_reasoning_and_finding_consolidation_stages
+    expected: multi_source_stage_completes_before_finding_consolidation
+  - id: taw-021
+    title: multi_source_input_handoff
+    input: source_and_parallel_analysis_outputs_available
+    expected: multi_source_stage_receives_explicit_source_context_and_analysis_refs
+  - id: taw-022
+    title: source_conflict_through_workflow
+    input: conflicting_source_observations_reach_multi_source_reasoning
+    expected: conflict_is_preserved_and_traceable_into_findings
+  - id: taw-023
+    title: finding_consolidation_before_analysis_result
+    input: finding_engine_output_and_analysis_result_stage
+    expected: finding_consolidation_precedes_final_analysis_result_consolidation
+  - id: taw-024
+    title: finding_failure_isolation
+    input: finding_engine_fails_after_analytical_stages_succeed
+    expected: prior_observations_and_findings_are_preserved_and_analysis_is_partial_or_blocked
+  - id: taw-025
+    title: no_readiness_from_finding_output
+    input: finding_engine_produces_multiple_findings
+    expected: workflow_does_not_create_readiness_until_explicit_readiness_stage
+  - id: taw-026
+    title: multi_source_internal_boundary
+    input: workflow_receives_internal_multi_source_objects
+    expected: only_declared_canonical_outputs_cross_the_model_boundary
