@@ -47,6 +47,14 @@ decision_engine:
   produces: [Decision, DecisionEvaluation]
   decision_boundary: policy_defined_outcome_only
 
+ticket_readiness_engine:
+  model: spectrum-ticket-readiness-engine
+  consumes: [AnalysisResult, Finding, Evidence, Context, Requirement, RequirementSet]
+  requires: [ReadinessPolicy]
+  delegates_generic_decision_semantics_to: spectrum-decision-engine
+  produces: [ReadinessEvaluation, Decision]
+  decision_boundary: explicit_readiness_policy_only
+
 pipeline_roles:
   source_ingestion: [Source, SourceFragment, Artifact]
   contextualization: [Context, Stakeholder, Entity, Constraint, Scenario]
@@ -54,6 +62,7 @@ pipeline_roles:
   analytical_execution: [SkillExecution, Observation]
   issue_aggregation: [Finding]
   policy_decision: [Decision, DecisionEvaluation]
+  ticket_readiness: [ReadinessEvaluation, Decision]
   handoff: [Artifact]
 
 boundary:
@@ -62,3 +71,5 @@ boundary:
   - Canonical model does not imply that every object or attribute is mandatory for every ticket.
   - Analysis Engine orchestrates Skill executions but does not redefine Skill semantics.
   - Decision Engine applies only explicit versioned policy semantics and does not invent outcomes.
+  - Ticket Readiness Engine does not redefine generic Decision Engine semantics; it supplies readiness-specific policy and dimensions.
+  - Ticket readiness is a SPECTRUM decision policy, not an INCOSE characteristic, rule, or automatic consequence of analysis coverage.
