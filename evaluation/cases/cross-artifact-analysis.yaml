@@ -1,0 +1,101 @@
+cases:
+  - id: caa-001
+    name: correspondance_semantique_etablie
+    given: Ticket et exigence décrivent le même comportement et sont reliés explicitement.
+    when: Comparaison sémantique.
+    expect: aligned
+  - id: caa-002
+    name: divergence_de_comportement_etablie
+    given: Deux artefacts attribuables prescrivent des comportements incompatibles dans le même périmètre.
+    when: Comparaison de comportement.
+    expect: contradictory
+  - id: caa-003
+    name: champ_api_calcule
+    given: Une réponse API contient un champ calculé et aucun stockage direct n'est déclaré.
+    when: Comparaison API/données.
+    expect: Ne pas produire automatiquement mismatch ; examiner le mapping et le contexte de calcul.
+  - id: caa-004
+    name: difference_de_casse_documentee
+    given: Un artefact utilise camelCase et un autre snake_case avec convention de mapping explicite.
+    when: Comparaison terminologique.
+    expect: aligned
+  - id: caa-005
+    name: absence_de_match_textuel
+    given: Aucun identifiant ou terme identique n'est retrouvé dans l'artefact cible.
+    when: Recherche de correspondance.
+    expect: missing_correspondence au maximum ; ne pas conclure à une absence sémantique certaine.
+  - id: caa-006
+    name: exigence_reliee_a_plusieurs_artefacts
+    given: Une exigence possède plusieurs relations vers API, données et tests.
+    when: Analyse de traçabilité.
+    expect: Toutes les relations applicables peuvent être comparées sans forcer une correspondance un-à-un.
+  - id: caa-007
+    name: versions_differentes_non_contradictoires
+    given: Deux versions diffèrent mais sont applicables à des périodes différentes et la transition est documentée.
+    when: Comparaison temporelle.
+    expect: Ne pas classer automatiquement contradictory.
+  - id: caa-008
+    name: versions_differentes_avec_contradiction
+    given: Deux versions sont simultanément applicables au même périmètre et prescrivent des valeurs incompatibles.
+    when: Comparaison temporelle et sémantique.
+    expect: contradictory avec conservation des deux provenances.
+  - id: caa-009
+    name: mapping_non_etabli
+    given: Le modèle suppose qu'un champ métier correspond à un champ technique mais aucune relation ni preuve ne l'établit.
+    when: Comparaison de champs.
+    expect: inconclusive ou missing_correspondence ; ne pas inventer la relation.
+  - id: caa-010
+    name: contrainte_divergente
+    given: Un artefact impose une borne de 10 et un autre une borne de 20 pour le même objet et contexte.
+    when: Comparaison de contraintes.
+    expect: mismatch ou contradictory selon la nature exacte des prescriptions.
+  - id: caa-011
+    name: contexte_incomplet
+    given: La comparaison dépend d'un contexte d'applicabilité absent.
+    when: Analyse.
+    expect: inconclusive avec uncertainty conservée.
+  - id: caa-012
+    name: relation_explicite_defferement
+    given: Une exigence est explicitement reportée à une version future.
+    when: Recherche d'implémentation actuelle.
+    expect: Ne pas produire automatiquement un finding de type orphan ou mismatch.
+  - id: caa-013
+    name: contradiction_preservee
+    given: Deux sources de projet se contredisent.
+    when: Analyse inter-artefacts.
+    expect: contradiction conservée avec source_refs et evidence_refs.
+  - id: caa-014
+    name: resultat_sans_evidence
+    given: Une divergence est affirmée mais aucune preuve localisable n'est fournie.
+    when: Validation du résultat.
+    expect: Résultat non suffisamment étayé ; pas de finding affirmatif fondé sur une preuve absente.
+  - id: caa-015
+    name: score_global_interdit
+    given: Les résultats individuels sont disponibles.
+    when: Agrégation.
+    expect: Aucun score global ni décision READY généré par cette analyse.
+  - id: caa-016
+    name: gravite_ne_vaut_pas_blocage
+    given: Un mismatch est classé high.
+    when: Transmission au moteur de décision.
+    expect: Le finding conserve high ; le blocage éventuel reste défini par la policy.
+  - id: caa-017
+    name: artefact_hors_perimetre
+    given: Deux artefacts ne partagent aucune base de comparaison déclarée.
+    when: Analyse.
+    expect: not_comparable.
+  - id: caa-018
+    name: correspondance_partielle
+    given: Une partie des champs et comportements est alignée mais certaines parties restent non établies.
+    when: Comparaison.
+    expect: partially_aligned avec incertitudes et périmètre couvert explicites.
+  - id: caa-019
+    name: finding_trace_au_resultat
+    given: Une comparaison établit une divergence observable.
+    when: Création du finding.
+    expect: Le finding référence la comparaison et ses preuves.
+  - id: caa-020
+    name: meme_entree_meme_resultat
+    given: Même révision, mêmes entrées, même périmètre et même base.
+    when: Réexécution.
+    expect: Même classification de comparaison, sous réserve d'un environnement documentaire identique.
