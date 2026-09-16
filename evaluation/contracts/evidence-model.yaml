@@ -1,0 +1,55 @@
+model: spectrum-evidence-model
+contract_version: 1
+
+invariants:
+  - id: EM-001
+    rule: evidence_has_stable_identity_type_kind_and_subjects
+  - id: EM-002
+    rule: source_fact_requires_source_provenance
+  - id: EM-003
+    rule: project_fact_requires_declared_project_origin
+  - id: EM-004
+    rule: project_artifact_requires_artifact_reference
+  - id: EM-005
+    rule: derived_evidence_requires_input_references
+  - id: EM-006
+    rule: contradiction_evidence_preserves_conflicting_inputs
+  - id: EM-007
+    rule: absence_evidence_does_not_equal_nonconformity
+  - id: EM-008
+    rule: evidence_is_distinct_from_observation_finding_and_decision
+  - id: EM-009
+    rule: confidence_does_not_replace_provenance
+  - id: EM-010
+    rule: source_fragment_references_resolve_to_source
+  - id: EM-011
+    rule: evidence_support_and_contradiction_links_are_traceable
+  - id: EM-012
+    rule: evidence_origin_and_extraction_status_are_explicit
+
+negative_controls:
+  - id: EM-N001
+    reject: create_source_fact_without_source_reference
+  - id: EM-N002
+    reject: create_project_fact_without_declared_project_origin
+  - id: EM-N003
+    reject: create_project_artifact_evidence_without_artifact_reference
+  - id: EM-N004
+    reject: create_derived_evidence_without_input_references
+  - id: EM-N005
+    reject: convert_absence_evidence_into_automatic_nonconformity
+  - id: EM-N006
+    reject: replace_evidence_with_observation_or_finding
+  - id: EM-N007
+    reject: resolve_contradictory_evidence_by_deleting_one_input
+  - id: EM-N008
+    reject: treat_model_confidence_as_provenance
+  - id: EM-N009
+    reject: create_decision_from_evidence_without_decision_policy
+  - id: EM-N010
+    reject: reference_nonexistent_source_fragment
+
+acceptance:
+  scope: evidence_identity_provenance_kind_reference_integrity_support_contradiction_and_decision_boundary
+  source_semantics: delegated_to_canonical_source_model
+  decision_semantics: out_of_scope
