@@ -11,8 +11,12 @@ SkillExecution:
   required:
     - execution_id
     - skill_ref
+    - skill_version
     - target_refs
     - input_refs
+    - precondition_results
+    - execution_status
+    - provenance
   fields:
     execution_id: stable execution identifier
     skill_ref: registered Skill identifier
@@ -21,8 +25,8 @@ SkillExecution:
     input_refs: canonical objects supplied as inputs
     source_refs: source records available to the Skill
     evidence_refs: evidence available to the Skill
-    precondition_results: evaluated preconditions
-    execution_steps: ordered analytical steps
+    precondition_results: evaluated preconditions before analytical execution
+    execution_steps: ordered analytical steps actually performed
     observation_refs: observations produced by the execution
     finding_refs: findings produced by the execution
     uncertainty_refs: unresolved uncertainty produced or preserved
@@ -67,7 +71,10 @@ SkillContract:
 
 ExecutionSemantics:
   precondition_failure:
-    behavior: record_blocking_or_inconclusive_observation_and_preserve_missing_inputs
+    behavior: >-
+      Mark execution as blocked or partial as applicable, record an inconclusive
+      or not_observed observation when analytically justified, and preserve the
+      missing-input references. Do not encode blocked as an Observation status.
   missing_evidence:
     behavior: preserve uncertainty; do_not_invent_evidence
   source_conflict:
@@ -75,9 +82,15 @@ ExecutionSemantics:
   partial_input:
     behavior: execute only within supported scope and mark coverage limitations
   not_applicable:
-    behavior: record_not_applicable_when_applicability_is_explicitly_established
+    behavior: >-
+      Record not_applicable only when applicability is explicitly established
+      and retain the basis for that applicability determination.
   successful_execution:
     behavior: emit attributable observations and findings according_to_skill_contract
+  failed_execution:
+    behavior: >-
+      Record failure provenance and preserve any outputs already produced; a
+      failed execution must not be interpreted as a global readiness decision.
 
 EvidenceRules:
   - every_source_backed_claim_links_to_source_or_fragment
@@ -106,11 +119,13 @@ Lifecycle:
 
 Traceability:
   execution_to_skill: required
+  execution_to_skill_version: required
   execution_to_inputs: required
   execution_to_outputs: required
   output_to_evidence: required_when_evidence_exists
   output_to_source: required_for_source_backed_claims
   finding_to_observation_or_evidence: required
+  failed_or_blocked_execution_to_reason: required
 
 Boundary:
   INCOSE: >-
