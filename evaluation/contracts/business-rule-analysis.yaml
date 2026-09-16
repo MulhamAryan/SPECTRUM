@@ -1,0 +1,96 @@
+contract:
+  id: spectrum-business-rule-analysis-contract
+  version: 1
+  model_ref: models/business-rule-analysis.yaml
+  purpose: >-
+    Garantir qu'une analyse de règles métier reste traçable, déterministe dans
+    ses frontières, explicite sur les limites d'information et séparée de la
+    décision de readiness.
+
+invariants:
+  - id: BRA-001
+    rule: every_business_rule_assessment_references_declared_rule
+  - id: BRA-002
+    rule: every_business_rule_preserves_identity_and_provenance
+  - id: BRA-003
+    rule: every_conflict_is_attributable_to_explicit_inputs
+  - id: BRA-004
+    rule: ambiguity_must_not_be_promoted_to_contradiction_without_evidence
+  - id: BRA-005
+    rule: missing_rule_correspondence_is_not_proof_of_missing_business_rule
+  - id: BRA-006
+    rule: technical_constraint_is_not_automatically_business_rule
+  - id: BRA-007
+    rule: requirement_and_business_rule_remain_distinct_objects
+  - id: BRA-008
+    rule: conditions_are_evaluated_only_when_their_basis_is_available
+  - id: BRA-009
+    rule: effective_dates_and_temporal_scope_are_preserved
+  - id: BRA-010
+    rule: rule_priority_is_used_only_when_explicitly_supported
+  - id: BRA-011
+    rule: derived_findings_reference_rule_assessment_and_evidence
+  - id: BRA-012
+    rule: no_business_rule_analysis_result_creates_a_readiness_decision
+  - id: BRA-013
+    rule: no_business_value_threshold_exception_or_behavior_may_be_invented
+  - id: BRA-014
+    rule: one_rule_may_trace_to_multiple_requirements_or_artifacts
+  - id: BRA-015
+    rule: multiple_source_fragments_may_support_one_rule
+  - id: BRA-016
+    rule: same_rule_versions_may_coexist_when_temporally_scoped
+  - id: BRA-017
+    rule: equal_inputs_and_configuration_produce_equivalent_assessment_status
+
+negative_controls:
+  - id: BRA-N001
+    condition: rule_missing_from_ticket_text
+    forbidden: create_missing_rule_finding_without_scope_or_source_basis
+  - id: BRA-N002
+    condition: two_rules_have_different_wording
+    forbidden: declare_conflict_without_semantic_or_source_evidence
+  - id: BRA-N003
+    condition: one_requirement_mentions_rule
+    forbidden: duplicate_requirement_as_business_rule_without_basis
+  - id: BRA-N004
+    condition: technical_constraint_exists
+    forbidden: classify_as_business_rule_automatically
+  - id: BRA-N005
+    condition: conflicting_rules_have_different_effective_dates
+    forbidden: declare_active_contradiction_without_common_applicability
+  - id: BRA-N006
+    condition: analysis_has_high_severity_finding
+    forbidden: infer_not_ready_without_readiness_policy
+  - id: BRA-N007
+    condition: missing_exception_detail
+    forbidden: invent_exception_logic
+  - id: BRA-N008
+    condition: uncertain_calculation_basis
+    forbidden: invent_formula_or_threshold
+  - id: BRA-N009
+    condition: unsupported_rule_priority
+    forbidden: assign_priority_by_analyst_preference
+  - id: BRA-N010
+    condition: analysis_failure
+    forbidden: convert_failure_to_business_rule_conflict
+
+evaluation_scope:
+  included:
+    - rule_identity
+    - rule_kind
+    - applicability
+    - conditions
+    - exceptions
+    - outcome
+    - calculation_basis
+    - temporal_scope
+    - source_authority
+    - traceability
+    - consistency
+    - verification_basis
+  excluded:
+    - generic_readiness_policy
+    - decision_outcome_generation
+    - regulatory_conformance_not_supplied
+    - undocumented_implementation_behavior
