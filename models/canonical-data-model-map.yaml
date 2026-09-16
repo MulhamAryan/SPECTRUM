@@ -56,6 +56,14 @@ ticket_readiness_engine:
   produces: [ReadinessEvaluation, Decision]
   decision_boundary: explicit_readiness_policy_only
 
+workflows:
+  ticket-analysis:
+    model: ticket-analysis
+    version: 1
+    consumes: [Ticket, Source, SourceFragment, Artifact, Evidence]
+    orchestrates: [Context, Requirement, RequirementSet, SkillExecution, AnalysisResult, ReadinessEvaluation, Decision]
+    decision_boundary: readiness_only_after_explicit_policy_evaluation
+
 pipeline_roles:
   source_ingestion: [Source, SourceFragment, Artifact]
   contextualization: [Context, Stakeholder, Entity, Constraint, Scenario]
@@ -74,3 +82,4 @@ boundary:
   - Decision Engine applies only explicit versioned policy semantics and does not invent outcomes.
   - Ticket Readiness Engine does not redefine generic Decision Engine semantics; it supplies readiness-specific policy and dimensions.
   - Ticket readiness is a SPECTRUM decision policy, not an INCOSE characteristic, rule, or automatic consequence of analysis coverage.
+  - Workflows orchestrate existing models and engines; they do not redefine source semantics or Skill contracts.
