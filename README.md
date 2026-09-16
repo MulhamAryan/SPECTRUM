@@ -18,6 +18,28 @@ The project is designed to use established requirements-engineering references a
 
 The first reference set to be mapped is ISO/IEC/IEEE 29148:2018, followed by INCOSE guidance and implementation references such as VNVSpec.
 
+## Install via Claude Code marketplace
+
+Add the SPECTRUM marketplace:
+
+```text
+/plugin marketplace add MulhamAryan/SPECTRUM
+```
+
+Install the plugin:
+
+```text
+/plugin install spectrum@SPECTRUM
+```
+
+After installation, the user-facing command is:
+
+```text
+/spectrum:analyze-ticket <path-to-ticket-or-ticket-text>
+```
+
+The command orchestrates the existing SPECTRUM ticket-analysis workflow and applies the `ticket-readiness-v1` policy. It produces a traceable readiness result, findings, contradictions/uncertainties, and the evidence used.
+
 ## Repository structure
 
 - `core/` — SPECTRUM core runtime and orchestration foundations
@@ -33,28 +55,6 @@ The first reference set to be mapped is ISO/IEC/IEEE 29148:2018, followed by INC
 - `evaluation/` — evaluation and test assets
 - `governance/` — provenance, versions, and source governance
 - `policies/` — configurable project or organizational policies
-
-## First runnable command
-
-The plugin now exposes one user-facing command:
-
-```text
-/analyze-ticket <path-to-ticket-or-ticket-text>
-```
-
-For local testing:
-
-```bash
-claude --plugin-dir /path/to/SPECTRUM
-```
-
-Then run:
-
-```text
-/analyze-ticket path/to/ticket.md
-```
-
-The command orchestrates the existing SPECTRUM ticket-analysis workflow and applies the `ticket-readiness-v1` policy. It produces a traceable readiness result, findings, contradictions/uncertainties, and the evidence used.
 
 ## Agent integrations
 
