@@ -3,7 +3,7 @@ contract_version: 1
 
 invariants:
   - id: AE-001
-    rule: analysis_request_has_ticket_inputs_and_explicit_skill_scope
+    rule: analysis_request_has_ticket_inputs_revision_and_explicit_skill_scope
   - id: AE-002
     rule: selected_skills_are_registered_and_version_resolved
   - id: AE-003
@@ -25,9 +25,11 @@ invariants:
   - id: AE-011
     rule: coverage_describes_execution_not_readiness
   - id: AE-012
-    rule: terminal_state_requires_output_collection_and_coverage
+    rule: terminal_analysis_result_references_plan_executions_and_coverage
   - id: AE-013
     rule: analysis_engine_cannot_create_global_readiness_decision
+  - id: AE-014
+    rule: execution_identity_is_scoped_to_analysis_revision
 
 negative_controls:
   - id: AE-N001
@@ -48,7 +50,9 @@ negative_controls:
     reject: convert_analysis_coverage_into_readiness_decision
   - id: AE-N009
     reject: create_ready_not_ready_pass_or_fail_from_analysis_engine
+  - id: AE-N010
+    reject: produce_analysis_result_without_plan_execution_traceability_or_coverage
 
 acceptance:
-  scope: analysis_planning_skill_orchestration_execution_isolation_and_consolidation
+  scope: analysis_request_planning_skill_orchestration_execution_isolation_consolidation_and_result
   decision_engine: explicitly_out_of_scope
