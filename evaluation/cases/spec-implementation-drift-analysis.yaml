@@ -1,0 +1,82 @@
+skill: spec-implementation-drift-analysis
+cases:
+  - id: sid-001
+    title: direct_alignment
+    input: requirement_and_matching_api_artifact
+    expected: aligned_with_traceable_mapping
+  - id: sid-002
+    title: behavior_drift
+    input: requirement_requires_validation_but_artifact_allows_invalid_input
+    expected: drift_observed_with_implementation_evidence
+  - id: sid-003
+    title: specification_without_evidence
+    input: requirement_without_relevant_implementation_artifact
+    expected: specification_without_implementation_evidence_not_proof_of_absence
+  - id: sid-004
+    title: implementation_without_specification
+    input: observable_endpoint_without_specification_basis
+    expected: implementation_without_specification_basis
+  - id: sid-005
+    title: ambiguous_mapping
+    input: requirement_matches_multiple_unrelated_artifacts_without_relationship
+    expected: ambiguous_mapping
+  - id: sid-006
+    title: one_to_many
+    input: requirement_realized_by_api_service_and_database_artifacts
+    expected: valid_one_to_many_mapping
+  - id: sid-007
+    title: representation_mapping
+    input: requirement_field_and_snake_case_database_column_with_explicit_mapping
+    expected: aligned_not_drift
+  - id: sid-008
+    title: computed_field
+    input: api_field_is_computed_without_database_column
+    expected: no_drift_from_database_absence_alone
+  - id: sid-009
+    title: generated_code
+    input: generated_implementation_without_requirement_text
+    expected: text_absence_does_not_prove_missing_implementation
+  - id: sid-010
+    title: documented_deviation
+    input: implementation_differs_from_specification_with_approved_deviation
+    expected: deviation_preserved_and_not_silently_classified_as_undocumented_drift
+  - id: sid-011
+    title: temporal_versions
+    input: specification_v2_and_implementation_v1
+    expected: version_scope_is_preserved_before_claiming_drift
+  - id: sid-012
+    title: feature_flag
+    input: behavior_enabled_only_under_explicit_feature_flag
+    expected: conditional_behavior_recorded_without_false_contradiction
+  - id: sid-013
+    title: library_delegation
+    input: requirement_behavior_delegated_to_declared_framework_component
+    expected: implementation_evidence_can_reference_delegated_artifact
+  - id: sid-014
+    title: missing_runtime
+    input: static_artifacts_without_runtime_environment
+    expected: no_runtime_behavior_claim_beyond_available_evidence
+  - id: sid-015
+    title: acceptance_to_test
+    input: acceptance_basis_and_matching_test_artifact
+    expected: aligned_or_partially_aligned_with_test_traceability
+  - id: sid-016
+    title: acceptance_gap
+    input: acceptance_requires_error_case_but_test_artifact_has_no_error_case
+    expected: implementation_or_verification_gap_is_reported_with_evidence
+  - id: sid-017
+    title: many_to_one
+    input: multiple_requirements_share_one_implementation_component_with_distinct_paths
+    expected: mapping_is_supported_without_forced_one_to_one_assumption
+  - id: sid-018
+    title: baseline_scope
+    input: implementation_matches_current_baseline_but_not_future_change
+    expected: no_current_drift_without_applicable_future_scope
+  - id: sid-019
+    title: no_readiness
+    input: critical_drift_observed
+    expected: finding_produced_without_readiness_decision
+  - id: sid-020
+    title: reproducibility
+    input: same_specification_artifacts_scope_and_configuration_reexecuted
+    expected: same_drift_assessment_structure_and_basis
