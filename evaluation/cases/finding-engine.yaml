@@ -71,7 +71,7 @@ cases:
     expected: conflict_remains_unresolved_and_no_source_is_silently_preferred
   - id: fe-018
     title: scope_difference
-    input: findings_use_same target_but_non_overlapping_applicability_scopes
+    input: findings_use_same_target_but_non_overlapping_applicability_scopes
     expected: findings_are_not_merged_as_duplicates
   - id: fe-019
     title: positive_and_negative_coexist
@@ -81,3 +81,43 @@ cases:
     title: canonical_boundary
     input: aggregation_uses_internal_grouping_objects
     expected: internal_objects_are_not_treated_as_new_canonical_entities
+  - id: fe-021
+    title: input_order_invariance
+    input: same_finding_inputs_present_in_different_arrival_orders
+    expected: grouping_and_consolidation_result_is_identical
+  - id: fe-022
+    title: idempotent_reexecution
+    input: same_analysis_revision_engine_version_inputs_and_plan_are_reexecuted
+    expected: no_duplicate_consolidated_result_is_created
+  - id: fe-023
+    title: material_temporal_difference
+    input: same_target_and_condition_but_different_non_overlapping_time_scopes
+    expected: findings_remain_separate
+  - id: fe-024
+    title: conflict_classification_before_resolution
+    input: conflicting_inputs_with_scope_and_temporal_checks_available
+    expected: comparison_is_classified_before_any_resolution_is_applied
+  - id: fe-025
+    title: authorized_resolution_traceability
+    input: conflicting_inputs_with_explicit_authority_or_policy
+    expected: resolution_may_select_basis_only_with_all_displaced_inputs_traceable
+  - id: fe-026
+    title: material_scope_difference
+    input: same_target_and_semantic_condition_but_different_applicability_scope
+    expected: findings_are_not_merged_and_scope_difference_is_preserved
+  - id: fe-027
+    title: changed_engine_revision
+    input: same_inputs_reexecuted_under_new_engine_version
+    expected: execution_is_distinct_and_prior_result_is_not_mutated
+  - id: fe-028
+    title: missing_grouping_basis
+    input: candidate_findings_have_insufficient_basis_for_equivalence
+    expected: findings_remain_separate_or_unresolved
+  - id: fe-029
+    title: failed_member_visibility
+    input: candidate_group_contains_failed_or_blocked_upstream_execution
+    expected: failure_remains_visible_and_does_not_become_silently_absent
+  - id: fe-030
+    title: deterministic_key_traceability
+    input: reproducible_grouping_is_executed
+    expected: grouping_key_and_basis_are_recorded_for_audit
