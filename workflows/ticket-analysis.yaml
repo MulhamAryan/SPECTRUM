@@ -1,12 +1,12 @@
 workflow:
   id: ticket-analysis
-  version: 3
+  version: 4
   interpretation_level: spectrum_workflow
   purpose: >-
     Orchestrate end-to-end analysis of a software-development ticket from source
-    ingestion and canonicalization through scoped analytical Skills, cross-artifact
-    analysis, multi-source reasoning, finding consolidation, and explicit
-    ticket-readiness decision evaluation.
+    ingestion and canonicalization through scoped analytical Skills, business-rule
+    analysis, cross-artifact analysis, multi-source reasoning, finding consolidation,
+    and explicit ticket-readiness decision evaluation.
 
 inputs:
   required:
@@ -14,13 +14,14 @@ inputs:
   optional:
     - project_sources
     - project_artifacts
+    - business_rules
     - analysis_profile
     - readiness_policy_ref
   provenance: required
 
 stages:
   - id: ingest
-    purpose: establish ticket, source, artifact, and provenance inputs
+    purpose: establish ticket, source, artifact, business-rule candidate, and provenance inputs
     produces: [Ticket, Source, SourceFragment, Artifact, Evidence]
     failure_behavior: preserve_inputs_and_stop_dependent_stages
 
@@ -54,13 +55,22 @@ stages:
     skills: [baseline-change-management]
     produces: [Observation, Finding, Baseline, Change]
 
+  - id: analyze_business_rules
+    purpose: identify and assess explicit business rules, applicability, conditions, exceptions, temporal scope, traceability, and consistency
+    depends_on:
+      - contextualize
+      - represent_requirements
+    skills: [business-rule-analysis]
+    produces: [BusinessRule, Observation, Finding, Evidence]
+
   - id: analyze_cross_artifacts
-    purpose: compare declared ticket and project artifacts to detect cross-artifact alignment gaps, mismatches, contradictions, and unresolved correspondences
+    purpose: compare declared ticket, requirements, business rules, and project artifacts to detect cross-artifact alignment gaps, mismatches, contradictions, and unresolved correspondences
     depends_on:
       - represent_requirements
       - analyze_requirements
       - analyze_verification_validation
       - analyze_lifecycle_change
+      - analyze_business_rules
     skills: [cross-artifact-analysis]
     produces: [Observation, Finding, Evidence]
 
@@ -71,6 +81,7 @@ stages:
       - analyze_requirements
       - analyze_verification_validation
       - analyze_lifecycle_change
+      - analyze_business_rules
       - analyze_cross_artifacts
     engine: spectrum-multi-source-reasoning
     produces: [Evidence, Observation, Finding, Relationship, SourceResolution]
@@ -81,6 +92,7 @@ stages:
       - analyze_requirements
       - analyze_verification_validation
       - analyze_lifecycle_change
+      - analyze_business_rules
       - analyze_cross_artifacts
       - multi_source_reasoning
     engine: spectrum-finding-engine
@@ -102,10 +114,11 @@ stages:
 execution_model:
   orchestration: dependency_graph
   parallelizable_groups:
-    - [analyze_requirements, analyze_verification_validation, analyze_lifecycle_change]
+    - [analyze_requirements, analyze_verification_validation, analyze_lifecycle_change, analyze_business_rules]
   rules:
     - dependencies_must_resolve_before_execution
     - independent_stages_may_execute_in_parallel
+    - business_rule_analysis_runs_before_cross_artifact_analysis_when_business_rules_are_in_scope
     - cross_artifact_analysis_runs_after_requirement_context_and_scoped_analyses
     - stage_failure_does_not_erase_prior_outputs
     - blocked_dependency_propagates_blocked_or_partial_state
@@ -130,7 +143,10 @@ handoffs:
     - ingest_to_contextualize
     - contextualize_to_represent_requirements
     - represent_requirements_to_analysis_skills
+    - contextualize_to_business_rule_analysis
+    - represent_requirements_to_business_rule_analysis
     - analysis_skills_to_cross_artifact_analysis
+    - business_rule_analysis_to_cross_artifact_analysis
     - cross_artifact_analysis_to_multi_source_reasoning
     - multi_source_reasoning_to_consolidate_findings
     - findings_to_consolidate
@@ -144,6 +160,7 @@ failure_paths:
   missing_required_source_context: partial_or_blocked
   unavailable_skill: blocked_or_partial_with_reason
   skill_failure: continue_independent_stages_and_preserve_failure
+  business_rule_analysis_failure: continue_with_preserved_inputs_and_mark_business_rule_coverage_partial
   cross_artifact_failure: continue_with_preserved_inputs_and_mark_cross_artifact_coverage_partial
   multi_source_failure: continue_with_preserved_inputs_and_mark_finding_coverage_partial
   finding_engine_failure: analysis_result_blocked_or_partial_without_erasing_prior_findings
@@ -156,6 +173,7 @@ outputs:
     - DecisionEvaluation
     - Decision
   supporting:
+    - BusinessRule
     - Observation
     - Finding
     - Evidence
@@ -170,6 +188,10 @@ boundaries:
   Skills: >-
     Skills perform scoped analysis and produce observations/findings; they do not
     orchestrate the workflow or create the readiness decision.
+  BusinessRuleAnalysis: >-
+    Business Rule Analysis establishes and assesses explicit domain rules with
+    provenance and applicability. It does not replace requirements, constraints,
+    cross-artifact analysis, or decision semantics.
   CrossArtifactAnalysis: >-
     Cross-Artifact Analysis compares declared inputs, preserves artifact identity,
     and reports analytical correspondences or divergences. It does not rewrite
