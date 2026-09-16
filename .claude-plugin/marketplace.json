@@ -8,7 +8,7 @@
       "name": "spectrum",
       "source": ".",
       "description": "Requirements engineering and developer-readiness analysis for software-development tickets.",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "author": {
         "name": "Mulham Aryan"
       }
