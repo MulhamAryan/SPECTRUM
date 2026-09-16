@@ -1,5 +1,5 @@
 workflow: ticket-analysis
-contract_version: 5
+contract_version: 6
 
 invariants:
   - id: TAW-001
@@ -74,6 +74,24 @@ invariants:
     rule: hypothetical_challenges_are_not_promoted_to_project_facts
   - id: TAW-036
     rule: adversarial_challenge_identity_and_provenance_are_preserved_through_handoffs
+  - id: TAW-037
+    rule: spec_implementation_drift_is_an_explicit_declared_workflow_stage
+  - id: TAW-038
+    rule: drift_analysis_receives_declared_specification_and_implementation_scope
+  - id: TAW-039
+    rule: drift_analysis_runs_only_with_declared_comparison_basis_and_available_inputs
+  - id: TAW-040
+    rule: drift_outputs_are_available_to_multi_source_reasoning_and_finding_consolidation
+  - id: TAW-041
+    rule: drift_analysis_failure_does_not_erase_unrelated_prior_outputs
+  - id: TAW-042
+    rule: drift_analysis_does_not_create_readiness_decision
+  - id: TAW-043
+    rule: absence_of_implementation_evidence_is_not_promoted_to_proven_absence
+  - id: TAW-044
+    rule: implementation_behavior_is_not_invented_without_implementation_evidence
+  - id: TAW-045
+    rule: version_baseline_and_documented_deviation_context_is_preserved_through_drift_handoffs
 
 negative_controls:
   - id: TAW-N001
@@ -134,7 +152,19 @@ negative_controls:
     reject: invent_scale_failure_without_applicable_scale_context
   - id: TAW-N029
     reject: discard_temporal_or_lifecycle_scope_during_adversarial_handoff
+  - id: TAW-N030
+    reject: treat_no_implementation_artifact_as_proof_of_missing_code
+  - id: TAW-N031
+    reject: treat_different_naming_or_representation_as_implementation_drift_without_mapping_analysis
+  - id: TAW-N032
+    reject: invent_runtime_behavior_from_partial_static_artifacts
+  - id: TAW-N033
+    reject: treat_version_difference_as_current_drift_without_applicable_scope
+  - id: TAW-N034
+    reject: silently_ignore_documented_deviation
+  - id: TAW-N035
+    reject: promote_drift_finding_directly_to_readiness_decision
 
 acceptance:
-  scope: workflow_structure_dependencies_handoffs_failure_isolation_business_rule_integration_adversarial_analysis_integration_cross_artifact_integration_multi_source_integration_finding_consolidation_traceability_and_readiness_boundary
+  scope: workflow_structure_dependencies_handoffs_failure_isolation_business_rule_integration_adversarial_analysis_integration_cross_artifact_integration_spec_implementation_drift_integration_multi_source_integration_finding_consolidation_traceability_and_readiness_boundary
   source_semantics: delegated_to_skills_and_engines
