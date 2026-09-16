@@ -94,8 +94,8 @@ cases:
     input: acceptance_test_details_are_absent_from_available_sources
     expected: absence_preserved_without_invention
   - id: tre-024
-    title: no_universal_incosе_requirement
-    input: an_incosе_attribute_or_characteristic_is_not_applicable_to_target
+    title: no_universal_incose_requirement
+    input: an_incose_attribute_or_characteristic_is_not_applicable_to_target
     expected: not_required_without_applicability_basis
   - id: tre-025
     title: findings_unchanged
