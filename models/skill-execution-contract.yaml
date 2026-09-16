@@ -30,6 +30,8 @@ SkillExecution:
     observation_refs: observations produced by the execution
     finding_refs: findings produced by the execution
     uncertainty_refs: unresolved uncertainty produced or preserved
+    handoff_refs: explicit references to inputs or outputs exchanged with other Skill executions
+    execution_reason: attributable reason for blocked, failed, partial, or not_applicable execution states when applicable
     execution_status: not_started | blocked | completed | failed | partial
     provenance: execution origin, method, recorded_at, recorded_by
 
@@ -89,8 +91,8 @@ ExecutionSemantics:
     behavior: emit attributable observations and findings according_to_skill_contract
   failed_execution:
     behavior: >-
-      Record failure provenance and preserve any outputs already produced; a
-      failed execution must not be interpreted as a global readiness decision.
+      Record execution_reason, preserve any outputs already produced, and do not
+      interpret failure as a global readiness decision.
 
 EvidenceRules:
   - every_source_backed_claim_links_to_source_or_fragment
@@ -115,17 +117,19 @@ Lifecycle:
     - partial
   transition_rule: >-
     Every state transition is attributable to an execution event and must not
-    erase previous observations, findings, evidence, or uncertainty.
+    erase previous observations, findings, evidence, or uncertainty. Blocked,
+    failed, and partial states require an execution_reason.
 
 Traceability:
   execution_to_skill: required
   execution_to_skill_version: required
   execution_to_inputs: required
   execution_to_outputs: required
+  execution_to_handoffs: required_when_handoff_exists
   output_to_evidence: required_when_evidence_exists
   output_to_source: required_for_source_backed_claims
   finding_to_observation_or_evidence: required
-  failed_or_blocked_execution_to_reason: required
+  blocked_failed_or_partial_execution_to_reason: required
 
 Boundary:
   INCOSE: >-
