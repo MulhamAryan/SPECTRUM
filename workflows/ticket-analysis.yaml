@@ -1,0 +1,146 @@
+workflow:
+  id: ticket-analysis
+  version: 1
+  interpretation_level: spectrum_workflow
+  purpose: >-
+    Orchestrate end-to-end analysis of a software-development ticket from source
+    ingestion and canonicalization through analytical Skill execution, finding
+    consolidation, and explicit ticket-readiness decision evaluation.
+
+inputs:
+  required:
+    - ticket
+  optional:
+    - project_sources
+    - project_artifacts
+    - analysis_profile
+    - readiness_policy_ref
+  provenance: required
+
+stages:
+  - id: ingest
+    purpose: establish ticket, source, artifact, and provenance inputs
+    produces: [Ticket, Source, SourceFragment, Artifact, Evidence]
+    failure_behavior: preserve_inputs_and_stop_dependent_stages
+
+  - id: contextualize
+    purpose: establish explicit context, stakeholders, entities, constraints, scenarios, and relevant relationships
+    depends_on: [ingest]
+    skills: [requirements-context, requirement-relationship-traceability]
+    produces: [Context, Stakeholder, Entity, Constraint, Scenario, Relationship, Observation, Finding]
+
+  - id: represent_requirements
+    purpose: represent needs, requirements, requirement sets, and applicable attributes
+    depends_on: [contextualize]
+    skills: [requirement-relationship-traceability, requirements-attribute-management, requirement-set-quality]
+    produces: [Requirement, RequirementSet, Attribute, Relationship, Observation, Finding]
+
+  - id: analyze_requirements
+    purpose: execute statement and set quality analysis
+    depends_on: [represent_requirements]
+    skills: [requirement-statement-quality, requirement-set-quality]
+    produces: [Observation, Finding, Evidence]
+
+  - id: analyze_verification_validation
+    purpose: analyze verification basis and validation context where applicable
+    depends_on: [represent_requirements]
+    skills: [verification-analysis, validation-analysis]
+    produces: [Observation, Finding, Evidence]
+
+  - id: analyze_lifecycle_change
+    purpose: analyze baseline and change information when lifecycle/change context is applicable
+    depends_on: [represent_requirements]
+    skills: [baseline-change-management]
+    produces: [Observation, Finding, Baseline, Change]
+
+  - id: consolidate
+    purpose: produce a complete AnalysisResult while preserving evidence, findings, uncertainty, and coverage
+    depends_on:
+      - analyze_requirements
+      - analyze_verification_validation
+      - analyze_lifecycle_change
+    engine: spectrum-analysis-engine
+    produces: [AnalysisResult]
+
+  - id: decide_readiness
+    purpose: apply the explicit ticket-readiness policy to the completed analytical result
+    depends_on: [consolidate]
+    requires: [readiness_policy_ref]
+    engine: spectrum-ticket-readiness-engine
+    produces: [DecisionEvaluation, Decision]
+
+execution_model:
+  orchestration: dependency_graph
+  parallelizable_groups:
+    - [analyze_requirements, analyze_verification_validation, analyze_lifecycle_change]
+  rules:
+    - dependencies_must_resolve_before_execution
+    - independent_stages_may_execute_in_parallel
+    - stage_failure_does_not_erase_prior_outputs
+    - blocked_dependency_propagates_blocked_or_partial_state
+    - every_stage_records_execution_and_provenance
+    - no_stage_invents_missing_project_facts
+
+state_semantics:
+  workflow_status:
+    - not_started
+    - running
+    - completed
+    - partial
+    - blocked
+    - failed
+  rules:
+    - workflow_status_is_execution_state_not_readiness_outcome
+    - readiness_decision_is_created_only_in_decide_readiness
+    - partial_or_blocked_analysis_does_not_become_ready_without_policy_permission
+
+handoffs:
+  required:
+    - ingest_to_contextualize
+    - contextualize_to_represent_requirements
+    - represent_requirements_to_analysis_skills
+    - skill_outputs_to_consolidate
+    - consolidate_to_decide_readiness
+  rule: >-
+    Each handoff identifies producer, consumer, input references, provenance,
+    and any coverage or uncertainty limitations.
+
+failure_paths:
+  missing_ticket: blocked
+  missing_required_source_context: partial_or_blocked
+  unavailable_skill: blocked_or_partial_with_reason
+  skill_failure: continue_independent_stages_and_preserve_failure
+  analysis_failure: no_readiness_decision_unless_policy_explicitly_allows_terminal_non_success_input
+  readiness_policy_error: failed_without_fallback_decision
+
+outputs:
+  primary:
+    - AnalysisResult
+    - DecisionEvaluation
+    - Decision
+  supporting:
+    - Observation
+    - Finding
+    - Evidence
+    - Context
+    - Relationship
+    - Baseline
+    - Change
+  traceability: required
+
+boundaries:
+  Skills: >-
+    Skills perform scoped analysis and produce observations/findings; they do not
+    orchestrate the workflow or create the readiness decision.
+  AnalysisEngine: >-
+    Analysis Engine orchestrates analytical Skill execution and produces
+    AnalysisResult; it does not define readiness semantics.
+  DecisionEngine: >-
+    Generic Decision Engine semantics govern explicit policy evaluation and
+    decision traceability.
+  TicketReadinessEngine: >-
+    Ticket Readiness Engine supplies readiness-specific dimensions, blocking
+    semantics, and policy-driven outcome handling.
+  Sources: >-
+    Source content remains attributable evidence and does not become SPECTRUM
+    policy merely by being ingested.
