@@ -1,0 +1,122 @@
+model:
+  id: spectrum-skill-execution-contract
+  version: 1
+  interpretation_level: spectrum_architecture
+  purpose: >-
+    Define the executable contract shared by SPECTRUM analytical Skills so that
+    execution is explicit, reproducible, evidence-aware, and separated from
+    global decision policy.
+
+SkillExecution:
+  required:
+    - execution_id
+    - skill_ref
+    - target_refs
+    - input_refs
+  fields:
+    execution_id: stable execution identifier
+    skill_ref: registered Skill identifier
+    skill_version: version of the Skill contract used
+    target_refs: canonical objects analyzed
+    input_refs: canonical objects supplied as inputs
+    source_refs: source records available to the Skill
+    evidence_refs: evidence available to the Skill
+    precondition_results: evaluated preconditions
+    execution_steps: ordered analytical steps
+    observation_refs: observations produced by the execution
+    finding_refs: findings produced by the execution
+    uncertainty_refs: unresolved uncertainty produced or preserved
+    execution_status: not_started | blocked | completed | failed | partial
+    provenance: execution origin, method, recorded_at, recorded_by
+
+SkillContract:
+  required:
+    - skill_id
+    - purpose
+    - input_contract
+    - preconditions
+    - procedure
+    - output_contract
+    - decision_boundary
+  input_contract:
+    accepted_types: canonical object types
+    required_inputs: inputs that must be present for execution
+    optional_inputs: inputs that may enrich execution
+    source_requirements: source or provenance requirements
+    evidence_requirements: evidence requirements
+  preconditions:
+    - input_identity_valid
+    - references_resolve
+    - required_context_available_or_explicitly_missing
+    - source_boundary_known
+    - applicability_known_or_inconclusive
+  procedure:
+    form: ordered_steps
+    rule: >-
+      A Skill executes only the analytical procedure declared by its contract.
+      It must not silently invent missing facts, source rules, thresholds,
+      evidence, or decision policy.
+  output_contract:
+    observations: allowed canonical Observation outputs
+    findings: allowed canonical Finding outputs
+    evidence: only newly recorded evidence with attributable provenance
+    context: only explicitly derived contextual objects with retained inputs
+  decision_boundary: >-
+    A Skill may produce observations and findings but may not create a global
+    readiness decision. Decision semantics belong to an explicit policy/workflow.
+
+ExecutionSemantics:
+  precondition_failure:
+    behavior: record_blocking_or_inconclusive_observation_and_preserve_missing_inputs
+  missing_evidence:
+    behavior: preserve uncertainty; do_not_invent_evidence
+  source_conflict:
+    behavior: preserve contradiction and source provenance
+  partial_input:
+    behavior: execute only within supported scope and mark coverage limitations
+  not_applicable:
+    behavior: record_not_applicable_when_applicability_is_explicitly_established
+  successful_execution:
+    behavior: emit attributable observations and findings according_to_skill_contract
+
+EvidenceRules:
+  - every_source_backed_claim_links_to_source_or_fragment
+  - every_derived_output_links_to_input_refs
+  - confidence_does_not_replace_provenance
+  - absence_does_not_equal_nonconformity
+  - a_skill_cannot_upgrade_uncertainty_into_fact
+
+IsolationRules:
+  - skill_must_respect_its_declared_source_boundary
+  - skill_must_respect_its_declared_characteristic_and_rule_scope
+  - skill_must_not_execute_another_skill_implicitly
+  - cross_skill_handoff_requires_explicit_references
+  - decision_policy_is_not_a_skill_input_unless_explicitly_declared_by_workflow
+
+Lifecycle:
+  states:
+    - not_started
+    - blocked
+    - completed
+    - failed
+    - partial
+  transition_rule: >-
+    Every state transition is attributable to an execution event and must not
+    erase previous observations, findings, evidence, or uncertainty.
+
+Traceability:
+  execution_to_skill: required
+  execution_to_inputs: required
+  execution_to_outputs: required
+  output_to_evidence: required_when_evidence_exists
+  output_to_source: required_for_source_backed_claims
+  finding_to_observation_or_evidence: required
+
+Boundary:
+  INCOSE: >-
+    INCOSE characteristics, rules, attributes, and activities remain source-backed
+    inputs where referenced by an individual Skill contract. This execution
+    contract does not create additional INCOSE requirements-engineering rules.
+  SPECTRUM: >-
+    Execution identity, lifecycle, preconditions, procedure contract, output
+    contract, isolation, handoff, and execution semantics are SPECTRUM architecture.
