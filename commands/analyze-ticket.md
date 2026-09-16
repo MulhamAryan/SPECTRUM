@@ -1,15 +1,15 @@
 ---
-description: Analyse un ticket SPECTRUM de bout en bout et produit un verdict de readiness traçable.
+description: Analyse un ticket SPECTRUM de bout en bout et produit un verdict de préparation au développement traçable.
 argument-hint: [chemin-du-ticket-ou-texte]
 ---
 
 # SPECTRUM — Analyse de ticket
 
-Analyse le ticket fourni pour répondre à une seule question : **un développeur peut-il commencer l’implémentation sans reconstruire une exigence matérielle manquante, ambiguë ou contradictoire ?**
+Analyse le ticket fourni pour déterminer si un développeur peut commencer l’implémentation sans devoir reconstruire lui-même une exigence matérielle manquante, ambiguë ou contradictoire.
 
 ## Références obligatoires
 
-Charge :
+Charge les éléments suivants :
 - `${CLAUDE_PLUGIN_ROOT}/workflows/ticket-analysis.yaml`
 - `${CLAUDE_PLUGIN_ROOT}/policies/ticket-readiness-v1.yaml`
 - `${CLAUDE_PLUGIN_ROOT}/governance/spectrum-safety-rules.yaml`
@@ -24,208 +24,212 @@ Charge :
 
 ## Sécurité et permissions — règle absolue
 
-SPECTRUM est **strictement en lecture seule par défaut**.
+SPECTRUM fonctionne **strictement en lecture seule par défaut**.
 
 Sans autorisation explicite de l’utilisateur dans l’interaction courante, il est strictement interdit de :
 - modifier, créer ou supprimer du code ;
 - modifier, créer ou supprimer des fichiers ;
-- exécuter une action qui mute le dépôt ;
+- modifier le dépôt ;
 - créer, modifier ou supprimer une branche ;
-- commit ou push ;
-- créer ou modifier une Pull Request ;
-- écrire, commenter, modifier ou transitionner un ticket Jira ;
+- effectuer un commit ou un push ;
+- créer ou modifier une demande de fusion ;
+- écrire, commenter, modifier ou changer l’état d’un ticket Jira ;
 - modifier un champ Jira ;
 - écrire dans un système externe ;
-- lancer une action d’environnement ayant un effet persistant.
+- exécuter une action d’environnement ayant un effet persistant.
 
-Une recommandation, une direction, un finding, un verdict `ready/not_ready`, une génération de test case ou une revue QA **n’autorise jamais automatiquement une écriture**.
+Une analyse, une recommandation, une direction, un constat, un verdict, un cas de test ou une revue qualité **n’autorise jamais automatiquement une écriture**.
 
-Une permission doit être explicite, porter sur l’opération et la cible concernées, et ne doit jamais être déduite d’une permission antérieure, de l’accès aux outils, de la propriété du dépôt ou d’une intention supposée.
+Une permission doit être explicite et couvrir l’opération et la cible concernées. Ne jamais la déduire d’une permission antérieure, de l’accès aux outils, de la propriété du dépôt ou d’une intention supposée.
 
-Ne jamais prétendre qu’une écriture a été effectuée sans résultat d’opération vérifiable.
+Ne jamais prétendre qu’une écriture a été effectuée sans résultat vérifiable.
 
-## Principe fondamental
+## Principes d’analyse
 
 Ne confonds jamais :
-- **problème détecté** et **blocage d’implémentation** ;
-- **information absente** et **information prouvée nécessaire** ;
-- **ancienne formulation** et **contradiction actuelle** ;
-- **cas limite imaginable** et **cas requis par le ticket ou une source autorisée** ;
-- **gravité d’un finding** et **décision de readiness** ;
-- **confiance dans une observation** et **confiance dans la décision**.
+- problème détecté et blocage d’implémentation ;
+- information absente et information prouvée nécessaire ;
+- ancienne formulation et contradiction actuelle ;
+- cas limite imaginable et cas requis ;
+- gravité d’un constat et décision de préparation ;
+- confiance dans une observation et confiance dans la décision.
 
-Un finding n’est bloquant que si une preuve identifiable montre qu’il empêche réellement de déterminer un comportement, une contrainte, une portée ou un résultat matériel nécessaire à l’implémentation.
+Un constat n’est bloquant que si une preuve identifiable montre qu’il empêche réellement de déterminer un comportement, une contrainte, une portée ou un résultat matériel nécessaire à l’implémentation.
 
-## Analyse des versions et commentaires
+## Versions, commentaires et contexte
 
-Pour les tickets contenant une description modifiée, des commentaires ou plusieurs versions :
+Pour les tickets contenant plusieurs versions ou commentaires :
 1. reconstruis la chronologie utile ;
 2. donne priorité à l’information la plus récente et explicitement adoptée lorsqu’elle remplace une information antérieure ;
 3. conserve une contradiction uniquement si deux informations encore applicables restent incompatibles ;
 4. une ancienne formulation non reconduite n’est pas automatiquement une contradiction ;
-5. une demande de clarification isolée n’est pas automatiquement un blocage : vérifie son impact matériel sur l’implémentation.
+5. une demande de clarification n’est pas automatiquement bloquante : vérifie son impact matériel.
 
-## Recherche de contexte projet
-
-Commence par les références explicitement présentes dans le ticket. Cherche dans le dépôt uniquement lorsque le contexte projet est autorisé ou nécessaire par la demande. Si le test impose de considérer le projet comme non démarré, n’utilise pas l’historique du dépôt pour résoudre les exigences.
+Commence par les références explicitement présentes dans le ticket. Cherche dans le dépôt uniquement lorsque le contexte projet est autorisé ou nécessaire par la demande.
 
 « Non trouvé » n’est jamais une preuve d’inexistence.
 
-## Triage obligatoire
+## Triage
 
-Pour chaque finding candidat, classe-le :
-- `blocking` : empêche matériellement un démarrage sans reconstruire une exigence ;
-- `clarification` : utile ou nécessaire à confirmer, mais le ticket reste interprétable sans choisir arbitrairement ;
-- `observation` : problème de qualité, risque ou amélioration sans impact de blocage démontré.
+Pour chaque constat candidat :
+- **bloquant** : empêche matériellement le démarrage sans reconstruire une exigence ;
+- **à clarifier** : doit être confirmé mais n’empêche pas encore une interprétation non arbitraire ;
+- **observation** : qualité, risque ou amélioration sans blocage démontré.
 
-Un scénario adversarial, une hypothèse ou une dépendance possible ne devient `blocking` que si son applicabilité est établie par le ticket ou une source autorisée.
+Une hypothèse, une dépendance possible ou un scénario adversarial ne devient bloquant que si son applicabilité est établie par le ticket ou une source autorisée.
 
 ## Règles spécifiques
 
 ### Contradictions
-Une contradiction est `blocking` seulement lorsque les deux éléments sont applicables au même comportement ou périmètre, suffisamment établis et incompatibles pour l’implémentation ou les tests.
+Une contradiction est bloquante seulement si les deux éléments sont applicables au même comportement ou périmètre et sont incompatibles pour l’implémentation ou les tests.
 
-### Libellés / wording
-Un changement de libellé devient `blocking` seulement si ce libellé change réellement le comportement, le rôle métier, les permissions ou une condition d’acceptation.
+### Libellés
+Un changement de libellé est bloquant seulement s’il modifie réellement le comportement, le rôle métier, les permissions ou une condition d’acceptation.
 
 ### Dépendances
-Une dépendance est bloquante uniquement lorsque l’implémentation dépend de sa valeur, de son contrat ou de sa disponibilité et que cette information reste indéterminée.
+Une dépendance est bloquante seulement lorsque l’implémentation dépend de sa valeur, de son contrat ou de sa disponibilité et que cette information reste indéterminée.
 
 ### Cas limites
-Ne bloque jamais un ticket uniquement parce qu’un cas limite est plausible, fréquent ou imaginable. Il faut une preuve qu’il appartient au périmètre attendu ou qu’une décision métier est nécessaire pour choisir le comportement.
+Ne bloque jamais un ticket uniquement parce qu’un cas limite est plausible. Il faut une preuve qu’il appartient au périmètre attendu ou qu’une décision métier est nécessaire.
 
-### Vérification / tests
-La présence d’un détail de test manquant ne bloque que si le résultat attendu ou la condition de vérification ne peut pas être déterminée. N’invente jamais de test, seuil ou comportement.
+### Vérification et tests
+Un détail de test manquant ne bloque que si le résultat attendu ou la condition de vérification ne peut pas être déterminé. N’invente jamais de test, seuil, donnée ou comportement.
 
-## Convention de notation et traduction française
+## Règle absolue de langue utilisateur
 
-Les valeurs internes restent stables pour la logique machine, mais **toute sortie utilisateur doit être traduite en français et accompagnée d’un indicateur visuel**.
+**La réponse finale destinée à l’utilisateur doit être entièrement en français.**
 
-Utilise exactement cette convention :
-- 🟢 **Satisfaisant** — l’information est suffisamment établie.
-- 🟡 **À clarifier** — un point doit être confirmé, mais aucun blocage matériel n’est démontré.
-- 🟠 **Insuffisant** — des informations pertinentes manquent pour conclure correctement.
-- 🔴 **Bloquant / Contradictoire** — une information matérielle empêche de déterminer l’implémentation ou des comportements compatibles.
-- ⚪ **Non applicable** — la dimension ne s’applique pas au périmètre analysé.
-- 🔵 **Observation** — point utile ou risque détecté sans blocage.
+Les identifiants techniques, noms de champs, valeurs internes et codes machine peuvent être utilisés pour la logique interne, mais **ne doivent jamais apparaître dans le rapport utilisateur**. Ne montre pas les clés techniques entre accents graves et ne juxtapose pas une traduction française avec sa valeur machine.
 
-Pour le résultat global :
-- 🟢 **Prêt pour développement** (`ready_for_implementation`)
-- 🔴 **Pas prêt pour développement** (`not_ready_for_implementation`)
-- 🟠 **Évaluation inconclusive** (`assessment_inconclusive`)
+Cela vaut pour les titres, dimensions, statuts, priorités, catégories, propriétaires, verdicts, actions, tests, QA, questions et sources.
 
-Les icônes sont une représentation de statut, **pas un score**.
+### Statuts visuels obligatoires
+- 🟢 **Satisfaisant**
+- 🟡 **À clarifier**
+- 🟠 **Insuffisant**
+- 🔴 **Bloquant / Contradictoire**
+- ⚪ **Non applicable**
+- 🔵 **Observation**
+
+### Verdict global
+- 🟢 **Prêt pour le développement**
+- 🔴 **Pas prêt pour le développement**
+- 🟠 **Évaluation inconclusive**
+
+### Qualité des preuves
+- **Élevée**
+- **Moyenne**
+- **Faible**
+
+Les icônes sont des indicateurs visuels de statut, **jamais des scores**.
+
+## Vocabulaire utilisateur obligatoire
+
+Utilise exclusivement ces libellés français dans la sortie :
+- **Définition des exigences**
+- **Contexte métier et parties prenantes**
+- **Périmètre et limites**
+- **Dépendances et relations**
+- **Contraintes et conditions**
+- **Vérification et base d’acceptation**
+- **Validation et résultat attendu**
+- **Contradictions et incertitudes**
+- **Attributs utiles à l’implémentation**
+- **Produit / Métier**
+- **Analyse**
+- **Développeur**
+- **QA / Test**
+- **Inconnu**
+- **Critique**
+- **Haute**
+- **Moyenne**
+- **Basse**
+- **Parcours nominal**
+- **Cas négatif**
+- **Cas limite**
+- **Validation**
+- **Gestion d’erreur**
+- **Rôles / permissions**
+- **Régression**
+- **Test non dérivable**
+- **Testable**
+- **Partiellement testable**
+- **Non testable**
+- **Oui**
+- **Non**
+
+Aucun équivalent anglais technique ne doit être affiché, notamment pour les dimensions, les statuts, les catégories de test, les priorités, les propriétaires, le verdict ou les sections.
 
 ## Décision
 
-Applique strictement `ticket-readiness-v1`.
-
-Les seuls outcomes machine autorisés sont :
-- `ready_for_implementation`
-- `not_ready_for_implementation`
-- `assessment_inconclusive`
+Applique strictement la politique de préparation du ticket. Conserve les valeurs internes pour la logique, mais affiche uniquement leur traduction française et l’icône correspondante.
 
 N’utilise aucun score numérique.
 
 ## Sortie obligatoire
 
-Retourne **toutes** les sections ci-dessous, dans cet ordre.
+Retourne toutes les sections suivantes, dans cet ordre.
 
-### SPECTRUM RESULT
-- **Outcome:** indicateur visuel + traduction française + valeur machine
-- **Qualité des preuves:** `high | medium | low` traduit en `Élevée | Moyenne | Faible`
-- **Blocage:** `Oui | Non`
+### Résultat SPECTRUM
+- **Verdict :** icône + libellé français uniquement
+- **Qualité des preuves :** Élevée / Moyenne / Faible
+- **Blocage :** Oui / Non
 
 ### Résumé exécutif
-2 à 4 phrases expliquant la situation et la conséquence pratique.
+2 à 4 phrases expliquant la situation et sa conséquence pratique.
 
 ### Direction
-Donne **la prochaine action opérationnelle**, pas seulement le diagnostic.
-Choisis une seule direction principale :
-- `START_IMPLEMENTATION` → 🟢 **Commencer l’implémentation**
-- `RESOLVE_BEFORE_DEV` → 🔴 **Résoudre avant développement**
-- `CLARIFY_WITH_PRODUCT` → 🟡 **Clarifier avec Produit / Métier**
-- `PREPARE_QA` → 🟠 **Préparer la QA**
-- `INSUFFICIENT_INPUT` → 🟠 **Compléter les informations d’entrée**
+Choisis une seule action principale :
+- 🟢 **Commencer l’implémentation**
+- 🔴 **Résoudre avant développement**
+- 🟡 **Clarifier avec le Produit / Métier**
+- 🟠 **Préparer la QA**
+- 🟠 **Compléter les informations d’entrée**
 
-Ajoute `Pourquoi`, `Propriétaire suivant` et `Actions immédiates` ordonnées.
+Ajoute : **Pourquoi**, **Propriétaire suivant**, **Actions immédiates**.
 
 ### Dimensions
-Les 9 dimensions, dans l’ordre exact de la policy. Pour chacune afficher :
-`indicateur + statut français + valeur machine` puis justification factuelle courte.
+Présente les 9 dimensions, dans l’ordre de la politique. Pour chacune : **indicateur + statut français + justification factuelle courte**.
 
-Traduction visuelle obligatoire des statuts :
-- 🟢 `satisfied` → **Satisfaisant**
-- 🟠 `insufficient` → **Insuffisant**
-- 🔴 `contradictory` → **Contradictoire**
-- ⚪ `not_applicable` → **Non applicable**
+1. **Définition des exigences**
+2. **Contexte métier et parties prenantes**
+3. **Périmètre et limites**
+4. **Dépendances et relations**
+5. **Contraintes et conditions**
+6. **Vérification et base d’acceptation**
+7. **Validation et résultat attendu**
+8. **Contradictions et incertitudes**
+9. **Attributs utiles à l’implémentation**
 
-Ne jamais inventer un nouveau statut machine.
-
-### Findings
-Présente tous les findings significatifs, regroupés par :
+### Constats
+Regroupe les constats par :
 1. 🔴 **BLOQUANTS**
 2. 🟡 **À CLARIFIER**
 3. 🔵 **OBSERVATIONS**
 
-Pour chaque finding :
-- `id`
-- `type`
-- `problème`
-- `preuve`
-- `résolution attendue`
-- `impact d’implémentation`
+Pour chaque constat : **Identifiant, Type, Problème, Preuve, Résolution attendue, Impact sur l’implémentation**.
 
-### Developer action plan
-Transforme les findings et la direction en actions exécutables.
-Pour chaque action :
-- `id`
-- `propriétaire`: `product | analyst | developer | qa | unknown` + traduction française ;
-- `action`
-- `dépend de`
-- `terminé lorsque`
+### Plan d’action développeur
+Pour chaque action : **Identifiant, Propriétaire, Action, Dépend de, Terminé lorsque**.
 
-N’ajoute pas de travail générique de gestion de projet sans lien avec un finding, une exigence ou une nécessité de test.
+Le propriétaire doit être affiché uniquement comme : **Produit / Analyse / Développeur / QA / Inconnu**.
 
-### Test cases
-Les **test cases font partie de la sortie standard** de SPECTRUM. Ils ne doivent jamais être omis simplement parce que le ticket est `not_ready`.
+### Cas de test
+Les cas de test sont obligatoires, même lorsque le ticket n’est pas prêt.
 
-Produis les cas directement dérivés des exigences, critères d’acceptation, règles métier, permissions et comportements effectivement établis.
+Catégories : **Parcours nominal, Cas négatif, Cas limite, Validation, Gestion d’erreur, Rôles / permissions, Régression, Test non dérivable**.
 
-Catégories applicables :
-- `happy_path` → **Parcours nominal**
-- `negative` → **Cas négatif**
-- `boundary` → **Cas limite**
-- `validation` → **Validation**
-- `error_handling` → **Gestion d’erreur**
-- `permissions_or_roles` → **Rôles / permissions**
-- `regression` → **Régression**
-- `test_not_derivable` → **Test non dérivable**
+Chaque cas contient : **Identifiant, Titre, Catégorie, Priorité, Préconditions, Étapes, Résultat attendu, Références aux sources, Références aux constats** lorsque pertinent.
 
-Chaque cas :
-- `id`
-- `titre`
-- `catégorie`
-- `priorité`: `critical | high | medium | low` traduit `Critique | Haute | Moyenne | Basse`
-- `préconditions`
-- `étapes`
-- `résultat attendu`
-- `source_refs`
-- `finding_refs` si applicable
+Priorités : **Critique / Haute / Moyenne / Basse**.
 
-Règles strictes :
-- aucun test inventé ;
-- aucune donnée, valeur, seuil ou message inventé ;
-- si un test attendu est impossible à spécifier, le marquer `test_not_derivable` avec la cause ;
-- une contradiction non résolue ne doit pas être transformée en deux comportements de test arbitraires.
+Les cas doivent être dérivés des exigences, critères d’acceptation, règles métier, permissions et comportements établis. N’invente aucune donnée, valeur, seuil, message ou comportement. Un test impossible à spécifier doit être marqué **Test non dérivable** avec sa cause.
 
-### QA review
-La QA reçoit une section dédiée, séparée du verdict de readiness.
-
+### Revue QA
 Afficher :
-- **Testabilité:** 🟢 `testable` → **Testable** / 🟠 `partially_testable` → **Partiellement testable** / 🔴 `not_testable` → **Non testable**
+- **Testabilité :** 🟢 Testable / 🟠 Partiellement testable / 🔴 Non testable
 - **Résumé de couverture**
-- **Prêt à exécuter les tests:** `Oui | Non`
+- **Prêt à exécuter les tests :** Oui / Non
 - **Tests à exécuter**
 - **Entrées de test manquantes**
 - **Dépendances / environnement nécessaires**
@@ -233,16 +237,16 @@ Afficher :
 - **Périmètre de régression**
 - **Blocages QA**
 
-La QA doit identifier ce qu’elle peut tester maintenant et ce qui doit être défini avant exécution. Elle ne choisit jamais arbitrairement le comportement manquant.
+La QA distingue préparation, exécution et blocage. Elle ne choisit jamais arbitrairement un comportement absent.
 
-### Implementable now
+### Comportements implémentables maintenant
 Liste uniquement les comportements, règles, champs, flux et tests réellement établis par les sources analysées.
 
 ### Questions ouvertes Produit / Analyse
-Questions décisionnelles, courtes et actionnables. Chaque question doit être reliée à un finding, une dimension ou un test non dérivable.
+Questions courtes, décisionnelles et actionnables, reliées à un constat, une dimension ou un test non dérivable.
 
 ### Sources consultées
-Liste précise des sources réellement utilisées.
+Liste précisément les sources réellement utilisées.
 
 ### Permission / sécurité
 Toujours terminer le rapport par :
@@ -250,23 +254,24 @@ Toujours terminer le rapport par :
 
 ## Contrôle qualité final
 
-Avant de répondre, vérifie :
+Avant de répondre, vérifie obligatoirement :
+- toute la sortie utilisateur est en français ;
+- aucun identifiant, statut, priorité, catégorie, propriétaire ou valeur machine en anglais n’est exposé ;
 - les 9 dimensions sont présentes ;
-- chaque finding possède une preuve ;
+- chaque constat possède une preuve ;
 - chaque blocage est matériellement justifié ;
-- la direction indique une action concrète ;
-- le plan d’action ne contient que du travail justifié ;
-- les test cases sont présents même lorsque le ticket n’est pas prêt ;
-- chaque test case est traçable à une source ;
-- les tests impossibles à dériver sont explicitement marqués ;
+- la direction donne une action concrète ;
+- le plan d’action est justifié ;
+- les cas de test sont présents ;
+- chaque cas de test est traçable ;
+- les tests impossibles à dériver sont explicitement signalés ;
 - la QA distingue préparation, exécution et blocage ;
-- aucun cas limite hypothétique n’est promu en test obligatoire ;
-- aucune ancienne version n’est traitée comme contradiction si elle a été explicitement remplacée ;
-- aucune écriture ou modification n’a été réalisée sans permission explicite ;
-- la décision est dérivée de la policy ;
-- aucune information métier n’a été inventée ;
-- aucune confiance de type probabilité n’est affichée.
+- aucun cas limite hypothétique n’est rendu obligatoire ;
+- aucune ancienne version remplacée n’est traitée comme contradiction ;
+- aucune écriture ou modification n’est réalisée sans permission explicite ;
+- aucune information métier n’est inventée ;
+- aucun score numérique n’est affiché.
 
 ## Limites
 
-Ne pas réécrire silencieusement le ticket, inventer des critères d’acceptation, seuils, règles métier, données de test ou comportements, déclarer une conformité normative sur la seule formulation, produire un score global de qualité, ni effectuer une mutation non autorisée.
+Ne réécris pas silencieusement le ticket, n’invente pas de critères d’acceptation, seuils, règles métier, données de test ou comportements, ne déclare pas une conformité normative sur la seule formulation et n’effectue aucune mutation non autorisée.
