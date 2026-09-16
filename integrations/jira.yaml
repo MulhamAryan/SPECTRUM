@@ -1,0 +1,38 @@
+integration:
+  id: jira
+  purpose: >-
+    Lire les informations Jira nécessaires à la contextualisation et à
+    l'analyse SPECTRUM.
+  mode: read_only
+
+capabilities:
+  read:
+    - issue
+    - description
+    - comments
+    - attachments_metadata
+    - linked_issues
+    - history_when_available
+  write:
+    - comment
+    - status
+    - fields
+    - issue_creation
+
+permission_policy:
+  read_requires_explicit_permission: false
+  write_requires_explicit_permission: true
+  permission_scope: operation_and_target
+
+normalization:
+  preserve_issue_identity: true
+  preserve_version_and_history: true
+  preserve_source_references: true
+  preserve_uncertainty: true
+  missing_data_is_not_nonexistence: true
+
+safety:
+  no_automatic_write: true
+  no_silent_write: true
+  no_status_transition_during_analysis: true
+  no_field_update_during_analysis: true
