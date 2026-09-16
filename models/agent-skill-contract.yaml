@@ -1,0 +1,71 @@
+version: 1
+name: agent-skill-contract
+purpose: >-
+  Define the mandatory relationship between SPECTRUM specialized agents and the
+  Skills they are allowed or required to execute.
+
+principles:
+  skill_is_execution_unit: true
+  agent_is_specialized_executor: true
+  agent_cannot_replace_skill_procedure: true
+  agent_cannot_invent_skill_scope: true
+  every_skill_execution_is_traceable: true
+  missing_skill_is_explicit_failure: true
+  skill_failure_does_not_create_silent_success: true
+  no_global_readiness_from_agent: true
+
+execution_contract:
+  required_fields:
+    - agent_id
+    - execution_id
+    - skill_id
+    - input_refs
+    - precondition_check
+    - execution_status
+    - output_refs
+    - evidence_refs
+    - finding_refs
+    - handoff_refs
+    - uncertainty_refs
+    - provenance
+  statuses:
+    - planned
+    - running
+    - completed
+    - completed_with_findings
+    - completed_with_gaps
+    - blocked
+    - failed
+    - not_applicable
+  rules:
+    - agent_must_load_skill_before_execution
+    - agent_must_respect_skill_inputs
+    - agent_must_respect_skill_preconditions
+    - agent_must_follow_skill_procedure
+    - agent_must_emit_skill_defined_output
+    - agent_must_preserve_skill_exit_condition
+    - agent_must_record_source_and_evidence_refs
+    - agent_must_not_upgrade_uncertainty_to_fact
+    - agent_must_not_create_readiness_decision
+
+handoff_contract:
+  required_when:
+    - skill_declares_handoff
+    - required_context_is_missing
+    - another_skill_is_needed_to continue_analysis
+  fields:
+    - from_execution
+    - to_skill_or_agent
+    - reason
+    - required_input_refs
+    - evidence_refs
+  rules:
+    - no_implicit_handoff
+    - no_handoff_without_reason
+    - no_lost_findings
+
+routing:
+  rule: >-
+    Select Skills from the registry according to target type, available evidence,
+    dependencies and explicit applicability. Never select a Skill solely because
+    its name appears related to the ticket.
