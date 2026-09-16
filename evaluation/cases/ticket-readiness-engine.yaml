@@ -1,0 +1,107 @@
+model: spectrum-ticket-readiness-engine
+
+cases:
+  - id: tre-001
+    title: explicit_readiness_policy
+    input: request_references_terminal_analysis_and_versioned_readiness_policy
+    expected: valid
+  - id: tre-002
+    title: missing_policy
+    input: readiness_request_has_no_policy_reference
+    expected: invalid
+  - id: tre-003
+    title: unversioned_policy
+    input: readiness_policy_version_cannot_be_resolved
+    expected: invalid
+  - id: tre-004
+    title: incomplete_analysis
+    input: analysis_result_is_partial_and_policy_requires_missing_scope
+    expected: uncertainty_or_no_readiness_decision
+  - id: tre-005
+    title: all_skills_completed
+    input: analysis_coverage_is_complete_but_readiness_criteria_are_not_satisfied
+    expected: readiness_does_not_follow_coverage
+  - id: tre-006
+    title: missing_business_context
+    input: applicable_business_rule_is_not_established
+    expected: gap_preserved_and_evaluated_by_policy
+  - id: tre-007
+    title: ambiguous_requirement
+    input: requirement_has_two_plausible_interpretations
+    expected: ambiguity_preserved_without_silent_selection
+  - id: tre-008
+    title: contradictory_sources
+    input: authoritative_inputs_conflict_and_policy_has_no_resolution
+    expected: contradiction_preserved
+  - id: tre-009
+    title: explicit_conflict_resolution
+    input: readiness_policy_defines_authorized_conflict_resolution
+    expected: resolution_traceable_to_policy
+  - id: tre-010
+    title: verification_basis_missing
+    input: applicable_requirement_has_no_verifiable_acceptance_basis
+    expected: verification_gap_recorded
+  - id: tre-011
+    title: verification_not_applicable
+    input: policy_declares_verification_dimension_not_applicable_for_target
+    expected: not_applicable_with_basis
+  - id: tre-012
+    title: design_owned_detail
+    input: ticket_omits_implementation_detail_explicitly_owned_by_design
+    expected: no_ticket_gap_for_that_detail
+  - id: tre-013
+    title: severity_not_blocking
+    input: high_severity_finding_exists_without_blocking_policy_rule
+    expected: severity_does_not_determine_readiness
+  - id: tre-014
+    title: explicit_blocking_rule
+    input: policy_declares_specific_finding_condition_blocking
+    expected: blocking_status_traceable_to_policy
+  - id: tre-015
+    title: unresolved_uncertainty
+    input: material_uncertainty_affects_applicable_criterion
+    expected: uncertainty_preserved_and_policy_applied
+  - id: tre-016
+    title: irrelevant_uncertainty
+    input: uncertainty_is_outside_policy_scope
+    expected: excluded_with_applicability_basis
+  - id: tre-017
+    title: positive_evidence_not_sufficient
+    input: strong_positive_observations_exist_but_blocking_policy_condition_remains
+    expected: blocking_condition_remains
+  - id: tre-018
+    title: criteria_completeness
+    input: applicable_policy_has_criteria_without_results
+    expected: incomplete_readiness_evaluation
+  - id: tre-019
+    title: decision_traceability
+    input: readiness_outcome_is_created_from_completed_evaluation
+    expected: decision_references_policy_version_evaluation_findings_and_evidence
+  - id: tre-020
+    title: evaluation_status_separation
+    input: readiness_evaluation_is_partial
+    expected: evaluation_status_is_not_used_as_readiness_outcome
+  - id: tre-021
+    title: policy_exception
+    input: explicit_policy_exception_is_authorized_and_applicable
+    expected: exception_traceable_to_policy_and_authority
+  - id: tre-022
+    title: unauthorized_exception
+    input: operator_attempts_to_override_policy_without_declared_authority
+    expected: exception_rejected
+  - id: tre-023
+    title: no_invented_acceptance_test
+    input: acceptance_test_details_are_absent_from_available_sources
+    expected: absence_preserved_without_invention
+  - id: tre-024
+    title: no_universal_incosе_requirement
+    input: an_incosе_attribute_or_characteristic_is_not_applicable_to_target
+    expected: not_required_without_applicability_basis
+  - id: tre-025
+    title: findings_unchanged
+    input: readiness_evaluation_attempts_to_modify_upstream_findings
+    expected: findings_and_evidence_remain_unchanged
+  - id: tre-026
+    title: reproducibility
+    input: same_analysis_revision_and_same_policy_version_are_re_evaluated
+    expected: evaluation_inputs_and_policy_identity_are_reproducible
