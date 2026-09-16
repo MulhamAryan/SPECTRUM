@@ -10,11 +10,13 @@ model:
 AnalysisRequest:
   required:
     - analysis_id
+    - analysis_revision
     - ticket_ref
     - input_refs
     - skill_scope
   fields:
     analysis_id: stable analysis identifier
+    analysis_revision: immutable revision identifier for this analysis run
     ticket_ref: Ticket being analyzed
     input_refs: canonical objects and evidence available to analysis
     skill_scope: explicit Skill selection scope or declared analysis profile
@@ -25,18 +27,42 @@ AnalysisRequest:
 AnalysisPlan:
   required:
     - analysis_id
+    - analysis_revision
     - selected_skill_refs
     - execution_nodes
     - dependencies
   fields:
     analysis_id: analysis identifier
+    analysis_revision: analysis revision being planned
     selected_skill_refs: registered Skills selected for this analysis
-    execution_nodes: planned Skill execution nodes with target and input requirements
+    execution_nodes: planned Skill execution nodes with stable node identifiers, targets, and input requirements
     dependencies: explicit dependency edges between execution nodes
     parallel_groups: independent nodes eligible for concurrent execution
     excluded_skills: declared Skills considered but excluded with attributable reason
     coverage_scope: intended analytical coverage
     provenance: plan origin and method
+
+AnalysisResult:
+  required:
+    - analysis_id
+    - analysis_revision
+    - analysis_status
+    - plan_ref
+    - execution_refs
+    - coverage
+  fields:
+    analysis_id: analysis identifier
+    analysis_revision: analyzed revision
+    analysis_status: completed | partial | blocked | failed
+    plan_ref: AnalysisPlan used for execution
+    execution_refs: SkillExecution records participating in the result
+    observation_refs: consolidated Observation references
+    finding_refs: consolidated Finding references
+    evidence_refs: consolidated Evidence references
+    uncertainty_refs: unresolved uncertainty references
+    handoff_refs: explicit cross-Skill handoff references
+    coverage: planned versus executed analytical scope
+    provenance: result origin, method, recorded_at, recorded_by
 
 SkillSelection:
   rules:
@@ -84,7 +110,7 @@ Execution:
 
 OutputConsolidation:
   outputs:
-    skill_executions: completed execution records including blocked, failed, partial, or not_applicable states
+    skill_executions: execution records including blocked, failed, partial, or not_applicable states
     observations: all attributable observations produced by executions
     findings: all attributable findings produced by executions
     evidence: all newly recorded evidence with provenance
@@ -148,6 +174,8 @@ Traceability:
   execution_to_inputs: required
   execution_to_outputs: required
   handoff_to_producer_and_consumer: required_when_handoff_exists
+  result_to_plan: required
+  result_to_executions: required
   coverage_to_plan: required
   terminal_failure_to_reason: required
 
