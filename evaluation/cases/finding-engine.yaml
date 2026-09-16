@@ -1,0 +1,83 @@
+engine: spectrum-finding-engine
+
+cases:
+  - id: fe-001
+    title: single_supported_finding
+    input: one_observation_with_attributable_evidence_and_target
+    expected: one_traceable_finding_created
+  - id: fe-002
+    title: equivalent_findings_merge
+    input: two_findings_same_target_same_condition_and_compatible_basis
+    expected: findings_may_merge_with_all_input_refs_preserved
+  - id: fe-003
+    title: same_target_different_basis
+    input: two_findings_same_target_but_materially_different_causes_or_evidence
+    expected: findings_remain_separate
+  - id: fe-004
+    title: contradiction_preserved
+    input: two_attributable_findings_conflict_on_same_target_and_scope
+    expected: contradiction_remains_visible_and_traceable
+  - id: fe-005
+    title: uncertainty_preserved
+    input: observation_is_insufficient_or_applicability_is_unresolved
+    expected: uncertainty_is_preserved_without_invented_fact
+  - id: fe-006
+    title: no_title_only_merge
+    input: findings_have_same_title_but_different_targets_or_bases
+    expected: merge_rejected
+  - id: fe-007
+    title: no_severity_only_merge
+    input: findings_have_same_severity_but_different_conditions
+    expected: merge_rejected
+  - id: fe-008
+    title: lower_severity_retained
+    input: equivalent_group_contains_findings_with_different_severities
+    expected: consolidation_does_not_discard_lower_severity_input_without_policy
+  - id: fe-009
+    title: provenance_after_merge
+    input: multiple_findings_are_consolidated
+    expected: resulting_finding_references_all_contributing_inputs
+  - id: fe-010
+    title: evidence_unchanged
+    input: consolidation_receives_source_evidence_and_observations
+    expected: original_evidence_and_observations_are_not_modified
+  - id: fe-011
+    title: missing_input_is_not_fact
+    input: expected_input_is_absent
+    expected: unresolved_or_coverage_state_recorded_without_creating_nonconformity
+  - id: fe-012
+    title: failed_input_preserved
+    input: upstream_skill_execution_is_failed_or_blocked
+    expected: failure_remains_visible_in_coverage_or_unresolved_refs
+  - id: fe-013
+    title: resolution_basis_required
+    input: existing_finding_is_proposed_as_resolved_without_resolution_evidence
+    expected: resolution_rejected_or_finding_remains_unresolved
+  - id: fe-014
+    title: no_readiness_from_findings
+    input: consolidated_findings_include_multiple_high_severity_issues
+    expected: no_readiness_or_implementation_decision_created
+  - id: fe-015
+    title: no_decision_creation
+    input: aggregation_completes_successfully
+    expected: output_contains_findings_only_and_no_decision
+  - id: fe-016
+    title: reproducible_grouping
+    input: same_inputs_same_grouping_basis_and_same_engine_revision_are_reexecuted
+    expected: grouping_and_consolidation_behavior_is_reproducible
+  - id: fe-017
+    title: source_preference_not_resolution
+    input: conflicting_sources_with_no_resolution_policy
+    expected: conflict_remains_unresolved_and_no_source_is_silently_preferred
+  - id: fe-018
+    title: scope_difference
+    input: findings_use_same target_but_non_overlapping_applicability_scopes
+    expected: findings_are_not_merged_as_duplicates
+  - id: fe-019
+    title: positive_and_negative_coexist
+    input: positive_observation_and_issue_describe_different_aspects_of_same_target
+    expected: both_outputs_remain_traceable
+  - id: fe-020
+    title: canonical_boundary
+    input: aggregation_uses_internal_grouping_objects
+    expected: internal_objects_are_not_treated_as_new_canonical_entities
