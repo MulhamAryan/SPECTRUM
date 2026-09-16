@@ -1,0 +1,58 @@
+workflow: ticket-analysis
+contract_version: 1
+
+invariants:
+  - id: TAW-001
+    rule: workflow_has_explicit_ticket_input_and_version
+  - id: TAW-002
+    rule: every_stage_has_explicit_dependency_or_is_root_stage
+  - id: TAW-003
+    rule: stage_dependencies_form_an_acyclic_graph
+  - id: TAW-004
+    rule: each_stage_uses_declared_skill_or_engine_contract
+  - id: TAW-005
+    rule: independent_analysis_stages_may_run_in_parallel
+  - id: TAW-006
+    rule: stage_handoffs_preserve_identity_provenance_and_uncertainty
+  - id: TAW-007
+    rule: stage_failure_does_not_erase_prior_outputs
+  - id: TAW-008
+    rule: blocked_dependency_is_preserved_and_propagated_when_required
+  - id: TAW-009
+    rule: workflow_status_is_distinct_from_readiness_decision_status
+  - id: TAW-010
+    rule: readiness_decision_is_created_only_in_readiness_stage
+  - id: TAW-011
+    rule: no_stage_invents_missing_project_facts_or_source_facts
+  - id: TAW-012
+    rule: final_outputs_retain_end_to_end_traceability
+  - id: TAW-013
+    rule: readiness_policy_is_explicit_and_versioned_when_readiness_is_requested
+  - id: TAW-014
+    rule: terminal_non_success_analysis_does_not_imply_readiness_outcome
+
+negative_controls:
+  - id: TAW-N001
+    reject: execute_stage_before_required_dependency
+  - id: TAW-N002
+    reject: create_implicit_skill_execution_inside_another_skill
+  - id: TAW-N003
+    reject: erase_successful_outputs_after_later_stage_failure
+  - id: TAW-N004
+    reject: convert_workflow_completed_status_into_ready_outcome
+  - id: TAW-N005
+    reject: invent_context_or_requirements_missing_from_inputs
+  - id: TAW-N006
+    reject: execute_readiness_without_explicit_readiness_policy
+  - id: TAW-N007
+    reject: silently_drop_uncertainty_or_conflicting_findings_between_stages
+  - id: TAW-N008
+    reject: merge_parallel_stage_outputs_without_provenance
+  - id: TAW-N009
+    reject: allow_a_failed_optional_stage_to_erase_unrelated_results
+  - id: TAW-N010
+    reject: create_readiness_decision_before_analysis_result_exists
+
+acceptance:
+  scope: workflow_structure_dependencies_handoffs_failure_isolation_traceability_and_readiness_boundary
+  source_semantics: delegated_to_skills_and_engines
