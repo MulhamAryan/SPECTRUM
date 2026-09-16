@@ -1,0 +1,17 @@
+{
+  "name": "SPECTRUM",
+  "owner": {
+    "name": "Mulham Aryan"
+  },
+  "plugins": [
+    {
+      "name": "spectrum",
+      "source": ".",
+      "description": "Requirements engineering and developer-readiness analysis for software-development tickets.",
+      "version": "0.2.0",
+      "author": {
+        "name": "Mulham Aryan"
+      }
+    }
+  ]
+}
