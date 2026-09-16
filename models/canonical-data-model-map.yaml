@@ -9,19 +9,19 @@ skill_bindings:
     produces: [Observation, Finding]
   requirements-context:
     targets: [Requirement, RequirementSet, Context]
-    consumes: [Source, SourceFragment, Evidence, Stakeholder, Entity, Constraint, Scenario]
+    consumes: [Source, SourceFragment, Evidence, Stakeholder, Entity, Constraint, Scenario, BusinessRule]
     produces: [Observation, Finding, Context]
   requirement-relationship-traceability:
     targets: [Requirement, RequirementSet, Relationship]
-    consumes: [Source, Evidence, Attribute]
+    consumes: [Source, Evidence, Attribute, BusinessRule]
     produces: [Observation, Finding, Relationship]
   verification-analysis:
     targets: [Requirement, RequirementSet]
-    consumes: [Scenario, Constraint, Evidence, Attribute, Artifact]
+    consumes: [Scenario, Constraint, Evidence, Attribute, Artifact, BusinessRule]
     produces: [Observation, Finding]
   validation-analysis:
     targets: [RequirementSet]
-    consumes: [Stakeholder, Scenario, Context, Evidence, Attribute, Artifact]
+    consumes: [Stakeholder, Scenario, Context, Evidence, Attribute, Artifact, BusinessRule]
     produces: [Observation, Finding]
   requirements-attribute-management:
     targets: [Requirement, RequirementSet, Attribute]
@@ -33,13 +33,18 @@ skill_bindings:
     produces: [Observation, Finding, Baseline, Change]
   cross-artifact-analysis:
     model: spectrum-cross-artifact-analysis
-    targets: [Ticket, Requirement, RequirementSet, Artifact, Baseline, Change]
-    consumes: [Source, SourceFragment, Evidence, Context, Constraint, Scenario, Relationship, Attribute]
+    targets: [Ticket, Requirement, RequirementSet, Artifact, Baseline, Change, BusinessRule]
+    consumes: [Source, SourceFragment, Evidence, Context, Constraint, Scenario, Relationship, Attribute, BusinessRule]
     produces: [Observation, Finding, Evidence]
+  business-rule-analysis:
+    model: spectrum-business-rule-analysis
+    targets: [BusinessRule, Requirement, RequirementSet, Scenario, Constraint, Artifact]
+    consumes: [Source, SourceFragment, Evidence, Context, Constraint, Scenario, Relationship, Attribute, Baseline, Change]
+    produces: [BusinessRule, Observation, Finding, Evidence]
 
 analysis_engine:
   model: spectrum-analysis-engine
-  consumes: [Ticket, Requirement, RequirementSet, Source, SourceFragment, Evidence, Context, Constraint, Scenario, Stakeholder, Entity, Relationship, Attribute, Baseline, Change, Artifact]
+  consumes: [Ticket, Requirement, RequirementSet, BusinessRule, Source, SourceFragment, Evidence, Context, Constraint, Scenario, Stakeholder, Entity, Relationship, Attribute, Baseline, Change, Artifact]
   orchestrates: [SkillExecution]
   produces: [Observation, Finding, Evidence]
   result: AnalysisResult
@@ -47,13 +52,13 @@ analysis_engine:
 
 multi_source_reasoning:
   model: spectrum-multi-source-reasoning
-  consumes: [Source, SourceFragment, Evidence, Observation, Context, Requirement, RequirementSet]
+  consumes: [Source, SourceFragment, Evidence, Observation, Context, Requirement, RequirementSet, BusinessRule]
   produces: [Evidence, Observation, Finding, Relationship, SourceResolution]
   decision_boundary: no_global_readiness_decision
 
 finding_engine:
   model: spectrum-finding-engine
-  consumes: [Observation, Evidence, Finding, Relationship, Requirement, RequirementSet, Context, Source, SourceFragment]
+  consumes: [Observation, Evidence, Finding, Relationship, Requirement, RequirementSet, BusinessRule, Context, Source, SourceFragment]
   produces: [Finding, FindingAggregationResult]
   decision_boundary: no_global_readiness_decision
 
@@ -66,7 +71,7 @@ decision_engine:
 
 ticket_readiness_engine:
   model: spectrum-ticket-readiness-engine
-  consumes: [AnalysisResult, Finding, Evidence, Context, Requirement, RequirementSet]
+  consumes: [AnalysisResult, Finding, Evidence, Context, Requirement, RequirementSet, BusinessRule]
   requires: [ReadinessPolicy]
   policy_ref: policies/ticket-readiness-v1.yaml
   delegates_generic_decision_semantics_to: spectrum-decision-engine
@@ -76,15 +81,16 @@ ticket_readiness_engine:
 workflows:
   ticket-analysis:
     model: ticket-analysis
-    version: 2
-    consumes: [Ticket, Source, SourceFragment, Artifact, Evidence]
-    orchestrates: [Context, Requirement, RequirementSet, SkillExecution, AnalysisResult, FindingAggregationResult, ReadinessEvaluation, Decision]
+    version: 3
+    consumes: [Ticket, Source, SourceFragment, Artifact, Evidence, BusinessRule]
+    orchestrates: [Context, Requirement, RequirementSet, BusinessRule, SkillExecution, AnalysisResult, FindingAggregationResult, ReadinessEvaluation, Decision]
     decision_boundary: readiness_only_after_explicit_policy_evaluation
 
 pipeline_roles:
   source_ingestion: [Source, SourceFragment, Artifact]
   contextualization: [Context, Stakeholder, Entity, Constraint, Scenario]
   requirement_representation: [Need, Requirement, RequirementSet, Attribute, Relationship]
+  business_rule_representation: [BusinessRule, Relationship, Attribute]
   analytical_execution: [SkillExecution, Observation]
   cross_artifact_analysis: [Comparison, Observation, Finding, Evidence, Relationship]
   multi_source_reasoning: [SourceObservation, Comparison, SourceResolution]
@@ -98,6 +104,7 @@ boundary:
   - Evidence remains attributable to its source or declared project origin.
   - Canonical model does not imply that every object or attribute is mandatory for every ticket.
   - Analysis Engine orchestrates Skill executions but does not redefine Skill semantics.
+  - Business Rule Analysis establishes and assesses explicit domain rules but does not redefine requirements or readiness semantics.
   - Cross-Artifact Analysis compares declared inputs and produces analytical results without rewriting source artifacts or creating readiness decisions.
   - Multi-Source Reasoning preserves source identity, contradiction, authority, scope, and temporal distinctions.
   - Finding Engine consolidates findings without changing source facts, deleting contradictions, or creating readiness decisions.
