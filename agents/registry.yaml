@@ -1,0 +1,156 @@
+version: 1
+name: spectrum-agent-registry
+purpose: >-
+  Registry of specialized SPECTRUM agents, their mandatory Skills, optional Skills,
+  inputs, outputs, handoffs and boundaries.
+
+agents:
+  requirement-analyst:
+    mission: Expliquer et contrôler la qualité, le contexte et les relations des exigences.
+    required_skills:
+      - requirement-expression
+      - requirement-statement-quality
+      - requirements-context
+      - requirement-relationship-traceability
+      - requirement-set-quality
+      - requirements-attribute-management
+    optional_skills:
+      - elicitation-gap
+    outputs:
+      - requirement_observations
+      - findings
+      - evidence_refs
+      - missing_context
+    forbidden_decisions:
+      - global_readiness
+      - implementation_choice
+
+  business-rule-analyst:
+    mission: Identifier et analyser les règles métier explicites sans inventer leur contenu.
+    required_skills:
+      - business-rule-analysis
+    optional_skills: []
+    outputs:
+      - rule_assessments
+      - findings
+      - evidence_refs
+      - uncertainties
+    forbidden_decisions:
+      - global_readiness
+      - implementation_choice
+
+  verification-validation-analyst:
+    mission: Examiner la vérifiabilité, la validation et la base d'acceptation établie.
+    required_skills:
+      - verification-analysis
+      - validation-analysis
+    optional_skills:
+      - requirement-relationship-traceability
+    outputs:
+      - verification_observations
+      - validation_observations
+      - findings
+      - evidence_refs
+    forbidden_decisions:
+      - global_readiness
+
+  lifecycle-change-analyst:
+    mission: Examiner les relations, attributs, baselines et changements applicables au ticket.
+    required_skills:
+      - baseline-change-management
+      - requirements-attribute-management
+      - requirement-relationship-traceability
+    optional_skills: []
+    outputs:
+      - lifecycle_observations
+      - change_impact_observations
+      - findings
+      - evidence_refs
+    forbidden_decisions:
+      - global_readiness
+
+  adversarial-analyst:
+    mission: Mettre les exigences à l'épreuve avec des défis traçables et applicables.
+    required_skills:
+      - adversarial-requirement-analysis
+    optional_skills:
+      - requirements-context
+    outputs:
+      - challenges
+      - observations
+      - findings
+      - evidence_refs
+    forbidden_decisions:
+      - global_readiness
+
+  consistency-analyst:
+    mission: Comparer plusieurs artefacts sans confondre différence de représentation et contradiction.
+    required_skills:
+      - cross-artifact-analysis
+    optional_skills:
+      - requirement-relationship-traceability
+    outputs:
+      - correspondence_assessments
+      - findings
+      - evidence_refs
+    forbidden_decisions:
+      - global_readiness
+
+  implementation-reviewer:
+    mission: Examiner les écarts entre spécification fournie et implémentation fournie.
+    required_skills:
+      - spec-implementation-drift-analysis
+    optional_skills:
+      - cross-artifact-analysis
+    outputs:
+      - drift_assessments
+      - findings
+      - evidence_refs
+      - limitations
+    forbidden_decisions:
+      - global_readiness
+
+  independent-reviewer:
+    mission: Produire une seconde analyse isolée et comparable avant toute consolidation.
+    required_skills:
+      - independent-analysis
+    optional_skills:
+      - requirement-statement-quality
+      - requirement-set-quality
+    outputs:
+      - independent_analysis
+      - comparison
+      - divergences
+      - evidence_refs
+    forbidden_decisions:
+      - global_readiness
+      - truth_by_agreement
+
+  qa-analyst:
+    mission: Déterminer la testabilité et produire les cas de test uniquement à partir du comportement établi.
+    required_skills:
+      - verification-analysis
+      - validation-analysis
+      - requirement-relationship-traceability
+    optional_skills:
+      - adversarial-requirement-analysis
+      - business-rule-analysis
+    outputs:
+      - test_cases
+      - testability_assessment
+      - qa_blockers
+      - regression_scope
+    forbidden_decisions:
+      - global_readiness
+      - test_execution_without_permission
+
+  report-composer:
+    mission: Transformer les résultats analytiques en rapport utilisateur français et traçable.
+    required_skills: []
+    optional_skills: []
+    outputs:
+      - user_report
+    forbidden_decisions:
+      - new_findings_without_evidence
+      - readiness_recalculation
+      - external_mutation
