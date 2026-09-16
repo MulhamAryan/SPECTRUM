@@ -7,16 +7,12 @@ argument-hint: [artefact-a] [artefact-b]
 
 Compare uniquement les deux artefacts explicitement fournis.
 
-Utilise la compétence de comparaison entre artefacts et conserve l'identité, la version et la portée de chaque source.
+## Exécution et rendu
 
-Retourne en français :
-- périmètre de comparaison ;
-- éléments alignés ;
-- différences de représentation ;
-- écarts ou contradictions avérés ;
-- correspondances manquantes ;
-- éléments non comparables ;
-- preuves et références ;
-- actions suivantes.
+Utilise le superviseur SPECTRUM et les Skills autorisés pour cette revue. Transmets ensuite les résultats normalisés au moteur central `${CLAUDE_PLUGIN_ROOT}/reporting/report-renderer.md`.
+
+Le rapport utilisateur doit respecter `${CLAUDE_PLUGIN_ROOT}/models/reporting-pipeline.yaml`.
+
+Retourne en français : périmètre de comparaison, éléments alignés, différences de représentation, écarts ou contradictions avérés, correspondances manquantes, éléments non comparables, preuves, références et actions suivantes.
 
 Ne transforme jamais directement une comparaison en verdict de préparation. Ne réécris pas silencieusement les sources et ne modifie aucun artefact ou système externe sans autorisation explicite.
