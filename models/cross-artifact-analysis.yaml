@@ -1,0 +1,190 @@
+model:
+  id: spectrum-cross-artifact-analysis
+  version: 1
+  interpretation_level: spectrum_architecture
+  purpose: >-
+    Définir l'analyse permettant de confronter plusieurs artefacts liés d'un
+    même périmètre afin de détecter des incohérences, absences de relations,
+    dérives terminologiques, écarts de contraintes ou désalignements de
+    comportement, sans transformer une comparaison en décision de readiness.
+
+CrossArtifactAnalysis:
+  required:
+    - analysis_id
+    - analysis_revision
+    - target_refs
+    - artifact_refs
+    - comparison_scope
+  fields:
+    analysis_id: identifiant stable de l'analyse
+    analysis_revision: révision de l'analyse
+    target_refs: objets canoniques concernés
+    artifact_refs: artefacts effectivement comparés
+    requirement_refs: exigences concernées lorsqu'elles sont identifiables
+    relationship_refs: relations explicites utilisées pour relier les artefacts
+    comparison_scope: périmètre déclaré de la comparaison
+    comparison_basis: critères de comparaison applicables
+    observation_refs: observations produites
+    finding_refs: findings produits
+    uncertainty_refs: incertitudes préservées
+    evidence_refs: preuves utilisées
+    provenance: origine, méthode, date et acteur d'exécution
+
+ComparisonBasis:
+  allowed:
+    - semantic_alignment
+    - terminology_alignment
+    - field_mapping
+    - behavior_alignment
+    - constraint_alignment
+    - condition_alignment
+    - acceptance_alignment
+    - traceability_alignment
+    - version_alignment
+    - lifecycle_alignment
+  rule: >-
+    Un critère de comparaison ne peut être utilisé que s'il est applicable au
+    couple d'artefacts et à leur périmètre. Une différence de représentation
+    n'est pas une incohérence lorsqu'une relation de mapping explicite la
+    transformation légitime.
+
+ComparisonResult:
+  statuses:
+    - aligned
+    - partially_aligned
+    - mismatch
+    - missing_correspondence
+    - contradictory
+    - not_comparable
+    - inconclusive
+  required:
+    - id
+    - left_ref
+    - right_ref
+    - basis
+    - status
+  fields:
+    id: identifiant du résultat
+    left_ref: premier élément comparé
+    right_ref: second élément comparé
+    basis: base de comparaison
+    status: résultat de comparaison
+    evidence_refs: preuves du résultat
+    relationship_refs: mappings ou relations utilisés
+    rationale: justification analytique
+
+AnalysisRules:
+  - compare_only_declared_scope
+  - preserve_original_artifact_identity
+  - do_not_equate_representation_difference_with_semantic_mismatch
+  - distinguish_missing_correspondence_from_proven_mismatch
+  - distinguish_contradiction_from_version_or_scope_difference
+  - verify_relationship_basis_before_claiming_orphan_or_mismatch
+  - preserve_temporal_applicability
+  - preserve_project_conventions_when_explicitly_declared
+  - do_not_invent_mapping
+  - do_not_invent_implementation_behavior
+  - derived_findings_retain_comparison_and_evidence_refs
+  - no_global_readiness_decision
+
+FalsePositiveControls:
+  examples:
+    - API_field_may_be_computed_without_direct_database_column
+    - camel_case_and_snake_case_may_be_declared_representation_mapping
+    - artifact_may_be_versioned_independently_with_explicit_relation
+    - requirement_may_be_intentionally_deferred_with_explicit_scope_evidence
+    - one_requirement_may_map_to_multiple_downstream_artifacts
+    - one_artifact_may_contain_multiple_requirements
+    - absent_text_match_does_not_prove_absent_semantics
+
+Scope:
+  supported_artifacts:
+    - Ticket
+    - Requirement
+    - RequirementSet
+    - Artifact
+    - Source
+    - SourceFragment
+    - Context
+    - Constraint
+    - Scenario
+    - Relationship
+    - Attribute
+    - Baseline
+    - Change
+  typical_comparisons:
+    - Ticket_vs_Requirement
+    - Requirement_vs_Requirement
+    - Requirement_vs_Acceptance_Basis
+    - Requirement_vs_Business_Rule
+    - Requirement_vs_API_Artifact
+    - Requirement_vs_Data_Artifact
+    - Artifact_vs_Artifact
+    - Baseline_vs_Change
+    - Specification_vs_Implementation_Artifact
+
+OutputSemantics:
+  aligned: >-
+    Les éléments comparés présentent une correspondance suffisamment étayée
+    pour le périmètre déclaré.
+  partially_aligned: >-
+    Une partie de la correspondance est établie mais le périmètre, les données
+    ou les preuves ne permettent pas de conclure complètement.
+  mismatch: >-
+    Une divergence observable et étayée existe entre les éléments comparés.
+  missing_correspondence: >-
+    Aucune correspondance acceptable n'a été établie dans le périmètre analysé.
+    Cet état ne prouve pas à lui seul qu'aucune correspondance n'existe.
+  contradictory: >-
+    Des informations attribuables affirment des comportements ou contraintes
+    incompatibles dans un périmètre commun.
+  not_comparable: >-
+    Les objets ne partagent pas de base de comparaison pertinente ou suffisamment
+    définie.
+  inconclusive: >-
+    Les preuves, relations, versions ou contextes disponibles ne permettent pas
+    de déterminer le résultat.
+
+FindingDerivation:
+  finding_types:
+    - issue
+    - gap
+    - contradiction
+    - positive_observation
+    - uncertainty
+  examples:
+    - cross_artifact_mismatch
+    - correspondence_missing
+    - terminology_drift
+    - condition_divergence
+    - constraint_divergence
+    - acceptance_alignment_gap
+    - traceability_gap
+    - version_alignment_uncertain
+  rule: >-
+    Ces types et identifiants sont des structures SPECTRUM. Ils ne doivent pas
+    être présentés comme des identifiants d'une source externe.
+
+Traceability:
+  analysis_to_artifacts: required
+  comparison_to_inputs: required
+  comparison_to_basis: required
+  comparison_to_evidence: required_when_evidence_exists
+  finding_to_comparison_or_evidence: required
+  finding_to_source: required_when_source_backed
+
+Boundary:
+  source_layer: >-
+    Les artefacts et leurs sources conservent leur identité et leur provenance.
+    L'analyse ne réécrit pas le contenu source.
+  analytical_layer: >-
+    Cette analyse produit des Comparisons, Observations, Evidence dérivées et
+    Findings selon les contrats SPECTRUM.
+  decision_layer: >-
+    Aucun résultat de comparaison ne vaut à lui seul une décision READY,
+    NOT_READY, PASS, FAIL ou équivalent. Une politique explicite doit être
+    appliquée par la couche de décision.
+  existing_engines: >-
+    L'analyse peut être orchestrée par l'Analysis Engine et ses résultats peuvent
+    être transmis au Finding Engine et au Multi-Source Reasoning sans redéfinir
+    leurs responsabilités.
