@@ -1,5 +1,5 @@
 workflow: ticket-analysis
-contract_version: 6
+contract_version: 7
 
 invariants:
   - id: TAW-001
@@ -92,6 +92,26 @@ invariants:
     rule: implementation_behavior_is_not_invented_without_implementation_evidence
   - id: TAW-045
     rule: version_baseline_and_documented_deviation_context_is_preserved_through_drift_handoffs
+  - id: TAW-046
+    rule: independent_analysis_is_an_explicit_declared_workflow_stage
+  - id: TAW-047
+    rule: independent_analysis_requires_declared_independence_basis_and_boundary
+  - id: TAW-048
+    rule: independent_analysis_runs_after_declared_primary_analysis_scope_is_available
+  - id: TAW-049
+    rule: independent_analysis_outputs_are_available_to_multi_source_reasoning_and_finding_consolidation
+  - id: TAW-050
+    rule: independent_analysis_failure_does_not_erase_unrelated_prior_outputs
+  - id: TAW-051
+    rule: independent_analysis_does_not_create_readiness_decision
+  - id: TAW-052
+    rule: agreement_between_analyses_is_not_promoted_to_truth
+  - id: TAW-053
+    rule: disagreement_between_analyses_is_not_promoted_to_error_without_evidence
+  - id: TAW-054
+    rule: scope_and_revision_differences_are_preserved_during_independent_comparison
+  - id: TAW-055
+    rule: independent_analysis_identity_and_provenance_are_preserved_through_handoffs
 
 negative_controls:
   - id: TAW-N001
@@ -164,7 +184,25 @@ negative_controls:
     reject: silently_ignore_documented_deviation
   - id: TAW-N035
     reject: promote_drift_finding_directly_to_readiness_decision
+  - id: TAW-N036
+    reject: claim_independence_without_distinct_independence_basis
+  - id: TAW-N037
+    reject: treat_prior_analysis_conclusion_as_project_fact_for_independent_analysis
+  - id: TAW-N038
+    reject: choose_one_analysis_as_truth_based_only_on_agreement
+  - id: TAW-N039
+    reject: choose_one_analysis_as_wrong_based_only_on_disagreement
+  - id: TAW-N040
+    reject: compare_different_scopes_as_direct_contradiction_without_alignment
+  - id: TAW-N041
+    reject: use_model_confidence_to_override_attributable_evidence
+  - id: TAW-N042
+    reject: treat_tool_failure_as_analytical_divergence
+  - id: TAW-N043
+    reject: erase_unresolved_independent_analysis_divergence_before_finding_consolidation
+  - id: TAW-N044
+    reject: promote_independent_analysis_directly_to_readiness_decision
 
 acceptance:
-  scope: workflow_structure_dependencies_handoffs_failure_isolation_business_rule_integration_adversarial_analysis_integration_cross_artifact_integration_spec_implementation_drift_integration_multi_source_integration_finding_consolidation_traceability_and_readiness_boundary
+  scope: workflow_structure_dependencies_handoffs_failure_isolation_business_rule_integration_adversarial_analysis_integration_cross_artifact_integration_spec_implementation_drift_integration_independent_analysis_integration_multi_source_integration_finding_consolidation_traceability_and_readiness_boundary
   source_semantics: delegated_to_skills_and_engines
