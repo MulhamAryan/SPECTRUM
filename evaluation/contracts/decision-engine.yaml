@@ -26,6 +26,16 @@ invariants:
     rule: policy_error_does_not_create_fallback_decision
   - id: DE-012
     rule: decision_authority_is_attributable_when_required
+  - id: DE-013
+    rule: every_applicable_policy_criterion_has_an_attributable_result
+  - id: DE-014
+    rule: analysis_and_evaluation_statuses_do_not_become_decision_outcomes_by_default
+  - id: DE-015
+    rule: decision_target_is_within_declared_decision_scope
+  - id: DE-016
+    rule: decision_requires_policy_permitted_outcome_and_attributable_evaluation
+  - id: DE-017
+    rule: decision_does_not_modify_findings_or_evidence
 
 negative_controls:
   - id: DE-N001
@@ -44,6 +54,18 @@ negative_controls:
     reject: create_fallback_decision_after_policy_error
   - id: DE-N008
     reject: lose_traceability_between_decision_evaluation_policy_and_findings
+  - id: DE-N009
+    reject: create_decision_from_partial_blocked_or_failed_analysis_without_explicit_policy_permission
+  - id: DE-N010
+    reject: create_decision_from_inconclusive_evaluation_without_explicit_policy_permission
+  - id: DE-N011
+    reject: treat_evaluation_status_as_decision_status
+  - id: DE-N012
+    reject: create_decision_outside_declared_scope
+  - id: DE-N013
+    reject: create_decision_without_attributable_evaluation
+  - id: DE-N014
+    reject: alter_findings_or_evidence_as_part_of_decision_creation
 
 acceptance:
   scope: decision_request_policy_evaluation_criteria_outcomes_governance_and_traceability
