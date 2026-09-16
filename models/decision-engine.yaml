@@ -47,6 +47,7 @@ DecisionEvaluation:
   required:
     - evaluation_id
     - decision_request_ref
+    - analysis_result_ref
     - policy_ref
     - input_refs
     - criterion_results
@@ -54,13 +55,18 @@ DecisionEvaluation:
   fields:
     evaluation_id: stable evaluation identifier
     decision_request_ref: DecisionRequest evaluated
-    policy_ref: policy and version used
+    analysis_result_ref: exact AnalysisResult evaluated
+    policy_ref: exact policy identity and version used
     input_refs: findings, evidence, analysis result, and permitted context used
     criterion_results: attributable result for every applicable criterion
     conflicts: unresolved or policy-resolved conflicts
     uncertainties: unresolved uncertainty affecting evaluation
     evaluation_status: completed | partial | blocked | failed | inconclusive
     provenance: evaluation origin, method, recorded_at, recorded_by
+  rule: >-
+    Every applicable criterion must have an attributable result. Evaluation
+    status describes evaluation execution and is distinct from any decision
+    outcome vocabulary defined by policy.
 
 Decision:
   required:
@@ -97,6 +103,17 @@ EvaluationSemantics:
     behavior: record_not_applicable_with_basis
   successful_evaluation:
     behavior: produce_only_policy_permitted_outcomes
+  terminal_non_success_analysis:
+    behavior: >-
+      Do not create a decision from partial, blocked, or failed analysis merely
+      because the analysis is terminal. A decision is permitted only when the
+      selected policy explicitly declares that such an analysis state is an
+      allowed input and defines the applicable outcome semantics.
+  inconclusive_evaluation:
+    behavior: >-
+      Do not create a decision from an inconclusive evaluation unless the policy
+      explicitly permits a decision for that evaluation state and defines its
+      outcome semantics.
   policy_error:
     behavior: fail_evaluation_without_inventing_fallback_semantics
 
@@ -108,6 +125,18 @@ InputRules:
   - only_policy_permitted_inputs_may_affect_outcome
   - no_skill_execution_status_is_a_decision_input_by_default
   - severity_is_not_an_outcome_unless_policy_explicitly_uses_it
+  - decision_targets_must_be_within_declared_decision_scope
+  - evaluation_criteria_must_be_traceable_to_policy_version
+
+DecisionCreation:
+  rules:
+    - decision_requires_an_attributable_evaluation
+    - decision_requires_policy_permitted_outcome
+    - decision_requires_target_scope
+    - partial_blocked_failed_or_inconclusive_analysis_does_not_imply_a_decision
+    - partial_blocked_failed_or_inconclusive_evaluation_does_not_imply_a_decision
+    - policy_explicitly_permitted_non_success_outcomes_must_be_traceable
+    - decision_creation_does_not_modify_findings_or_evidence
 
 DecisionBoundary:
   upstream:
@@ -120,8 +149,8 @@ DecisionBoundary:
     - decision_consumers may use the resulting Decision
   rule: >-
     No decision may be inferred from analysis completeness, finding count,
-    finding severity, Skill status, or model confidence unless an explicit
-    decision policy defines that relationship.
+    finding severity, Skill status, model confidence, or evaluation status
+    unless an explicit decision policy defines that relationship.
 
 Governance:
   rules:
@@ -130,10 +159,12 @@ Governance:
     - policy_changes_create_new_policy_versions
     - decisions_retain_the_policy_version_used
     - evaluations_are_reproducible_from_recorded_inputs_and_policy_version
+    - evaluation_and_decision_status_vocabularies_remain_distinct
 
 Traceability:
   request_to_analysis_result: required
   request_to_policy: required
+  evaluation_to_analysis_result: required
   evaluation_to_policy_version: required
   evaluation_to_inputs: required
   evaluation_to_criteria: required
@@ -141,6 +172,7 @@ Traceability:
   decision_to_policy: required
   decision_to_findings: required
   decision_to_evidence: required_when_evidence_exists
+  decision_to_scope: required
   unresolved_conflict_to_evaluation: required_when_present
 
 Boundary:
