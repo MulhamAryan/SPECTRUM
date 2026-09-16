@@ -76,7 +76,7 @@ entities:
 
   Evidence:
     purpose: Attributable information supporting, contradicting, or qualifying an observation.
-    required: [id, type, evidence_kind, source_refs]
+    required: [id, type, evidence_kind, subject_refs]
     fields: [id, type, evidence_kind, source_refs, fragment_refs, subject_refs, observation_refs, supports_refs, contradicts_refs, provenance, extraction_status]
     evidence_kind_values: [source_fact, project_fact, project_artifact, observation_input, derived_observation, contradiction, absence]
 
