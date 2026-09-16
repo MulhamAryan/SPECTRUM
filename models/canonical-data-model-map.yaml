@@ -40,13 +40,20 @@ analysis_engine:
   result: AnalysisResult
   decision_boundary: no_global_readiness_decision
 
+decision_engine:
+  model: spectrum-decision-engine
+  consumes: [AnalysisResult, Finding, Evidence]
+  requires: [DecisionPolicy]
+  produces: [Decision, DecisionEvaluation]
+  decision_boundary: policy_defined_outcome_only
+
 pipeline_roles:
   source_ingestion: [Source, SourceFragment, Artifact]
   contextualization: [Context, Stakeholder, Entity, Constraint, Scenario]
   requirement_representation: [Need, Requirement, RequirementSet, Attribute, Relationship]
   analytical_execution: [SkillExecution, Observation]
   issue_aggregation: [Finding]
-  policy_decision: [Decision]
+  policy_decision: [Decision, DecisionEvaluation]
   handoff: [Artifact]
 
 boundary:
@@ -54,3 +61,4 @@ boundary:
   - Evidence remains attributable to its source or declared project origin.
   - Canonical model does not imply that every object or attribute is mandatory for every ticket.
   - Analysis Engine orchestrates Skill executions but does not redefine Skill semantics.
+  - Decision Engine applies only explicit versioned policy semantics and does not invent outcomes.
