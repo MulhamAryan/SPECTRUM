@@ -1,0 +1,54 @@
+model: spectrum-analysis-engine
+contract_version: 1
+
+invariants:
+  - id: AE-001
+    rule: analysis_request_has_ticket_inputs_and_explicit_skill_scope
+  - id: AE-002
+    rule: selected_skills_are_registered_and_version_resolved
+  - id: AE-003
+    rule: skill_selection_respects_declared_scope_and_input_contract
+  - id: AE-004
+    rule: dependency_graph_is_explicit_and_acyclic
+  - id: AE-005
+    rule: required_inputs_resolve_or_are_explicitly_missing
+  - id: AE-006
+    rule: independent_skill_executions_can_be_isolated
+  - id: AE-007
+    rule: execution_failure_does_not_erase_other_results
+  - id: AE-008
+    rule: cross_skill_handoffs_are_explicit
+  - id: AE-009
+    rule: observations_findings_and_evidence_retain_provenance
+  - id: AE-010
+    rule: conflicting_findings_are_not_silently_merged
+  - id: AE-011
+    rule: coverage_describes_execution_not_readiness
+  - id: AE-012
+    rule: terminal_state_requires_output_collection_and_coverage
+  - id: AE-013
+    rule: analysis_engine_cannot_create_global_readiness_decision
+
+negative_controls:
+  - id: AE-N001
+    reject: execute_unregistered_or_unversioned_skill
+  - id: AE-N002
+    reject: select_skill_outside_declared_skill_scope
+  - id: AE-N003
+    reject: create_cyclic_execution_dependency
+  - id: AE-N004
+    reject: invent_missing_execution_input
+  - id: AE-N005
+    reject: cancel_independent_skill_because_another_skill_failed
+  - id: AE-N006
+    reject: create_implicit_cross_skill_handoff
+  - id: AE-N007
+    reject: silently_merge_conflicting_findings_and_lose_evidence
+  - id: AE-N008
+    reject: convert_analysis_coverage_into_readiness_decision
+  - id: AE-N009
+    reject: create_ready_not_ready_pass_or_fail_from_analysis_engine
+
+acceptance:
+  scope: analysis_planning_skill_orchestration_execution_isolation_and_consolidation
+  decision_engine: explicitly_out_of_scope
