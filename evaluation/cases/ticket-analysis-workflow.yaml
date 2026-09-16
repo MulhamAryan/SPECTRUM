@@ -1,0 +1,75 @@
+workflow: ticket-analysis
+
+cases:
+  - id: taw-001
+    title: minimal_valid_flow
+    input: ticket_with_required_inputs_and_versioned_readiness_policy
+    expected: workflow_completes_with_traceable_analysis_and_readiness_evaluation
+  - id: taw-002
+    title: dependency_order
+    input: downstream_stage_requested_before_required_upstream_stage
+    expected: execution_blocked_until_dependency_exists
+  - id: taw-003
+    title: parallel_analysis
+    input: independent_requirement_verification_and_lifecycle_analysis_stages
+    expected: stages_are_eligible_for_parallel_execution
+  - id: taw-004
+    title: explicit_handoff
+    input: context_stage_produces_outputs_consumed_by_requirement_representation
+    expected: handoff_records_producer_consumer_and_inputs
+  - id: taw-005
+    title: missing_source_context
+    input: required_context_is_not_established
+    expected: uncertainty_or_partial_analysis_preserved
+  - id: taw-006
+    title: skill_failure_isolation
+    input: one_parallel_skill_fails_while_other_skills_succeed
+    expected: successful_outputs_preserved_and_failure_recorded
+  - id: taw-007
+    title: unavailable_skill
+    input: selected_skill_is_not_registered_or_contract_cannot_resolve
+    expected: stage_blocked_or_partial_with_reason
+  - id: taw-008
+    title: no_implicit_skill_call
+    input: stage_attempts_to_execute_an_undeclared_skill_inside_another_skill
+    expected: execution_rejected
+  - id: taw-009
+    title: analysis_result_before_readiness
+    input: readiness_stage_requested_before_analysis_consolidation
+    expected: readiness_stage_blocked
+  - id: taw-010
+    title: missing_readiness_policy
+    input: analysis_completes_but_readiness_policy_is_missing
+    expected: analysis_preserved_without_readiness_decision
+  - id: taw-011
+    title: completed_workflow_not_readiness
+    input: all_stages_complete_without_readiness_policy_evaluation
+    expected: workflow_state_does_not_become_readiness_outcome
+  - id: taw-012
+    title: partial_analysis
+    input: required_analysis_stage_is_partial
+    expected: partial_analysis_result_with_coverage_and_uncertainty
+  - id: taw-013
+    title: readiness_decision
+    input: analysis_result_and_explicit_versioned_readiness_policy_are_available
+    expected: policy_driven_readiness_evaluation_and_decision
+  - id: taw-014
+    title: policy_error
+    input: readiness_policy_evaluation_fails
+    expected: failed_readiness_without_fallback_decision
+  - id: taw-015
+    title: provenance_preservation
+    input: evidence_and_findings_pass_through_multiple_stages
+    expected: end_to_end_traceability_preserved
+  - id: taw-016
+    title: conflict_preservation
+    input: parallel_stages_produce_conflicting_findings
+    expected: conflict_remains_attributable_and_is_not_silently_merged
+  - id: taw-017
+    title: terminal_non_success
+    input: analysis_result_is_blocked_or_failed
+    expected: no_readiness_outcome_without_explicit_policy_permission
+  - id: taw-018
+    title: reproducibility
+    input: same_ticket_revision_and_same_policy_version_are_reexecuted
+    expected: workflow_inputs_and_policy_identity_are_reproducible
