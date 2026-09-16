@@ -43,7 +43,7 @@ entities:
   Ticket:
     purpose: Original work item under analysis.
     required: [id, type, title]
-    references: [Requirement, RequirementSet, Artifact, Source, Context]
+    references: [Requirement, RequirementSet, Artifact, Source, Context, BusinessRule]
 
   Requirement:
     purpose: Individual need or requirement candidate being analyzed.
@@ -62,6 +62,12 @@ entities:
     purpose: Semantic specialization of a Requirement object for a need.
     canonical_representation: Requirement
     kind: need
+
+  BusinessRule:
+    purpose: Explicit domain rule that constrains, authorizes, calculates, classifies, derives, orders, validates, or otherwise governs business behavior.
+    required: [id, type, statement]
+    fields: [id, type, statement, rule_kind, scope_refs, condition_refs, constraint_refs, source_refs, evidence_refs, relationship_refs, applicability, effective_from, effective_to, priority, status, provenance]
+    rule_kind_values: [authorization, eligibility, obligation, prohibition, calculation, derivation, classification, sequencing, validation, constraint, temporal, unknown]
 
   Source:
     purpose: Authoritative or project source from which information is derived.
