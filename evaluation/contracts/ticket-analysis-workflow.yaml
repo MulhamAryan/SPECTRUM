@@ -1,5 +1,5 @@
 workflow: ticket-analysis
-contract_version: 4
+contract_version: 5
 
 invariants:
   - id: TAW-001
@@ -58,6 +58,22 @@ invariants:
     rule: business_rule_analysis_does_not_create_readiness_decision
   - id: TAW-028
     rule: business_rule_rule_identity_and_provenance_are_preserved_through_handoffs
+  - id: TAW-029
+    rule: adversarial_analysis_is_an_explicit_declared_workflow_stage
+  - id: TAW-030
+    rule: adversarial_analysis_receives_declared_scope_and_applicable_challenge_categories
+  - id: TAW-031
+    rule: adversarial_analysis_runs_only_after_required_context_and_rule_inputs_are_available
+  - id: TAW-032
+    rule: adversarial_outputs_are_available_to_cross_artifact_analysis
+  - id: TAW-033
+    rule: adversarial_analysis_failure_does_not_erase_unrelated_prior_outputs
+  - id: TAW-034
+    rule: adversarial_analysis_does_not_create_readiness_decision
+  - id: TAW-035
+    rule: hypothetical_challenges_are_not_promoted_to_project_facts
+  - id: TAW-036
+    rule: adversarial_challenge_identity_and_provenance_are_preserved_through_handoffs
 
 negative_controls:
   - id: TAW-N001
@@ -106,7 +122,19 @@ negative_controls:
     reject: invent_business_threshold_exception_or_formula_during_workflow
   - id: TAW-N023
     reject: silently_discard_business_rule_temporal_scope_between_stages
+  - id: TAW-N024
+    reject: treat_unmentioned_negative_scenario_as_proven_requirement_gap
+  - id: TAW-N025
+    reject: treat_hypothetical_adversarial_actor_as_project_fact
+  - id: TAW-N026
+    reject: declare_implementation_failure_without_implementation_evidence
+  - id: TAW-N027
+    reject: promote_adversarial_finding_directly_to_readiness_decision
+  - id: TAW-N028
+    reject: invent_scale_failure_without_applicable_scale_context
+  - id: TAW-N029
+    reject: discard_temporal_or_lifecycle_scope_during_adversarial_handoff
 
 acceptance:
-  scope: workflow_structure_dependencies_handoffs_failure_isolation_business_rule_integration_cross_artifact_integration_multi_source_integration_finding_consolidation_traceability_and_readiness_boundary
+  scope: workflow_structure_dependencies_handoffs_failure_isolation_business_rule_integration_adversarial_analysis_integration_cross_artifact_integration_multi_source_integration_finding_consolidation_traceability_and_readiness_boundary
   source_semantics: delegated_to_skills_and_engines
