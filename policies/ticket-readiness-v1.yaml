@@ -94,7 +94,7 @@ criteria:
   dependencies_and_relationships:
     applicability: required_when_dependencies_affect_implementation_behavior
     satisfied_when:
-      - material_dependencies_are_identified_or_explicitly absent
+      - material_dependencies_are_identified_or_explicitly_absent
     blocking_conditions:
       - required_dependency_is_unknown
       - required_peer_or_interface_relationship_is_undefined
@@ -130,17 +130,17 @@ criteria:
     applicability: required_when_stakeholder_or_intended_use_outcome_affects_scope
     satisfied_when:
       - intended_outcome_is_established
-      - material stakeholder_or_use-context expectation is established when applicable
+      - material_stakeholder_or_use_context_expectation_is_established_when_applicable
     blocking_conditions:
       - intended_outcome_is_materially_ambiguous
       - stakeholder_acceptance_expectation_is_required_but_unknown
     not_applicable_basis:
-      - intended outcome is fully defined by the applicable requirement and no additional validation context is material
+      - intended_outcome_is_fully_defined_by_the_applicable_requirement_and_no_additional_validation_context_is_material
 
   contradictions_and_uncertainties:
     applicability: required
     satisfied_when:
-      - no material unresolved contradiction_or_uncertainty_affects_implementation
+      - no_material_unresolved_contradiction_or_uncertainty_affects_implementation
     blocking_conditions:
       - material_contradiction_affects_interpretation
       - material_uncertainty_affects_implementation_behavior
@@ -152,13 +152,13 @@ criteria:
   implementation_relevant_attributes:
     applicability: required_when_an_attribute_materially_changes_interpretation_or_execution
     satisfied_when:
-      - material attributes are established or their absence is explicitly non-material
+      - material_attributes_are_established_or_their_absence_is_explicitly_non_material
     blocking_conditions:
       - missing_attribute_changes_requirement_interpretation
       - missing_attribute_changes_scope_or_applicability
       - missing_attribute_changes_required_behavior
     not_applicable_basis:
-      - no implementation-relevant attribute affects the ticket under analysis
+      - no_implementation_relevant_attribute_affects_the_ticket_under_analysis
 
 rules:
   global:
