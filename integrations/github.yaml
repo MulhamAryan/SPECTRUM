@@ -1,0 +1,47 @@
+integration:
+  id: github
+  purpose: >-
+    Lire les artefacts GitHub nécessaires aux analyses de spécification,
+    d'implémentation, de comparaison et de traçabilité SPECTRUM.
+  mode: read_only
+
+capabilities:
+  read:
+    - repository_metadata
+    - files
+    - commits
+    - branches
+    - pull_requests
+    - pull_request_diffs
+    - pull_request_comments
+    - issue_comments
+    - commit_status
+    - workflow_results_when_available
+  write:
+    - file_changes
+    - commit
+    - push
+    - branch_creation
+    - pull_request_creation
+    - pull_request_update
+    - comment
+
+permission_policy:
+  read_requires_explicit_permission: false
+  write_requires_explicit_permission: true
+  permission_scope: operation_and_target
+
+normalization:
+  preserve_repository_identity: true
+  preserve_revision_identity: true
+  preserve_file_paths: true
+  preserve_source_references: true
+  preserve_uncertainty: true
+  missing_data_is_not_nonexistence: true
+
+safety:
+  no_automatic_write: true
+  no_silent_write: true
+  no_commit_during_analysis: true
+  no_push_during_analysis: true
+  no_pull_request_mutation_during_analysis: true
