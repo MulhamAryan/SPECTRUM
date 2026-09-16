@@ -7,15 +7,12 @@ argument-hint: [chemin-du-ticket-ou-texte]
 
 Analyse l'entrée pour déterminer ce qui est testable et produire les cas de test directement dérivables.
 
-Charge les compétences et modèles nécessaires à la vérification, validation, testabilité et revue QA.
+## Exécution
 
-Retourne en français :
-- couverture observable ;
-- cas de test nominaux, négatifs, limites, validation, erreurs, permissions et régression lorsque justifiés ;
-- tests non dérivables avec cause explicite ;
-- préconditions et données réellement établies ;
-- dépendances d'environnement ;
-- blocages QA ;
-- questions ouvertes nécessaires à la testabilité.
+Utilise le superviseur SPECTRUM et les Skills autorisés pour cette revue. À la fin de l'analyse, transmets les résultats normalisés au moteur central `${CLAUDE_PLUGIN_ROOT}/reporting/report-renderer.md`.
+
+Le rapport utilisateur doit respecter `${CLAUDE_PLUGIN_ROOT}/models/reporting-pipeline.yaml` et `${CLAUDE_PLUGIN_ROOT}/outputs/ticket-analysis-report.yaml`.
+
+Retourne en français : couverture observable, cas de test justifiés, tests non dérivables, préconditions et données établies, dépendances d'environnement, blocages QA et questions ouvertes.
 
 N'invente aucune donnée, valeur, seuil, message ou comportement. Ne lance aucun test ayant un effet persistant sans autorisation explicite.
