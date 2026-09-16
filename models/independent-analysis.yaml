@@ -1,0 +1,126 @@
+model:
+  id: spectrum-independent-analysis
+  version: 1
+  interpretation_level: spectrum_architecture
+  purpose: >-
+    Définir une analyse indépendante d'un même périmètre afin d'obtenir une
+    appréciation analytique distincte, comparable aux autres analyses, sans
+    lui attribuer d'autorité supérieure ni en faire une seconde source de vérité.
+
+IndependentAnalysis:
+  required:
+    - analysis_id
+    - analysis_revision
+    - target_refs
+    - independence_basis
+    - execution_ref
+    - provenance
+  fields:
+    analysis_id: identifiant stable de l'analyse indépendante
+    analysis_revision: révision de l'analyse
+    target_refs: objets canoniques analysés indépendamment
+    independence_basis: mécanisme, agent, modèle, analyste ou configuration distincte
+    isolation_boundary: entrées explicitement autorisées et éléments exclus
+    execution_ref: référence vers l'exécution portant cette analyse
+    observation_refs: observations produites
+    finding_refs: findings produits
+    evidence_refs: preuves et références utilisées
+    comparison_refs: comparaisons avec d'autres analyses
+    uncertainty_refs: incertitudes conservées
+    provenance: origine, méthode, version, date et acteur d'exécution
+
+IndependenceBasis:
+  required:
+    - identity
+    - version
+    - boundary
+  fields:
+    identity: identifiant du moteur, agent, analyste ou configuration
+    version: version du mécanisme utilisé
+    boundary: périmètre et entrées autorisées
+    configuration_ref: référence optionnelle de configuration
+    model_ref: référence optionnelle du modèle ou moteur
+
+OpinionResult:
+  statuses:
+    - corroborated
+    - divergent
+    - partially_corroborated
+    - inconclusive
+    - not_comparable
+    - insufficient_evidence
+  required:
+    - id
+    - primary_ref
+    - independent_ref
+    - status
+  fields:
+    id: identifiant de la comparaison d'analyses
+    primary_ref: analyse ou résultat de référence comparé
+    independent_ref: analyse indépendante
+    status: résultat de comparaison
+    agreement_refs: observations ou findings concordants
+    divergence_refs: observations ou findings divergents
+    unresolved_refs: éléments non départagés
+    evidence_refs: preuves communes ou distinctes
+    rationale: justification
+
+Rules:
+  - independent_analysis_requires_declared_independence_boundary
+  - independent_analysis_preserves_its_own_execution_identity
+  - independent_analysis_does_not_inherit_unverified_conclusions_as_facts
+  - agreement_is_not_proof_of_truth
+  - disagreement_is_not_proof_of_error
+  - source_authority_remains_source_specific
+  - primary_and_independent_analysis_remain_attributable
+  - comparisons_require_comparable_scope_and_revision
+  - conflicts_are_preserved_when_not_resolved_by_evidence
+  - insufficient_evidence_remains_inconclusive
+  - no_analysis_can_promote_itself_to_decision_authority
+  - no_global_readiness_decision
+
+ComparisonMethod:
+  allowed:
+    - target_alignment
+    - observation_alignment
+    - finding_alignment
+    - evidence_alignment
+    - scope_alignment
+    - assumption_alignment
+    - conclusion_divergence
+    - temporal_alignment
+  rule: >-
+    La comparaison confronte des résultats attribuables sur un périmètre déclaré.
+    Elle ne transforme pas automatiquement une divergence en erreur ni un accord
+    en validation de vérité.
+
+FalsePositiveControls:
+  examples:
+    - same_conclusion_from_same_source_does_not_create_independence
+    - different_wording_does_not_create_divergence
+    - independent_model_using_same_inputs_is_not_independent_of_input_bias
+    - disagreement_caused_by_different_scope_is_not_contradiction
+    - missing_evidence_does_not_mean_wrong_analysis
+    - higher_confidence_does_not_override_attributable_evidence
+    - manual_second_opinion_must_retain_analyst_identity
+    - tool_failure_is_not_analytical_disagreement
+
+Traceability:
+  analysis_to_execution: required
+  execution_to_inputs: required
+  analysis_to_provenance: required
+  comparison_to_both_analyses: required
+  comparison_to_evidence: required_when_evidence_exists
+  derived_finding_to_comparison_or_evidence: required
+
+Boundary:
+  source_layer: >-
+    L'analyse indépendante ne modifie ni les sources ni les conclusions déjà
+    enregistrées.
+  analytical_layer: >-
+    Elle produit des IndependentAnalysis, OpinionResult, Observations, Evidence
+    dérivées, Findings et incertitudes selon les contrats applicables.
+  decision_layer: >-
+    Une analyse indépendante ne possède aucune autorité de décision. Les résultats
+    alimentent les mêmes mécanismes de consolidation et de décision que les autres
+    analyses, selon une politique explicite.
