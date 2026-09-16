@@ -1,5 +1,5 @@
 workflow: ticket-analysis
-contract_version: 1
+contract_version: 2
 
 invariants:
   - id: TAW-001
@@ -30,6 +30,16 @@ invariants:
     rule: readiness_policy_is_explicit_and_versioned_when_readiness_is_requested
   - id: TAW-014
     rule: terminal_non_success_analysis_does_not_imply_readiness_outcome
+  - id: TAW-015
+    rule: multi_source_reasoning_occurs_before_finding_consolidation
+  - id: TAW-016
+    rule: multi_source_reasoning_receives_explicit_source_and_analysis_inputs
+  - id: TAW-017
+    rule: finding_consolidation_occurs_before_analysis_result_consolidation
+  - id: TAW-018
+    rule: finding_engine_failure_does_not_erase_prior_analytical_outputs
+  - id: TAW-019
+    rule: multi_source_conflicts_and_uncertainty_remain_traceable_through_finding_consolidation
 
 negative_controls:
   - id: TAW-N001
@@ -52,7 +62,15 @@ negative_controls:
     reject: allow_a_failed_optional_stage_to_erase_unrelated_results
   - id: TAW-N010
     reject: create_readiness_decision_before_analysis_result_exists
+  - id: TAW-N011
+    reject: skip_multi_source_reasoning_when_declared_as_required_workflow_stage
+  - id: TAW-N012
+    reject: run_finding_consolidation_before_required_multi_source_outputs_are_available
+  - id: TAW-N013
+    reject: convert_source_conflict_into_silently_selected_finding_basis
+  - id: TAW-N014
+    reject: treat_finding_engine_output_as_readiness_decision
 
 acceptance:
-  scope: workflow_structure_dependencies_handoffs_failure_isolation_traceability_and_readiness_boundary
+  scope: workflow_structure_dependencies_handoffs_failure_isolation_multi_source_integration_finding_consolidation_traceability_and_readiness_boundary
   source_semantics: delegated_to_skills_and_engines
