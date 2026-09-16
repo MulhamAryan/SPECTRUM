@@ -1,0 +1,81 @@
+cases:
+  - id: bra-001
+    title: rule_established
+    input: explicit_rule_with_source_and_scope
+    expected: assessment_status_established_with_rule_and_evidence_refs
+  - id: bra-002
+    title: conditional_rule
+    input: rule_with_explicit_condition
+    expected: condition_is_preserved_and_assessed_without_invention
+  - id: bra-003
+    title: ambiguous_condition
+    input: rule_with_two_plausible_unresolved_conditions
+    expected: ambiguous_or_inconclusive_without_forced_interpretation
+  - id: bra-004
+    title: conflicting_rules_same_scope
+    input: two_attributable_rules_with_common_applicability_and_incompatible_outcomes
+    expected: conflicting_with_both_source_refs_preserved
+  - id: bra-005
+    title: conflicting_rules_different_dates
+    input: incompatible_rules_with_non_overlapping_effective_periods
+    expected: no_active_conflict_when_temporal_scope_is_explicit
+  - id: bra-006
+    title: technical_constraint_not_business_rule
+    input: technical_limit_without_domain_semantics
+    expected: remains_technical_constraint_and_not_business_rule
+  - id: bra-007
+    title: requirement_references_rule
+    input: requirement_refers_to_existing_business_rule
+    expected: requirement_and_business_rule_remain_distinct_and_traceable
+  - id: bra-008
+    title: one_rule_many_requirements
+    input: one_rule_traced_to_multiple_requirements
+    expected: one_rule_to_many_relationship_is_preserved
+  - id: bra-009
+    title: textual_absence
+    input: rule_not_repeated_in_ticket_but_present_in_authoritative_source
+    expected: absence_in_ticket_text_does_not_create_missing_rule_finding
+  - id: bra-010
+    title: missing_correspondence
+    input: requirement_without_identified_rule_mapping
+    expected: missing_correspondence_or_uncertainty_without_proof_of_missing_domain_rule
+  - id: bra-011
+    title: incomplete_exception
+    input: rule_has_condition_but_exception_detail_is_unsupplied
+    expected: incomplete_or_uncertain_finding_without_invented_exception
+  - id: bra-012
+    title: uncertain_calculation
+    input: calculation_rule_without_formula_or_threshold
+    expected: incomplete_or_inconclusive_without_invented_formula
+  - id: bra-013
+    title: rule_priority_not_supplied
+    input: multiple_rules_without_explicit_priority
+    expected: priority_remains_unknown_and_no_analyst_priority_is_created
+  - id: bra-014
+    title: traceability_gap
+    input: rule_statement_present_without_source_or_project_basis
+    expected: traceability_gap_or_uncertainty_with_provenance_preserved
+  - id: bra-015
+    title: verification_basis
+    input: rule_with_explicit_verification_scenario
+    expected: verification_basis_is_linked_without_creating_decision
+  - id: bra-016
+    title: temporal_rule
+    input: rule_with_effective_from_and_effective_to
+    expected: temporal_applicability_is_preserved
+  - id: bra-017
+    title: rule_conflict_requires_evidence
+    input: similar_wording_without_semantic_conflict_evidence
+    expected: no_conflict_declared
+  - id: bra-018
+    title: severity_is_not_readiness
+    input: high_severity_business_rule_finding
+    expected: finding_is_emitted_without_readiness_decision
+  - id: bra-019
+    title: reproducibility
+    input: identical_rule_inputs_and_configuration
+    expected: equivalent_assessment_status_and_traceability_structure
+  - id: bra-020
+    title: analysis_failure
+    input: unavailable_rule_source
+    expected: inconclusive_or_failed_analysis_state_without_fabricated_rule_conflict
