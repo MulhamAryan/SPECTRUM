@@ -1,0 +1,145 @@
+version: 1
+name: agent-orchestration
+purpose: >-
+  Define the executable orchestration contract for SPECTRUM specialized agents.
+  This model turns the agent registry and Agent→Skill contract into an
+  explicit execution graph.
+
+principles:
+  supervisor_is_scheduler: true
+  agent_is_execution_boundary: true
+  skill_is_atomic_analysis_unit: true
+  parallel_only_when_dependencies_are_satisfied: true
+  failed_execution_remains_visible: true
+  no_silent_result_loss: true
+  no_agent_global_readiness: true
+  no_external_mutation: true
+
+invocation:
+  mechanism: Task
+  rule: >-
+    The supervisor invokes each selected specialized agent through the Claude
+    Code Task mechanism using the agent definition identified by the registry.
+  required_context:
+    - analysis_id
+    - target_refs
+    - source_refs
+    - available_artifact_refs
+    - prior_execution_refs
+    - applicable_workflow_stage
+    - agent_registry_entry
+    - agent_skill_contract
+  required_agent_behavior:
+    - load_own_agent_definition
+    - load_registry_entry
+    - load_agent_skill_contract
+    - load_each_selected_skill_before_use
+    - follow_skill_procedure
+    - return_structured_execution_result
+    - preserve_evidence_and_finding_refs
+  isolation:
+    independent_analysis:
+      must_use_distinct_execution_context: true
+      must_not_read_primary_agent_conclusions_before_own_analysis: true
+
+execution_result:
+  required_fields:
+    - execution_id
+    - agent_id
+    - status
+    - selected_skill_executions
+    - observations
+    - findings
+    - evidence_refs
+    - uncertainty_refs
+    - handoff_refs
+    - limitations
+    - provenance
+  allowed_statuses:
+    - completed
+    - completed_with_findings
+    - completed_with_gaps
+    - blocked
+    - failed
+    - not_applicable
+
+phases:
+  - id: contextualize
+    agents:
+      - requirement-analyst
+    parallel: false
+  - id: primary_analysis
+    parallel: true
+    agents:
+      - requirement-analyst
+      - business-rule-analyst
+      - verification-validation-analyst
+      - lifecycle-change-analyst
+  - id: adversarial_and_consistency
+    parallel: true
+    agents:
+      - adversarial-analyst
+      - consistency-analyst
+    depends_on:
+      - primary_analysis
+  - id: implementation_and_independent
+    parallel: true
+    agents:
+      - implementation-reviewer
+      - independent-reviewer
+    depends_on:
+      - adversarial_and_consistency
+  - id: qa
+    agents:
+      - qa-analyst
+    depends_on:
+      - primary_analysis
+      - adversarial_and_consistency
+      - implementation_and_independent
+  - id: consolidation
+    agents:
+      - report-composer
+    depends_on:
+      - primary_analysis
+      - adversarial_and_consistency
+      - implementation_and_independent
+      - qa
+
+routing:
+  implementation-reviewer:
+    required_when:
+      - implementation_artifacts_available
+      - implementation_evidence_requested
+  consistency-analyst:
+    required_when:
+      - two_or_more_comparable_artifacts_available
+  independent-reviewer:
+    required_when:
+      - independent_analysis_requested
+      - workflow_policy_requires_second_opinion
+  qa-analyst:
+    required_when:
+      - ticket_analysis_requested
+      - test_review_requested
+
+handoffs:
+  explicit_only: true
+  record:
+    - source_execution_id
+    - target_agent_or_skill
+    - reason
+    - input_refs
+    - evidence_refs
+
+failure_policy:
+  on_agent_failure: preserve_failure_and_continue_independent_branches
+  on_required_agent_failure: mark_downstream_stage_blocked_when_dependency_is_material
+  on_skill_failure: do_not_simulate_success
+  on_missing_context: emit_gap_or_blocked_status
+
+completion:
+  ready_for_consolidation_only_when:
+    - all_material_selected_agents_have_returned
+    - all_required_skill_failures_are_recorded
+    - all_handoffs_are_recorded
+    - all_findings_and_evidence_are_traceable
