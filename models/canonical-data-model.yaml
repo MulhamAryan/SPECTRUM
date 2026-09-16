@@ -4,7 +4,7 @@ interpretation_level: spectrum_architecture
 purpose: >-
   Define the canonical objects exchanged across SPECTRUM analysis, preserving
   source provenance, evidence, relationships, observations, findings, challenges,
-  and decisions without embedding product-specific readiness policy.
+  independent analyses, and decisions without embedding product-specific readiness policy.
 principles:
   - source_facts_are_not_decisions
   - evidence_is_first_class
@@ -137,6 +137,24 @@ entities:
     fields: [id, type, target_ref, category, question, preconditions, scenario_refs, evidence_refs, status, observation_refs, finding_refs, uncertainty_refs, rationale, provenance]
     status_values: [supported, concern_identified, contradiction_identified, gap_identified, not_applicable, inconclusive, insufficient_evidence]
 
+  DriftAssessment:
+    purpose: Explicit comparison record between supplied specification evidence and implementation evidence within a declared scope and revision context.
+    required: [id, type, specification_refs, implementation_refs, comparison_scope, status]
+    fields: [id, type, specification_refs, implementation_refs, comparison_scope, comparison_basis, specification_revision, implementation_version, status, observation_refs, finding_refs, evidence_refs, uncertainty_refs, rationale, provenance]
+    status_values: [aligned, partially_aligned, drift_observed, specification_only, implementation_only, ambiguous, not_comparable, insufficient_evidence]
+
+  IndependentAnalysis:
+    purpose: Distinct analytical execution performed with a declared independence basis and boundary so that results can be compared without treating the analysis as a superior source of truth.
+    required: [id, type, analysis_id, target_refs, independence_basis, execution_ref, status]
+    fields: [id, type, analysis_id, analysis_revision, target_refs, independence_basis, isolation_boundary, execution_ref, status, observation_refs, finding_refs, evidence_refs, comparison_refs, uncertainty_refs, provenance]
+    status_values: [completed, partial, blocked, failed, inconclusive]
+
+  OpinionResult:
+    purpose: Explicit comparison result between an independent analysis and another attributable analysis on a comparable scope.
+    required: [id, type, primary_ref, independent_ref, status]
+    fields: [id, type, primary_ref, independent_ref, status, agreement_refs, divergence_refs, unresolved_refs, evidence_refs, rationale, provenance]
+    status_values: [corroborated, divergent, partially_corroborated, inconclusive, not_comparable, insufficient_evidence]
+
   Observation:
     purpose: Machine- or analyst-produced observation about a target based on supplied inputs and evidence.
     required: [id, type, target_refs, status]
@@ -202,6 +220,11 @@ reference_integrity:
     - challenge_target_must_resolve
     - challenge_finding_refs_must_resolve_when_present
     - challenge_observation_refs_must_resolve_when_present
+    - drift_specification_refs_must_resolve
+    - drift_implementation_refs_must_resolve
+    - independent_analysis_execution_ref_must_resolve
+    - opinion_primary_ref_must_resolve
+    - opinion_independent_ref_must_resolve
 
 status_semantics:
   observation: >-
@@ -210,6 +233,14 @@ status_semantics:
   challenge: >-
     Describes an adversarial question and its analytical execution state; it is
     not itself evidence that a defect exists.
+  drift_assessment: >-
+    Describes an observable comparison between supplied specification and implementation evidence;
+    it is not itself a readiness decision.
+  independent_analysis: >-
+    Describes a distinct analytical execution and its lifecycle state; it is not a source of truth.
+  opinion_result: >-
+    Describes agreement, divergence, or inconclusivity between attributable analyses;
+    it does not select a winning analysis.
   finding: >-
     Describes an analytical issue or observation that may feed decision logic.
   readiness_evaluation: >-
@@ -224,6 +255,6 @@ source_boundary:
     references. This model does not create additional INCOSE characteristics or
     rules.
   SPECTRUM: >-
-    Object types, identifiers, evidence semantics, observation/finding/challenge
-    structures, relationship vocabulary, readiness evaluation structure, and
-    decision separation are SPECTRUM architecture.
+    Object types, identifiers, evidence semantics, observation/finding/challenge,
+    drift and independent-analysis structures, relationship vocabulary, readiness
+    evaluation structure, and decision separation are SPECTRUM architecture.
