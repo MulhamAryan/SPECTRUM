@@ -1,0 +1,39 @@
+model: spectrum-finding-model
+contract_version: 1
+
+invariants:
+  - id: FIND-001
+    rule: every_finding_has_stable_id_finding_type_target_and_status
+  - id: FIND-002
+    rule: every_finding_has_an_observation_or_evidence_basis
+  - id: FIND-003
+    rule: finding_is_distinct_from_decision
+  - id: FIND-004
+    rule: severity_does_not_define_readiness
+  - id: FIND-005
+    rule: inconclusive_findings_preserve_uncertainty
+  - id: FIND-006
+    rule: contradiction_findings_preserve_conflicting_evidence
+  - id: FIND-007
+    rule: resolution_requires_attributable_evidence
+  - id: FIND-008
+    rule: derived_finding_claims_retain_input_references
+  - id: FIND-009
+    rule: finding_does_not_create_new_source_facts
+
+negative_controls:
+  - id: FIND-N001
+    reject: encode_ready_or_not_ready_as_finding_status
+  - id: FIND-N002
+    reject: infer_source_authority_from_severity
+  - id: FIND-N003
+    reject: mark_missing_information_as_nonconformity_without_basis
+  - id: FIND-N004
+    reject: resolve_contradiction_by_silently_discarding_evidence
+  - id: FIND-N005
+    reject: create_finding_without_observation_or_evidence_basis
+
+acceptance:
+  scope: finding_structure_derivation_and_invariants
+  readiness_decision: explicitly_out_of_scope
+  source_authority: SPECTRUM_architecture_using_source_backed_inputs
