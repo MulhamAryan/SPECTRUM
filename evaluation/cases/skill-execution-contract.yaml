@@ -1,0 +1,107 @@
+model: spectrum-skill-execution-contract
+
+cases:
+  - id: sec-001
+    title: complete_execution_identity
+    input: execution_has_skill_version_target_inputs_and_status
+    expected: valid
+  - id: sec-002
+    title: provenance_required
+    input: execution_has_provenance_and_attributable_outputs
+    expected: valid
+  - id: sec-003
+    title: preconditions_evaluated
+    input: required_preconditions_are_evaluated_before_procedure
+    expected: valid
+  - id: sec-004
+    title: missing_evidence_uncertainty
+    input: required_evidence_is_missing
+    expected: uncertainty_preserved_without_invented_evidence
+  - id: sec-005
+    title: source_conflict_preservation
+    input: two_source_inputs_conflict
+    expected: conflict_and_source_provenance_preserved
+  - id: sec-006
+    title: source_scope_boundary
+    input: execution_attempts_to_use_source_outside_declared_boundary
+    expected: execution_rejected_or_blocked
+  - id: sec-007
+    title: explicit_cross_skill_handoff
+    input: downstream_skill_consumes_upstream_output
+    expected: handoff_references_are_explicit
+  - id: sec-008
+    title: no_readiness_decision
+    input: skill_attempts_to_emit_global_readiness
+    expected: invalid
+  - id: sec-009
+    title: derived_output_traceability
+    input: finding_or_observation_is_derived_from_inputs
+    expected: output_references_input_basis
+  - id: sec-010
+    title: failed_execution_preserves_outputs
+    input: skill_produces_output_then_fails
+    expected: prior_outputs_preserved_and_failure_recorded
+  - id: sec-011
+    title: blocked_execution_reason
+    input: required_precondition_fails
+    expected: blocked_or_partial_with_attributable_reason
+  - id: sec-012
+    title: explicit_not_applicable
+    input: skill_scope_is_proven_not_applicable
+    expected: not_applicable_recorded_with_basis
+  - id: sec-013
+    title: no_not_applicable_inference
+    input: applicability_is_unknown
+    expected: not_applicable_is_not_assumed
+  - id: sec-014
+    title: blocked_is_not_observation_status
+    input: required_input_is_unavailable_before_execution
+    expected: execution_status_blocked_or_partial_and_observation_status_remains_distinct
+  - id: sec-015
+    title: isolated_execution_state
+    input: one_skill_execution_fails_while_other_skill_executes
+    expected: executions_remain_independently_traceable
+  - id: sec-016
+    title: no_implicit_skill_execution
+    input: skill_attempts_to_execute_another_skill_without_declared_handoff
+    expected: execution_rejected
+  - id: sec-017
+    title: no_confidence_substitute
+    input: unsupported_claim_has_high_model_confidence
+    expected: provenance_or_evidence_still_required
+  - id: sec-018
+    title: absence_not_nonconformity
+    input: expected_information_is_absent
+    expected: absence_preserved_without_automatic_nonconformity
+  - id: sec-019
+    title: uncertainty_not_fact
+    input: ambiguous_or_insufficient_evidence_is_available
+    expected: uncertainty_preserved_and_not_upgraded_to_fact
+  - id: sec-020
+    title: execution_version_identity
+    input: same_skill_is_reexecuted_under_new_skill_version
+    expected: execution_records_remain_version_distinct
+  - id: sec-021
+    title: output_to_source_traceability
+    input: observation_contains_source_backed_claim
+    expected: source_or_fragment_reference_is_present
+  - id: sec-022
+    title: handoff_identity_preservation
+    input: upstream_output_is_passed_to_downstream_skill
+    expected: producer_consumer_and_input_references_are_preserved
+  - id: sec-023
+    title: partial_input_scope
+    input: only_part_of_required_analysis_scope_can_be_supported
+    expected: supported_scope_is_executed_and_coverage_limitation_recorded
+  - id: sec-024
+    title: terminal_failure_is_not_decision
+    input: execution_terminates_failed
+    expected: failure_remains_execution_state_and_no_global_decision_is_created
+  - id: sec-025
+    title: lifecycle_transition_traceability
+    input: execution_moves_from_not_started_to_completed_or_failed
+    expected: transition_is_attributable_and_previous_outputs_are_preserved
+  - id: sec-026
+    title: decision_policy_not_implicit_input
+    input: skill_receives_decision_policy_without_workflow_declaration
+    expected: policy_is_not_used_as_implicit_skill_semantics
