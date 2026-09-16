@@ -1,0 +1,82 @@
+skill: independent-analysis
+cases:
+  - id: ia-001
+    title: explicit_independence_basis
+    input: second_analysis_with_distinct_versioned_mechanism
+    expected: independence_basis_and_execution_identity_are_recorded
+  - id: ia-002
+    title: shared_source_bias
+    input: independent_analyses_share_same_project_sources
+    expected: analyses_remain_independent_in_method_but_shared_input_bias_is_preserved
+  - id: ia-003
+    title: prior_finding_is_not_fact
+    input: prior_analysis_contains_unverified_finding
+    expected: independent_analysis_does_not_promote_prior_finding_to_project_fact
+  - id: ia-004
+    title: corroborated_result
+    input: comparable_analyses_reach_supported_compatible_observations
+    expected: opinion_result_is_corroborated_without_claiming_truth
+  - id: ia-005
+    title: divergent_result
+    input: comparable_analyses_produce_different_observations
+    expected: divergence_is_preserved_and_attributed
+  - id: ia-006
+    title: scope_difference
+    input: analyses_cover_different_declared_scopes
+    expected: direct_comparison_is_not_treated_as_contradiction
+  - id: ia-007
+    title: revision_difference
+    input: analyses_target_different_requirement_revisions
+    expected: temporal_or_revision_difference_is_preserved
+  - id: ia-008
+    title: insufficient_evidence
+    input: analyses_disagree_without_sufficient_evidence
+    expected: result_remains_inconclusive
+  - id: ia-009
+    title: textual_difference_only
+    input: equivalent_semantics_with_different_wording
+    expected: wording_difference_does_not_create_divergence
+  - id: ia-010
+    title: confidence_does_not_override_evidence
+    input: one_analysis_has_higher_model_confidence_but_weaker_evidence
+    expected: source_and_evidence_traceability_are_preserved
+  - id: ia-011
+    title: tool_failure_boundary
+    input: independent_analysis_tool_fails
+    expected: tool_failure_is_recorded_as_execution_failure_not_analytical_disagreement
+  - id: ia-012
+    title: manual_analyst_identity
+    input: manual_second_opinion
+    expected: analyst_identity_and_execution_provenance_are_preserved
+  - id: ia-013
+    title: same_mechanism_not_independent
+    input: same_mechanism_reexecuted_without_independent_basis
+    expected: independence_is_not_claimed
+  - id: ia-014
+    title: configuration_difference
+    input: distinct_configurations_with_explicit_independence_boundary
+    expected: configuration_identity_is_preserved
+  - id: ia-015
+    title: finding_traceability
+    input: divergence_generates_finding
+    expected: finding_references_opinion_comparison_and_supporting_evidence
+  - id: ia-016
+    title: no_readiness_decision
+    input: independent_analysis_produces_critical_finding
+    expected: no_readiness_decision_is_created_by_the_skill
+  - id: ia-017
+    title: reproducibility
+    input: same_inputs_same_independence_basis_same_revision
+    expected: analysis_execution_is_reproducible
+  - id: ia-018
+    title: not_comparable
+    input: unrelated_targets_or_non_comparable_scopes
+    expected: opinion_result_is_not_comparable
+  - id: ia-019
+    title: shared_evidence
+    input: both_analyses_reference_same_authoritative_source_fragment
+    expected: shared_evidence_is_preserved_without_claiming_independent_evidence
+  - id: ia-020
+    title: unresolved_conflict
+    input: two_analyses_remain_incompatible_after_scope_alignment
+    expected: conflict_is_preserved_for_downstream_reasoning
