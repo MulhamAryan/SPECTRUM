@@ -131,6 +131,24 @@ DecisionBoundary:
     uncertainty, and policy-governed source resolutions. It does not by itself create
     ticket readiness or any global implementation decision.
 
+ObjectBoundary:
+  canonical_objects:
+    - Source
+    - SourceFragment
+    - Evidence
+    - Observation
+    - Finding
+    - Relationship
+  internal_architecture_objects:
+    - MultiSourceAnalysis
+    - SourceObservation
+    - Comparison
+    - SourceResolution
+  rule: >-
+    The multi-source reasoning engine may use internal analysis structures, but only
+    explicitly listed canonical objects cross the canonical data-model boundary.
+    Internal structures must not be presented downstream as new canonical entities.
+
 Boundaries:
   Source: >-
     Canonical Source metadata remains authoritative for source identity, version,
