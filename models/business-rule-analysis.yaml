@@ -1,0 +1,183 @@
+model:
+  id: spectrum-business-rule-analysis
+  version: 1
+  interpretation_level: spectrum_architecture
+  purpose: >-
+    Définir l'analyse des règles métier explicites applicables à un périmètre,
+    afin d'identifier les règles manquantes, ambiguës, contradictoires,
+    incomplètes ou insuffisamment tracées, sans transformer leur analyse en
+    décision de readiness.
+
+BusinessRule:
+  required:
+    - id
+    - type
+    - statement
+  fields:
+    id: identifiant stable de la règle
+    type: BusinessRule
+    statement: formulation de la règle
+    rule_kind: nature de la règle
+    scope_refs: objets auxquels la règle s'applique
+    condition_refs: conditions explicites
+    constraint_refs: contraintes associées
+    source_refs: sources porteuses de la règle
+    evidence_refs: éléments étayant la règle
+    relationship_refs: relations vers exigences, scénarios, artefacts ou autres règles
+    applicability: périmètre métier ou temporel d'application
+    effective_from: début d'applicabilité lorsque connu
+    effective_to: fin d'applicabilité lorsque connue
+    priority: priorité explicitement fournie par le projet ou la source
+    status: état analytique ou lifecycle explicite
+    provenance: origine et méthode d'établissement
+  rule_kind_values:
+    - authorization
+    - eligibility
+    - obligation
+    - prohibition
+    - calculation
+    - derivation
+    - classification
+    - sequencing
+    - validation
+    - constraint
+    - temporal
+    - unknown
+
+BusinessRuleAnalysis:
+  required:
+    - analysis_id
+    - analysis_revision
+    - target_refs
+    - business_rule_refs
+    - analysis_scope
+  fields:
+    analysis_id: identifiant stable de l'analyse
+    analysis_revision: révision de l'analyse
+    target_refs: objets analysés
+    business_rule_refs: règles métier effectivement examinées
+    requirement_refs: exigences concernées
+    source_refs: sources utilisées
+    relationship_refs: relations utilisées pour établir l'applicabilité ou la traçabilité
+    analysis_scope: périmètre déclaré
+    findings_refs: findings produits
+    observation_refs: observations produites
+    evidence_refs: preuves utilisées
+    uncertainty_refs: incertitudes préservées
+    provenance: origine, méthode, date et acteur
+
+RuleAssessment:
+  statuses:
+    - established
+    - partially_established
+    - ambiguous
+    - conflicting
+    - incomplete
+    - not_applicable
+    - inconclusive
+  required:
+    - id
+    - rule_ref
+    - status
+  fields:
+    id: identifiant du résultat
+    rule_ref: règle évaluée
+    target_refs: éléments affectés
+    status: statut analytique
+    evidence_refs: preuves
+    relationship_refs: traçabilités utilisées
+    rationale: justification
+
+AnalysisRules:
+  - treat_business_rules_as_explicit_domain_objects
+  - preserve_rule_identity_and_provenance
+  - distinguish_rule_from_requirement
+  - distinguish_rule_from_technical_constraint
+  - distinguish_rule_from_policy_decision
+  - analyse_only_declared_scope
+  - require_condition_basis_for_conditional_rules_when_applicable
+  - preserve_effective_dates_and_temporal_scope
+  - preserve_rule_priority_only_when_explicitly_supplied
+  - distinguish_missing_rule_from_unobserved_rule
+  - distinguish_ambiguity_from_contradiction
+  - do_not_invent_business_values_thresholds_or_exceptions
+  - derived_findings_retain_rule_and_evidence_refs
+  - no_readiness_decision
+
+RuleQualityDimensions:
+  allowed:
+    - identification
+    - formulation
+    - applicability
+    - conditions
+    - exceptions
+    - outcome
+    - calculation_basis
+    - temporal_scope
+    - priority
+    - source_authority
+    - traceability
+    - consistency
+    - verification_basis
+  rule: >-
+    Une dimension n'est analysée que si les informations nécessaires sont
+    disponibles dans le périmètre déclaré. L'absence d'une information ne
+    devient pas automatiquement une contradiction.
+
+FalsePositiveControls:
+  examples:
+    - business_rule_may_be_represented_in_multiple_requirements
+    - requirement_may_reference_business_rule_without_repeating_statement
+    - technical_constraint_is_not_automatically_business_rule
+    - missing_textual_rule_does_not_prove_missing_domain_rule
+    - same_rule_may_have_multiple_source_fragments
+    - different_rule_versions_may_coexist_when_temporally_scoped
+    - one_rule_may_apply_to_multiple_entities_or_scenarios
+
+TypicalAnalyses:
+  - Requirement_vs_BusinessRule
+  - BusinessRule_vs_BusinessRule
+  - BusinessRule_vs_Scenario
+  - BusinessRule_vs_Constraint
+  - BusinessRule_vs_Acceptance_Basis
+  - BusinessRule_vs_Artifact
+  - BusinessRule_vs_Baseline_Change
+
+OutputSemantics:
+  established: règle établie pour le périmètre déclaré.
+  partially_established: règle partiellement établie mais avec une limitation identifiée.
+  ambiguous: plusieurs interprétations restent possibles sans base suffisante pour trancher.
+  conflicting: deux informations attribuables et applicables sont incompatibles.
+  incomplete: des éléments requis pour comprendre la règle sont absents ou non établis.
+  not_applicable: la règle ne s'applique pas au périmètre analysé.
+  inconclusive: les informations disponibles ne permettent pas de déterminer le statut.
+
+FindingDerivation:
+  examples:
+    - business_rule_missing_correspondence
+    - business_rule_ambiguous_condition
+    - business_rule_conflict
+    - business_rule_incomplete_exception
+    - business_rule_temporal_uncertainty
+    - business_rule_traceability_gap
+    - requirement_rule_misalignment
+    - business_rule_verification_gap
+
+Traceability:
+  analysis_to_rules: required
+  assessment_to_rule: required
+  assessment_to_evidence: required_when_evidence_exists
+  finding_to_rule_or_assessment: required
+  finding_to_source: required_when_source_backed
+
+Boundary:
+  source_layer: >-
+    Les sources et artefacts conservent leur identité. L'analyse n'en réécrit
+    pas le contenu.
+  analytical_layer: >-
+    L'analyse produit des BusinessRule, RuleAssessment, Observations, Evidence
+    dérivées et Findings selon les contrats SPECTRUM.
+  decision_layer: >-
+    Aucun résultat de règle métier ne crée directement une décision READY,
+    NOT_READY ou équivalent. La décision reste définie par une politique
+    explicite dans la couche de décision.
