@@ -49,3 +49,11 @@ cases:
     title: no_readiness_decision
     input: engine_attempts_to_emit_ready_or_not_ready
     expected: invalid
+  - id: ae-013
+    title: analysis_revision_identity
+    input: same_analysis_id_is_reexecuted_as_a_new_revision
+    expected: distinct_execution_identity
+  - id: ae-014
+    title: result_traceability
+    input: terminal_analysis_result_references_plan_executions_coverage_and_outputs
+    expected: valid
