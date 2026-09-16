@@ -57,3 +57,51 @@ cases:
     title: authority_attribution
     input: policy_requires_decision_authority
     expected: decision_authority_recorded
+  - id: de-015
+    title: partial_analysis_without_permission
+    input: analysis_result_is_partial_and_policy_does_not_allow_non_success_input
+    expected: no_decision
+  - id: de-016
+    title: blocked_analysis_without_permission
+    input: analysis_result_is_blocked_and_policy_does_not_allow_non_success_input
+    expected: no_decision
+  - id: de-017
+    title: failed_analysis_without_permission
+    input: analysis_result_is_failed_and_policy_does_not_allow_non_success_input
+    expected: no_decision
+  - id: de-018
+    title: explicit_non_success_policy
+    input: policy_explicitly_allows_partial_analysis_and_defines_outcome
+    expected: decision_permitted_and_traceable_to_policy
+  - id: de-019
+    title: inconclusive_evaluation_without_permission
+    input: evaluation_is_inconclusive_and_policy_does_not_allow_decision
+    expected: no_decision
+  - id: de-020
+    title: explicit_inconclusive_policy
+    input: policy_explicitly_defines_outcome_for_inconclusive_evaluation
+    expected: decision_permitted_and_traceable_to_policy
+  - id: de-021
+    title: criterion_completeness
+    input: applicable_policy_has_three_criteria_but_only_two_have_results
+    expected: invalid_or_incomplete_evaluation
+  - id: de-022
+    title: scope_violation
+    input: decision_target_is_outside_declared_scope
+    expected: invalid
+  - id: de-023
+    title: missing_evaluation
+    input: decision_request_has_no_attributable_evaluation
+    expected: no_decision
+  - id: de-024
+    title: status_separation
+    input: evaluation_status_is_partial_but_policy_outcome_vocabulary_is_distinct
+    expected: statuses_remain_distinct
+  - id: de-025
+    title: immutable_inputs
+    input: policy_version_or_evaluation_inputs_change_after_decision
+    expected: prior_decision_remains_traceable_to_original_version_and_inputs
+  - id: de-026
+    title: decision_does_not_mutate_findings
+    input: decision_creation_attempts_to_modify_finding_status_or_evidence
+    expected: finding_and_evidence_records_remain_unchanged
