@@ -125,3 +125,31 @@ cases:
     title: cross_artifact_no_direct_readiness
     input: cross_artifact_analysis_produces_high_severity_mismatch
     expected: finding_is_forwarded_without_creating_readiness_decision
+  - id: taw-032
+    title: business_rule_stage_present
+    input: workflow_version_4
+    expected: explicit_business_rule_analysis_stage_exists_and_uses_declared_skill
+  - id: taw-033
+    title: business_rule_parallelization
+    input: business_rule_analysis_and_independent_requirement_quality_analysis
+    expected: both_stages_are_eligible_for_parallel_execution_after_shared_dependencies
+  - id: taw-034
+    title: business_rule_before_cross_artifact
+    input: business_rule_and_cross_artifact_stages
+    expected: business_rule_outputs_are_available_before_cross_artifact_analysis
+  - id: taw-035
+    title: business_rule_handoff
+    input: explicit_business_rules_and_requirements
+    expected: business_rule_stage_receives_rule_and_requirement_context_without_identity_loss
+  - id: taw-036
+    title: business_rule_failure_isolation
+    input: business_rule_analysis_fails_after_unrelated_analysis_stages_succeed
+    expected: prior_outputs_are_preserved_and_business_rule_failure_is_visible
+  - id: taw-037
+    title: business_rule_no_direct_readiness
+    input: business_rule_analysis_produces_high_severity_conflict
+    expected: finding_is_forwarded_without_creating_readiness_decision
+  - id: taw-038
+    title: business_rule_temporal_scope
+    input: versioned_business_rules_with_effective_dates
+    expected: temporal_scope_is_preserved_through_workflow_handoffs
