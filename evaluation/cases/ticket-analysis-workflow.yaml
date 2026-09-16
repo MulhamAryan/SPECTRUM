@@ -197,3 +197,43 @@ cases:
     title: adversarial_implementation_boundary
     input: challenge_without_implementation_artifact
     expected: no_implementation_failure_is_claimed
+  - id: taw-050
+    title: drift_stage_present
+    input: workflow_version_6
+    expected: explicit_spec_implementation_drift_stage_exists_and_uses_declared_skill
+  - id: taw-051
+    title: drift_scope_handoff
+    input: requirement_and_supplied_implementation_artifact
+    expected: drift_stage_receives_explicit_specification_implementation_scope_and_comparison_basis
+  - id: taw-052
+    title: drift_after_cross_artifact
+    input: cross_artifact_and_drift_stages
+    expected: drift_stage_can_use_declared_mappings_before_multi_source_reasoning
+  - id: taw-053
+    title: drift_failure_isolation
+    input: drift_analysis_fails_after_prior_analysis_stages_succeed
+    expected: prior_outputs_are_preserved_and_drift_failure_is_visible
+  - id: taw-054
+    title: drift_no_direct_readiness
+    input: drift_analysis_produces_critical_drift_finding
+    expected: finding_is_forwarded_without_creating_readiness_decision
+  - id: taw-055
+    title: drift_absence_boundary
+    input: specification_without_matching_implementation_artifact
+    expected: workflow_records_missing_evidence_without_claiming_proven_code_absence
+  - id: taw-056
+    title: drift_mapping_boundary
+    input: specification_and_implementation_have_different_representations_with_explicit_mapping
+    expected: representation_difference_is_not_classified_as_drift
+  - id: taw-057
+    title: drift_runtime_boundary
+    input: partial_static_artifacts_without_runtime_evidence
+    expected: no_unobserved_runtime_behavior_is_invented
+  - id: taw-058
+    title: drift_temporal_boundary
+    input: current_baseline_matches_but_future_change_differs
+    expected: current_and_future_scope_are_not_silently_conflated
+  - id: taw-059
+    title: drift_deviation_boundary
+    input: documented_approved_deviation_between_specification_and_implementation
+    expected: deviation_context_is_preserved_and_not_silently_reclassified
