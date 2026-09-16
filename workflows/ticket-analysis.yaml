@@ -1,11 +1,11 @@
 workflow:
   id: ticket-analysis
-  version: 1
+  version: 2
   interpretation_level: spectrum_workflow
   purpose: >-
     Orchestrate end-to-end analysis of a software-development ticket from source
-    ingestion and canonicalization through analytical Skill execution, finding
-    consolidation, and explicit ticket-readiness decision evaluation.
+    ingestion and canonicalization through analytical Skill execution, multi-source
+    reasoning, finding consolidation, and explicit ticket-readiness decision evaluation.
 
 inputs:
   required:
@@ -53,12 +53,29 @@ stages:
     skills: [baseline-change-management]
     produces: [Observation, Finding, Baseline, Change]
 
-  - id: consolidate
-    purpose: produce a complete AnalysisResult while preserving evidence, findings, uncertainty, and coverage
+  - id: multi_source_reasoning
+    purpose: compare and reconcile information from multiple attributable sources while preserving conflicts and uncertainty
+    depends_on:
+      - represent_requirements
+      - analyze_requirements
+      - analyze_verification_validation
+      - analyze_lifecycle_change
+    engine: spectrum-multi-source-reasoning
+    produces: [Evidence, Observation, Finding, Relationship, SourceResolution]
+
+  - id: consolidate_findings
+    purpose: group and consolidate analytical findings without erasing provenance, contradictions, or uncertainty
     depends_on:
       - analyze_requirements
       - analyze_verification_validation
       - analyze_lifecycle_change
+      - multi_source_reasoning
+    engine: spectrum-finding-engine
+    produces: [Finding, FindingAggregationResult]
+
+  - id: consolidate
+    purpose: produce a complete AnalysisResult while preserving evidence, findings, uncertainty, and coverage
+    depends_on: [consolidate_findings]
     engine: spectrum-analysis-engine
     produces: [AnalysisResult]
 
@@ -99,17 +116,21 @@ handoffs:
     - ingest_to_contextualize
     - contextualize_to_represent_requirements
     - represent_requirements_to_analysis_skills
-    - skill_outputs_to_consolidate
+    - analysis_skills_to_multi_source_reasoning
+    - multi_source_reasoning_to_consolidate_findings
+    - findings_to_consolidate
     - consolidate_to_decide_readiness
   rule: >-
     Each handoff identifies producer, consumer, input references, provenance,
-    and any coverage or uncertainty limitations.
+    and any coverage, contradiction, failure, or uncertainty limitations.
 
 failure_paths:
   missing_ticket: blocked
   missing_required_source_context: partial_or_blocked
   unavailable_skill: blocked_or_partial_with_reason
   skill_failure: continue_independent_stages_and_preserve_failure
+  multi_source_failure: continue_with_preserved_inputs_and_mark_finding_coverage_partial
+  finding_engine_failure: analysis_result_blocked_or_partial_without_erasing_prior_findings
   analysis_failure: no_readiness_decision_unless_policy_explicitly_allows_terminal_non_success_input
   readiness_policy_error: failed_without_fallback_decision
 
@@ -124,6 +145,7 @@ outputs:
     - Evidence
     - Context
     - Relationship
+    - SourceResolution
     - Baseline
     - Change
   traceability: required
@@ -132,9 +154,15 @@ boundaries:
   Skills: >-
     Skills perform scoped analysis and produce observations/findings; they do not
     orchestrate the workflow or create the readiness decision.
+  MultiSourceReasoning: >-
+    Multi-source reasoning compares attributable inputs and preserves source-aware
+    contradictions and uncertainty; internal comparison objects do not become canonical entities.
+  FindingEngine: >-
+    Finding Engine consolidates analytical findings and preserves their supporting
+    observations and evidence; it does not create source facts or readiness decisions.
   AnalysisEngine: >-
-    Analysis Engine orchestrates analytical Skill execution and produces
-    AnalysisResult; it does not define readiness semantics.
+    Analysis Engine orchestrates analytical execution and produces AnalysisResult;
+    it does not define readiness semantics.
   DecisionEngine: >-
     Generic Decision Engine semantics govern explicit policy evaluation and
     decision traceability.
