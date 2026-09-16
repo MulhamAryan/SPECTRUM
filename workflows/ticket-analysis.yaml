@@ -1,11 +1,12 @@
 workflow:
   id: ticket-analysis
-  version: 2
+  version: 3
   interpretation_level: spectrum_workflow
   purpose: >-
     Orchestrate end-to-end analysis of a software-development ticket from source
-    ingestion and canonicalization through analytical Skill execution, multi-source
-    reasoning, finding consolidation, and explicit ticket-readiness decision evaluation.
+    ingestion and canonicalization through scoped analytical Skills, cross-artifact
+    analysis, multi-source reasoning, finding consolidation, and explicit
+    ticket-readiness decision evaluation.
 
 inputs:
   required:
@@ -53,6 +54,16 @@ stages:
     skills: [baseline-change-management]
     produces: [Observation, Finding, Baseline, Change]
 
+  - id: analyze_cross_artifacts
+    purpose: compare declared ticket and project artifacts to detect cross-artifact alignment gaps, mismatches, contradictions, and unresolved correspondences
+    depends_on:
+      - represent_requirements
+      - analyze_requirements
+      - analyze_verification_validation
+      - analyze_lifecycle_change
+    skills: [cross-artifact-analysis]
+    produces: [Observation, Finding, Evidence]
+
   - id: multi_source_reasoning
     purpose: compare and reconcile information from multiple attributable sources while preserving conflicts and uncertainty
     depends_on:
@@ -60,6 +71,7 @@ stages:
       - analyze_requirements
       - analyze_verification_validation
       - analyze_lifecycle_change
+      - analyze_cross_artifacts
     engine: spectrum-multi-source-reasoning
     produces: [Evidence, Observation, Finding, Relationship, SourceResolution]
 
@@ -69,6 +81,7 @@ stages:
       - analyze_requirements
       - analyze_verification_validation
       - analyze_lifecycle_change
+      - analyze_cross_artifacts
       - multi_source_reasoning
     engine: spectrum-finding-engine
     produces: [Finding, FindingAggregationResult]
@@ -93,6 +106,7 @@ execution_model:
   rules:
     - dependencies_must_resolve_before_execution
     - independent_stages_may_execute_in_parallel
+    - cross_artifact_analysis_runs_after_requirement_context_and_scoped_analyses
     - stage_failure_does_not_erase_prior_outputs
     - blocked_dependency_propagates_blocked_or_partial_state
     - every_stage_records_execution_and_provenance
@@ -116,7 +130,8 @@ handoffs:
     - ingest_to_contextualize
     - contextualize_to_represent_requirements
     - represent_requirements_to_analysis_skills
-    - analysis_skills_to_multi_source_reasoning
+    - analysis_skills_to_cross_artifact_analysis
+    - cross_artifact_analysis_to_multi_source_reasoning
     - multi_source_reasoning_to_consolidate_findings
     - findings_to_consolidate
     - consolidate_to_decide_readiness
@@ -129,6 +144,7 @@ failure_paths:
   missing_required_source_context: partial_or_blocked
   unavailable_skill: blocked_or_partial_with_reason
   skill_failure: continue_independent_stages_and_preserve_failure
+  cross_artifact_failure: continue_with_preserved_inputs_and_mark_cross_artifact_coverage_partial
   multi_source_failure: continue_with_preserved_inputs_and_mark_finding_coverage_partial
   finding_engine_failure: analysis_result_blocked_or_partial_without_erasing_prior_findings
   analysis_failure: no_readiness_decision_unless_policy_explicitly_allows_terminal_non_success_input
@@ -154,6 +170,10 @@ boundaries:
   Skills: >-
     Skills perform scoped analysis and produce observations/findings; they do not
     orchestrate the workflow or create the readiness decision.
+  CrossArtifactAnalysis: >-
+    Cross-Artifact Analysis compares declared inputs, preserves artifact identity,
+    and reports analytical correspondences or divergences. It does not rewrite
+    artifacts, invent mappings, or create readiness decisions.
   MultiSourceReasoning: >-
     Multi-source reasoning compares attributable inputs and preserves source-aware
     contradictions and uncertainty; internal comparison objects do not become canonical entities.
