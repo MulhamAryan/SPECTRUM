@@ -1,0 +1,101 @@
+version: 1
+name: spectrum-reporting-pipeline
+purpose: >-
+  Define the single reporting pipeline used by all SPECTRUM user-facing commands.
+
+principles:
+  one_reporting_pipeline: true
+  decision_is_upstream: true
+  report_composer_is_renderer: true
+  no_reanalysis_during_render: true
+  no_readiness_recalculation: true
+  french_user_output: true
+  technical_identifiers_hidden: true
+  traceability_preserved: true
+
+input_contract:
+  required:
+    - command_id
+    - analysis_or_review_id
+    - source_refs
+    - evidence_refs
+    - finding_refs
+    - provenance
+  conditional:
+    decision_ref: required_for_commands_that_produce_readiness
+    test_case_refs: required_when_testability_is_relevant
+    qa_review_ref: required_when_qa_is_relevant
+    action_plan_ref: required_when_actions_are produced
+
+normalization:
+  source: canonical_analysis_results
+  operations:
+    - resolve_references
+    - preserve_provenance
+    - group_findings
+    - resolve_display_labels
+    - map_machine_statuses_to_french_labels
+    - validate_required_sections
+    - validate_traceability
+    - validate_permission_notice
+  forbidden:
+    - infer_missing_business_behavior
+    - create_new_finding
+    - create_new_requirement
+    - recalculate_decision
+    - invent_test_case
+    - alter_source_evidence
+
+rendering:
+  renderer: report-composer
+  output_contract: outputs/ticket-analysis-report.yaml
+  language: fr
+  status_icons: required
+  machine_values: hidden
+  technical_ids: hidden
+  source_quotes: preserve_only_when_already_provided_and_authorized
+
+common_sections:
+  required:
+    - Resultat_SPECTRUM
+    - Resume_executif
+    - Constats
+    - Sources_consultees
+    - Permission_securite
+  conditional:
+    - Direction
+    - Dimensions
+    - Plan_action_developpeur
+    - Cas_de_test
+    - Revue_QA
+    - Comportements_implementables_maintenant
+    - Questions_ouvertes
+
+validation:
+  before_render:
+    - all_required_inputs_resolved_or_explicitly_unavailable
+    - decision_reference_resolves_when_required
+    - findings_have_evidence_or_explicit_insufficient_evidence
+    - every_displayed_action_has_source_or_finding_basis
+    - every_displayed_test_has_requirement_or_acceptance_basis_or_is_test_non_derivable
+  after_render:
+    - output_is_entirely_french
+    - no_machine_status_is_exposed
+    - no_machine_category_is_exposed
+    - no_machine_priority_is_exposed
+    - no_internal_identifier_is_exposed_unless_requested_as_source_content
+    - no_numeric_quality_score_is_added
+    - readiness_decision_matches_upstream_decision
+    - every_finding_remains_traceable
+    - permission_notice_is_present
+
+failure_behavior:
+  unresolved_reference: report_generation_blocked_with_reason
+  invalid_input: report_generation_blocked_with_reason
+  missing_decision_when_required: report_generation_blocked_with_reason
+  validation_failure: do_not_render_as_success
+
+security:
+  mode: read_only_by_default
+  rendering_does_not_authorize_mutation: true
+  external_write_requires_explicit_user_permission: true
