@@ -49,3 +49,19 @@ cases:
     title: no_synthetic_source_characteristic
     input: invented_source_characteristic
     expected: invalid
+  - id: cdm-013
+    title: readiness_evaluation_traceability
+    input: readiness_evaluation_references_analysis_result_and_policy
+    expected: valid
+  - id: cdm-014
+    title: readiness_evaluation_decision_separation
+    input: readiness_evaluation_exists_before_decision
+    expected: valid
+  - id: cdm-015
+    title: readiness_status_separation
+    input: readiness_evaluation_is_partial_but_decision_status_vocabulary_is_distinct
+    expected: valid
+  - id: cdm-016
+    title: unresolved_readiness_reference
+    input: readiness_evaluation_references_unknown_analysis_result
+    expected: invalid
