@@ -153,3 +153,47 @@ cases:
     title: business_rule_temporal_scope
     input: versioned_business_rules_with_effective_dates
     expected: temporal_scope_is_preserved_through_workflow_handoffs
+  - id: taw-039
+    title: adversarial_stage_present
+    input: workflow_version_5
+    expected: explicit_adversarial_requirement_analysis_stage_exists_and_uses_declared_skill
+  - id: taw-040
+    title: adversarial_scope_and_categories
+    input: requirement_with_explicit_adversarial_profile
+    expected: adversarial_stage_receives_declared_scope_and_applicable_challenge_categories
+  - id: taw-041
+    title: adversarial_dependencies
+    input: adversarial_stage_requested_before_context_and_business_rule_inputs
+    expected: execution_is_blocked_until_required_dependencies_resolve
+  - id: taw-042
+    title: adversarial_before_cross_artifact
+    input: adversarial_and_cross_artifact_stages
+    expected: adversarial_outputs_are_available_before_cross_artifact_analysis
+  - id: taw-043
+    title: adversarial_handoff
+    input: challenge_produces_observation_and_finding
+    expected: challenge_identity_provenance_and_uncertainty_are_preserved_through_handoff
+  - id: taw-044
+    title: adversarial_failure_isolation
+    input: adversarial_analysis_fails_after_unrelated_analysis_stages_succeed
+    expected: prior_outputs_are_preserved_and_adversarial_failure_is_visible
+  - id: taw-045
+    title: adversarial_no_direct_readiness
+    input: adversarial_analysis_produces_high_severity_finding
+    expected: finding_is_forwarded_without_creating_readiness_decision
+  - id: taw-046
+    title: adversarial_hypothesis_boundary
+    input: hypothetical_negative_scenario_without_project_evidence
+    expected: hypothesis_is_not_promoted_to_project_fact
+  - id: taw-047
+    title: adversarial_temporal_scope
+    input: versioned_requirement_or_rule_with_different_effective_periods
+    expected: temporal_distinction_is_preserved_through_handoff
+  - id: taw-048
+    title: adversarial_scale_context
+    input: high_volume_challenge_without_applicable_scale_context
+    expected: insufficient_evidence_is_preserved_instead_of_declaring_failure
+  - id: taw-049
+    title: adversarial_implementation_boundary
+    input: challenge_without_implementation_artifact
+    expected: no_implementation_failure_is_claimed
