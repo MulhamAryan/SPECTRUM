@@ -51,6 +51,7 @@ ticket_readiness_engine:
   model: spectrum-ticket-readiness-engine
   consumes: [AnalysisResult, Finding, Evidence, Context, Requirement, RequirementSet]
   requires: [ReadinessPolicy]
+  policy_ref: policies/ticket-readiness-v1.yaml
   delegates_generic_decision_semantics_to: spectrum-decision-engine
   produces: [ReadinessEvaluation, Decision]
   decision_boundary: explicit_readiness_policy_only
