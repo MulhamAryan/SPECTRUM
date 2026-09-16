@@ -1,0 +1,79 @@
+skill: spec-implementation-drift-analysis
+model: spectrum-spec-implementation-drift-analysis
+contract_version: 1
+
+invariants:
+  - id: SID-001
+    rule: specification_identity_and_provenance_are_preserved
+  - id: SID-002
+    rule: implementation_identity_and_provenance_are_preserved
+  - id: SID-003
+    rule: comparison_basis_is_explicit
+  - id: SID-004
+    rule: comparison_requires_available_inputs
+  - id: SID-005
+    rule: explicit_relationships_are_preferred_for_mapping
+  - id: SID-006
+    rule: text_or_name_similarity_does_not_establish_mapping
+  - id: SID-007
+    rule: absence_of_evidence_is_distinct_from_proven_absence
+  - id: SID-008
+    rule: representation_difference_is_not_automatically_drift
+  - id: SID-009
+    rule: version_or_baseline_difference_is_not_automatically_drift
+  - id: SID-010
+    rule: documented_deviation_is_preserved_as_context
+  - id: SID-011
+    rule: observed_behavior_requires_implementation_evidence
+  - id: SID-012
+    rule: one_to_many_and_many_to_one_mappings_are_supported
+  - id: SID-013
+    rule: temporal_and_lifecycle_scope_is_preserved
+  - id: SID-014
+    rule: findings_retain_drift_and_evidence_references
+  - id: SID-015
+    rule: same_inputs_and_configuration_are_reproducible
+  - id: SID-016
+    rule: no_readiness_decision_is_created_by_the_skill
+
+negative_controls:
+  - id: SID-N001
+    reject: no_text_match_equals_no_implementation
+  - id: SID-N002
+    reject: different_identifier_equals_drift
+  - id: SID-N003
+    reject: computed_field_without_database_column_equals_drift
+  - id: SID-N004
+    reject: generated_code_without_requirement_text_equals_missing_implementation
+  - id: SID-N005
+    reject: missing_runtime_artifact_allows_claim_of_runtime_failure
+  - id: SID-N006
+    reject: version_difference_is_classified_as_contradiction_without_common_scope
+  - id: SID-N007
+    reject: documented_deviation_is_silently_discarded
+  - id: SID-N008
+    reject: ambiguous_mapping_is_promoted_to_certain_mapping
+  - id: SID-N009
+    reject: missing_test_artifact_proves_missing_behavior
+  - id: SID-N010
+    reject: observed_drift_is_promoted_directly_to_readiness_decision
+
+evaluation_scope:
+  includes:
+    - specification_to_implementation_mapping
+    - structural_alignment
+    - interface_alignment
+    - data_mapping
+    - behavior_alignment
+    - business_rule_alignment
+    - scenario_to_test_alignment
+    - validation_and_error_behavior
+    - authorization_behavior
+    - version_and_baseline_scope
+    - traceability
+  excludes:
+    - unprovided_runtime_behavior
+    - security_assessment_beyond_supplied_evidence
+    - performance_assessment_beyond_supplied_evidence
+    - readiness_policy
+    - implementation_modification
