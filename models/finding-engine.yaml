@@ -1,6 +1,6 @@
 model:
   id: spectrum-finding-engine
-  version: 1
+  version: 2
   interpretation_level: spectrum_architecture
   purpose: >-
     Define how SPECTRUM consolidates observations, evidence, relationships, and
@@ -18,6 +18,7 @@ FindingAggregationRequest:
     input_refs: observations, evidence, findings, relationships, and relevant canonical targets
     scope_refs: optional target scope limiting consolidation
     policy_ref: optional explicit finding-consolidation policy
+    engine_version: immutable finding-engine revision used for aggregation
     provenance: request origin, method, recorded_at, recorded_by
 
 FindingAggregationPlan:
@@ -31,6 +32,7 @@ FindingAggregationPlan:
     consolidation_strategy: explicit grouping and merge behavior
     precedence_rules: optional policy-defined precedence for duplicate or equivalent findings
     contradiction_rules: explicit preservation behavior for incompatible inputs
+    deterministic_key_definition: fields and normalization rules used to derive stable grouping keys
     provenance: plan derivation and version
 
 FindingAggregationResult:
@@ -48,6 +50,7 @@ FindingAggregationResult:
     contradiction_refs: contradictions preserved through consolidation
     uncertainty_refs: unresolved uncertainties preserved through consolidation
     coverage: scope and input coverage achieved by the aggregation
+    idempotency_key: stable key derived from analysis reference, engine version, input identities, and plan revision
     provenance: execution and derivation metadata
 
 FindingGrouping:
@@ -61,6 +64,7 @@ FindingGrouping:
     target_refs: canonical targets shared by grouped inputs
     member_refs: finding, observation, evidence, or relationship inputs in the group
     grouping_basis: explicit semantic, target, relationship, or policy basis
+    grouping_key: deterministic normalized key for reproducible grouping
     confidence: optional analytical confidence that does not replace provenance
     provenance: grouping origin and method
 
@@ -108,6 +112,37 @@ ConsolidationSemantics:
       A finding may be marked resolved only through attributable resolution evidence
       or an explicit resolution input; consolidation itself does not imply resolution.
 
+DeterministicGrouping:
+  required_basis:
+    - target_identity
+    - normalized_semantic_condition
+    - applicability_scope
+    - compatible_evidence_basis
+  normalization:
+    - preserve_source_and_project_identity
+    - normalize_only_representation_level_variants
+    - do_not_normalize_away_material_scope_or_temporal_differences
+  behavior: >-
+    The same analysis revision, engine version, input identities, and grouping basis
+    must yield the same grouping decisions. Ordering of input arrival or model
+    preference must not change a grouping result.
+
+Idempotency:
+  rules:
+    - repeated_execution_with_same_identities_and_engine_version_is_idempotent
+    - equivalent_reexecution_does_not_create_duplicate_consolidated_findings
+    - changed_input_identity_or_engine_version_creates_a_distinct_execution_revision
+    - idempotency_does_not_allow_mutation_of_prior_results
+
+ConflictHandling:
+  rules:
+    - classify_before_merge
+    - test_scope_overlap_before_calling_conflict
+    - test_temporal_compatibility_before_calling_conflict
+    - preserve_unresolved_conflict_when_basis_is_insufficient
+    - apply_precedence_only_when_explicitly_authorized
+    - resolution_does_not_delete_displaced_inputs
+
 SafetyRules:
   - no_new_source_fact_is_created
   - every_consolidated_finding_retains_input_refs
@@ -133,6 +168,9 @@ DeduplicationRules:
     - merge_by_same_source_only
     - merge_because_findings_are_similar_in_wording_only
     - discard_lower_severity_finding_without_policy
+  output_rule: >-
+    A duplicate determination may suppress duplicate presentation but may not erase
+    the contributing finding identities, evidence references, or provenance.
 
 InputBoundaries:
   allowed_inputs:
@@ -165,10 +203,12 @@ Traceability:
     - aggregation_to_analysis
     - aggregation_to_input_refs
     - grouping_to_members
+    - grouping_to_deterministic_key
     - consolidation_to_input_refs
     - resulting_finding_to_evidence_or_observation_basis
     - contradiction_to_original_inputs
     - unresolved_input_to_coverage_or_unresolved_ref
+    - repeated_execution_to_idempotency_key
 
 DecisionBoundary:
   rule: >-
