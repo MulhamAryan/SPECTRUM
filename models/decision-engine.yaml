@@ -1,0 +1,157 @@
+model:
+  id: spectrum-decision-engine
+  version: 1
+  interpretation_level: spectrum_architecture
+  purpose: >-
+    Define the policy-controlled decision layer that evaluates an AnalysisResult
+    against explicit decision criteria and produces traceable Decision records
+    without allowing Skills or analysis execution to create global decisions.
+
+DecisionRequest:
+  required:
+    - decision_id
+    - analysis_result_ref
+    - policy_ref
+  fields:
+    decision_id: stable decision identifier
+    analysis_result_ref: completed or terminal AnalysisResult supplied as decision input
+    policy_ref: explicit decision policy governing semantics
+    scope_refs: decision scope and applicable targets
+    evidence_refs: additional decision evidence explicitly permitted by policy
+    provenance: request origin, method, recorded_at, recorded_by
+
+DecisionPolicy:
+  required:
+    - policy_id
+    - policy_version
+    - applicability
+    - inputs
+    - criteria
+    - outcomes
+  fields:
+    policy_id: registered policy identifier
+    policy_version: immutable policy version used for evaluation
+    applicability: explicit conditions under which the policy applies
+    inputs: allowed canonical objects, findings, evidence, and analysis states
+    criteria: explicit rules used to evaluate inputs
+    precedence: explicit conflict-resolution order when defined by policy
+    outcomes: permitted decision statuses and their meanings
+    exceptions: explicitly declared exceptions and authority requirements
+    provenance: policy origin and authority
+  rule: >-
+    The Decision Engine may evaluate only semantics explicitly declared by the
+    selected policy. It must not invent thresholds, priorities, weights,
+    severities, exceptions, or outcome meanings.
+
+DecisionEvaluation:
+  required:
+    - evaluation_id
+    - decision_request_ref
+    - policy_ref
+    - input_refs
+    - criterion_results
+    - evaluation_status
+  fields:
+    evaluation_id: stable evaluation identifier
+    decision_request_ref: DecisionRequest evaluated
+    policy_ref: policy and version used
+    input_refs: findings, evidence, analysis result, and permitted context used
+    criterion_results: attributable result for every applicable criterion
+    conflicts: unresolved or policy-resolved conflicts
+    uncertainties: unresolved uncertainty affecting evaluation
+    evaluation_status: completed | partial | blocked | failed | inconclusive
+    provenance: evaluation origin, method, recorded_at, recorded_by
+
+Decision:
+  required:
+    - id
+    - type
+    - decision_status
+    - target_refs
+  fields:
+    id: stable decision identifier
+    type: canonical Decision type
+    decision_status: policy-defined outcome
+    target_refs: objects to which the decision applies
+    finding_refs: findings considered by the decision
+    policy_refs: exact policy/version governing the decision
+    rationale: concise traceable rationale
+    evidence_refs: evidence supporting the decision
+    decided_at: decision timestamp
+    decided_by: decision authority or execution identity
+    evaluation_ref: DecisionEvaluation that produced the decision
+  rule: >-
+    Every decision outcome is attributable to an explicit policy version and
+    evaluation. Decision status vocabulary is not defined by Skills or Findings.
+
+EvaluationSemantics:
+  applicability:
+    behavior: evaluate_policy_applicability_before_criteria
+  missing_required_input:
+    behavior: preserve_missing_input_and_mark_blocked_or_inconclusive
+  insufficient_evidence:
+    behavior: preserve_uncertainty_and_follow_policy_defined_behavior_only
+  conflicting_inputs:
+    behavior: preserve_conflict_unless_policy_defines_explicit_resolution
+  criterion_not_applicable:
+    behavior: record_not_applicable_with_basis
+  successful_evaluation:
+    behavior: produce_only_policy_permitted_outcomes
+  policy_error:
+    behavior: fail_evaluation_without_inventing_fallback_semantics
+
+InputRules:
+  - analysis_result_must_be_traceable
+  - findings_must_remain_distinct_from_decision
+  - evidence_provenance_must_be_preserved
+  - policy_version_must_be_resolved
+  - only_policy_permitted_inputs_may_affect_outcome
+  - no_skill_execution_status_is_a_decision_input_by_default
+  - severity_is_not_an_outcome_unless_policy_explicitly_uses_it
+
+DecisionBoundary:
+  upstream:
+    - Skills produce observations and findings
+    - Analysis Engine produces AnalysisResult and coverage
+  decision_layer:
+    - Decision Engine evaluates explicit policy
+    - Decision records preserve policy and evaluation traceability
+  downstream:
+    - decision_consumers may use the resulting Decision
+  rule: >-
+    No decision may be inferred from analysis completeness, finding count,
+    finding severity, Skill status, or model confidence unless an explicit
+    decision policy defines that relationship.
+
+Governance:
+  rules:
+    - policy_identity_and_version_are_immutable_for_an_evaluation
+    - decision_authority_must_be_attributable_when_required_by_policy
+    - policy_changes_create_new_policy_versions
+    - decisions_retain_the_policy_version_used
+    - evaluations_are_reproducible_from_recorded_inputs_and_policy_version
+
+Traceability:
+  request_to_analysis_result: required
+  request_to_policy: required
+  evaluation_to_policy_version: required
+  evaluation_to_inputs: required
+  evaluation_to_criteria: required
+  decision_to_evaluation: required
+  decision_to_policy: required
+  decision_to_findings: required
+  decision_to_evidence: required_when_evidence_exists
+  unresolved_conflict_to_evaluation: required_when_present
+
+Boundary:
+  CanonicalDataModel: >-
+    Decision uses the canonical Decision object and its reference-integrity rules.
+  AnalysisEngine: >-
+    AnalysisResult is an upstream analytical input. The Decision Engine does not
+    reinterpret or modify Skill execution semantics.
+  FindingModel: >-
+    Findings are inputs to policy evaluation and never become decisions merely
+    by being aggregated.
+  SPECTRUM: >-
+    Policy evaluation, criterion results, outcome semantics, decision governance,
+    and decision traceability are SPECTRUM architecture.
