@@ -34,6 +34,28 @@ The first reference set to be mapped is ISO/IEC/IEEE 29148:2018, followed by INC
 - `governance/` — provenance, versions, and source governance
 - `policies/` — configurable project or organizational policies
 
+## First runnable command
+
+The plugin now exposes one user-facing command:
+
+```text
+/analyze-ticket <path-to-ticket-or-ticket-text>
+```
+
+For local testing:
+
+```bash
+claude --plugin-dir /path/to/SPECTRUM
+```
+
+Then run:
+
+```text
+/analyze-ticket path/to/ticket.md
+```
+
+The command orchestrates the existing SPECTRUM ticket-analysis workflow and applies the `ticket-readiness-v1` policy. It produces a traceable readiness result, findings, contradictions/uncertainties, and the evidence used.
+
 ## Agent integrations
 
 SPECTRUM is intended to remain as model- and agent-agnostic as practical. Platform-specific packaging is kept separate from the core methodology.
