@@ -7,11 +7,12 @@ argument-hint: [chemin-du-ticket-ou-texte]
 
 Vérifie que l'analyse respecte le mode lecture seule et identifie toute action qui nécessiterait une autorisation explicite.
 
-Retourne en français :
-- actions autorisées en lecture ;
-- actions qui nécessiteraient une permission ;
-- cibles concernées ;
-- risques de mutation implicite ;
-- éléments nécessitant une confirmation avant exécution.
+## Exécution et rendu
+
+Utilise le superviseur SPECTRUM et les Skills autorisés pour cette revue. Transmets ensuite les résultats normalisés au moteur central `${CLAUDE_PLUGIN_ROOT}/reporting/report-renderer.md`.
+
+Le rapport utilisateur doit respecter `${CLAUDE_PLUGIN_ROOT}/models/reporting-pipeline.yaml` et rester entièrement en français.
+
+Retourne : actions autorisées en lecture, actions nécessitant une permission, cibles concernées, risques de mutation implicite et éléments nécessitant une confirmation.
 
 Ne modifie rien et n'appelle aucune opération d'écriture.
