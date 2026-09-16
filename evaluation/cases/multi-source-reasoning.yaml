@@ -1,0 +1,59 @@
+model: spectrum-multi-source-reasoning
+
+cases:
+  - id: msr-001
+    title: corroboration
+    input: two_sources_make_compatible_claims_about_same_target_and_scope
+    expected: corroboration_preserved_with_two_source_provenances
+  - id: msr-002
+    title: contradiction
+    input: two_sources_make_conflicting_claims_for_same_target_and_scope
+    expected: contradiction_preserved_without_silent_selection
+  - id: msr-003
+    title: temporal_difference
+    input: sources_apply_to_different_versions_or_dates
+    expected: temporal_difference_recorded_not_direct_contradiction
+  - id: msr-004
+    title: scope_difference
+    input: sources_apply_to_non_overlapping_scopes
+    expected: scope_difference_recorded_not_direct_contradiction
+  - id: msr-005
+    title: authority_metadata
+    input: source_authority_is_declared_in_canonical_source_record
+    expected: authority_copied_without_inference
+  - id: msr-006
+    title: model_confidence_not_authority
+    input: model_confidence_differs_between_two_sources
+    expected: confidence_does_not_select_source_authority
+  - id: msr-007
+    title: newer_source_not_automatically_authoritative
+    input: newer_source_conflicts_with_existing_source_without_policy
+    expected: conflict_remains_unresolved
+  - id: msr-008
+    title: explicit_policy_resolution
+    input: source_resolution_policy_defines_authorized_precedence
+    expected: resolution_references_policy_and_original_sources
+  - id: msr-009
+    title: authorized_resolution
+    input: authorized_project_authority_resolves_conflict
+    expected: resolution_references_authority_and_original_sources
+  - id: msr-010
+    title: unresolved_authority
+    input: conflicting_sources_have_no_authorized_resolution_basis
+    expected: unresolved_authority_preserved
+  - id: msr-011
+    title: incomplete_coverage
+    input: one_source_covers_only_part_of_the_target
+    expected: incomplete_coverage_preserved_without_inference
+  - id: msr-012
+    title: provenance_after_resolution
+    input: conflict_is_resolved_by_explicit_policy
+    expected: displaced_source_claim_remains_traceable
+  - id: msr-013
+    title: no_synthetic_source_fact
+    input: multiple_sources_are_correlated_by_reasoning
+    expected: no_new_source_fact_is_attributed_to_an_original_source
+  - id: msr-014
+    title: no_readiness_decision
+    input: multi_source_analysis_produces_strong_corrobation
+    expected: no_global_readiness_decision
