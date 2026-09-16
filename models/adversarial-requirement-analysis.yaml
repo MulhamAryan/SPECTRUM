@@ -1,0 +1,179 @@
+model:
+  id: spectrum-adversarial-requirement-analysis
+  version: 1
+  interpretation_level: spectrum_architecture
+  purpose: >-
+    Définir une analyse volontairement adversariale des exigences et de leur
+    contexte afin d'identifier les hypothèses implicites, scénarios limites,
+    conditions adverses, contradictions potentielles et comportements non
+    spécifiés sans inventer de faits ni produire directement une décision.
+
+AdversarialAnalysis:
+  required:
+    - analysis_id
+    - analysis_revision
+    - target_refs
+    - analysis_scope
+    - challenge_categories
+  fields:
+    analysis_id: identifiant stable de l'analyse
+    analysis_revision: révision de l'analyse
+    target_refs: objets canoniques soumis à l'analyse
+    requirement_refs: exigences concernées lorsqu'elles sont identifiables
+    business_rule_refs: règles métier pertinentes lorsqu'elles sont disponibles
+    context_refs: contextes applicables
+    scenario_refs: scénarios disponibles
+    constraint_refs: contraintes connues
+    evidence_refs: preuves d'entrée utilisées
+    relationship_refs: relations utiles à l'analyse
+    analysis_scope: périmètre explicite des challenges
+    challenge_categories: catégories activées
+    challenge_refs: challenges exécutés
+    observation_refs: observations produites
+    finding_refs: findings produits
+    uncertainty_refs: incertitudes préservées
+    provenance: origine, méthode, date et acteur d'exécution
+
+ChallengeCategory:
+  allowed:
+    - implicit_assumption
+    - boundary_condition
+    - exceptional_condition
+    - unexpected_input
+    - actor_misuse
+    - adversarial_actor
+    - conflicting_rule
+    - state_transition
+    - temporal_edge
+    - lifecycle_edge
+    - volume_or_scale
+    - failure_or_degradation
+    - omission_or_exit_path
+    - dependency_failure
+    - authorization_boundary
+  rule: >-
+    Une catégorie ne peut être exécutée que lorsque sa pertinence peut être
+    établie à partir du périmètre, du contexte ou des entrées disponibles.
+
+Challenge:
+  required:
+    - id
+    - target_ref
+    - category
+    - question
+    - status
+  fields:
+    id: identifiant du challenge
+    target_ref: objet visé
+    category: catégorie du challenge
+    question: question adversariale formulée
+    preconditions: conditions nécessaires au challenge
+    scenario_refs: scénarios utilisés
+    evidence_refs: éléments étayant le challenge
+    status: résultat du challenge
+    observation_refs: observations issues du challenge
+    finding_refs: findings issus du challenge
+    uncertainty_refs: incertitudes rencontrées
+    rationale: justification analytique
+
+ChallengeStatus:
+  allowed:
+    - supported
+    - concern_identified
+    - contradiction_identified
+    - gap_identified
+    - not_applicable
+    - inconclusive
+    - insufficient_evidence
+
+AdversarialRules:
+  - challenge_only_declared_scope
+  - attack_assumptions_not_people
+  - do_not_invent_project_facts
+  - do_not_invent_implementation_behavior
+  - distinguish_missing_specification_from_proven_system_failure
+  - distinguish_uncertainty_from_contradiction
+  - distinguish_edge_case_from_defect
+  - preserve_temporal_and_lifecycle_applicability
+  - preserve_explicit_exceptions
+  - use_existing_relationships_before_inferring_dependencies
+  - record_evidence_for_material_claims
+  - preserve_alternative_interpretations_when_evidence_is_insufficient
+  - findings_retain_challenge_and_evidence_refs
+  - no_direct_readiness_decision
+
+FalsePositiveControls:
+  examples:
+    - unspecified_edge_case_is_not_automatically_a_defect
+    - absence_of_negative_scenario_is_not_proof_of_missing_requirement
+    - high_volume_case_requires_scale_context_before_being_called_a_failure
+    - actor_misuse_requires_an_applicable_actor_and_action_scope
+    - versioned_behavior_may_be_different_without_being_contradictory
+    - explicit_deferred_scope_must_not_be_reported_as_current_gap
+    - hypothetical_attack_without_applicability_is_not_project_evidence
+    - business_rule_conflict_must_preserve_source_and_scope
+
+OutputSemantics:
+  supported: >-
+    Les entrées et preuves disponibles supportent le comportement attendu pour
+    le challenge considéré.
+  concern_identified: >-
+    Le challenge révèle une préoccupation analytique qui mérite d'être
+    transmise comme finding ou approfondie.
+  contradiction_identified: >-
+    Des informations attribuables incompatibles sont établies dans un même
+    périmètre applicable.
+  gap_identified: >-
+    Une information nécessaire au comportement considéré n'est pas établie
+    dans le périmètre analysé, sans conclure à l'absence réelle dans le système.
+  not_applicable: >-
+    Le challenge ne s'applique pas au contexte ou aux cibles déclarées.
+  inconclusive: >-
+    Les informations disponibles ne permettent pas de déterminer le résultat.
+  insufficient_evidence: >-
+    Une hypothèse ou question est pertinente mais les preuves nécessaires ne
+    sont pas disponibles.
+
+FindingDerivation:
+  finding_types:
+    - issue
+    - gap
+    - contradiction
+    - positive_observation
+    - uncertainty
+  examples:
+    - implicit_assumption_unverified
+    - boundary_condition_unspecified
+    - exceptional_path_unspecified
+    - conflicting_behavior_under_context
+    - temporal_edge_unresolved
+    - authorization_boundary_unclear
+    - dependency_failure_unaddressed
+    - scale_behavior_unspecified
+  rule: >-
+    Ces types et identifiants appartiennent à SPECTRUM et ne constituent pas des
+    identifiants d'une source externe.
+
+Traceability:
+  analysis_to_targets: required
+  challenge_to_target: required
+  challenge_to_category: required
+  challenge_to_inputs: required_when_inputs_exist
+  observation_to_challenge: required
+  finding_to_challenge_or_evidence: required
+  source_backed_finding_to_source: required
+
+Boundary:
+  source_layer: >-
+    Les exigences, règles, artefacts et sources restent inchangés et conservent
+    leur identité et leur provenance.
+  analytical_layer: >-
+    L'analyse adversariale produit des Challenges, Observations, Evidence
+    dérivées, Findings et incertitudes selon les contrats SPECTRUM.
+  decision_layer: >-
+    Aucun challenge, nombre de problèmes ou finding ne constitue à lui seul une
+    décision READY, NOT_READY, PASS, FAIL ou équivalent.
+  downstream: >-
+    Les résultats peuvent être transmis au Cross-Artifact Analysis,
+    Multi-Source Reasoning, Finding Engine, Analysis Engine et à la politique de
+    readiness via les interfaces explicites existantes.
