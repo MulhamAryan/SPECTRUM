@@ -1,12 +1,13 @@
 workflow:
   id: ticket-analysis
-  version: 4
+  version: 5
   interpretation_level: spectrum_workflow
   purpose: >-
     Orchestrate end-to-end analysis of a software-development ticket from source
     ingestion and canonicalization through scoped analytical Skills, business-rule
-    analysis, cross-artifact analysis, multi-source reasoning, finding consolidation,
-    and explicit ticket-readiness decision evaluation.
+    analysis, adversarial requirement analysis, cross-artifact analysis,
+    multi-source reasoning, finding consolidation, and explicit ticket-readiness
+    decision evaluation.
 
 inputs:
   required:
@@ -15,6 +16,7 @@ inputs:
     - project_sources
     - project_artifacts
     - business_rules
+    - adversarial_profile
     - analysis_profile
     - readiness_policy_ref
   provenance: required
@@ -63,14 +65,24 @@ stages:
     skills: [business-rule-analysis]
     produces: [BusinessRule, Observation, Finding, Evidence]
 
+  - id: analyze_adversarial_requirements
+    purpose: challenge declared requirements, rules, contexts, scenarios, constraints, and dependencies for boundary conditions, assumptions, exceptions, failure paths, state transitions, temporal edges, and other applicable adversarial conditions
+    depends_on:
+      - contextualize
+      - represent_requirements
+      - analyze_business_rules
+    skills: [adversarial-requirement-analysis]
+    produces: [Challenge, Observation, Finding, Evidence]
+
   - id: analyze_cross_artifacts
-    purpose: compare declared ticket, requirements, business rules, and project artifacts to detect cross-artifact alignment gaps, mismatches, contradictions, and unresolved correspondences
+    purpose: compare declared ticket, requirements, business rules, challenges, and project artifacts to detect cross-artifact alignment gaps, mismatches, contradictions, and unresolved correspondences
     depends_on:
       - represent_requirements
       - analyze_requirements
       - analyze_verification_validation
       - analyze_lifecycle_change
       - analyze_business_rules
+      - analyze_adversarial_requirements
     skills: [cross-artifact-analysis]
     produces: [Observation, Finding, Evidence]
 
@@ -82,6 +94,7 @@ stages:
       - analyze_verification_validation
       - analyze_lifecycle_change
       - analyze_business_rules
+      - analyze_adversarial_requirements
       - analyze_cross_artifacts
     engine: spectrum-multi-source-reasoning
     produces: [Evidence, Observation, Finding, Relationship, SourceResolution]
@@ -93,13 +106,14 @@ stages:
       - analyze_verification_validation
       - analyze_lifecycle_change
       - analyze_business_rules
+      - analyze_adversarial_requirements
       - analyze_cross_artifacts
       - multi_source_reasoning
     engine: spectrum-finding-engine
     produces: [Finding, FindingAggregationResult]
 
   - id: consolidate
-    purpose: produce a complete AnalysisResult while preserving evidence, findings, uncertainty, and coverage
+    purpose: produce a complete AnalysisResult while preserving evidence, findings, uncertainty, coverage, and challenge coverage
     depends_on: [consolidate_findings]
     engine: spectrum-analysis-engine
     produces: [AnalysisResult]
@@ -118,7 +132,7 @@ execution_model:
   rules:
     - dependencies_must_resolve_before_execution
     - independent_stages_may_execute_in_parallel
-    - business_rule_analysis_runs_before_cross_artifact_analysis_when_business_rules_are_in_scope
+    - adversarial_analysis_runs_after_required_context_and_business_rule_inputs_are_available
     - cross_artifact_analysis_runs_after_requirement_context_and_scoped_analyses
     - stage_failure_does_not_erase_prior_outputs
     - blocked_dependency_propagates_blocked_or_partial_state
@@ -145,8 +159,12 @@ handoffs:
     - represent_requirements_to_analysis_skills
     - contextualize_to_business_rule_analysis
     - represent_requirements_to_business_rule_analysis
+    - contextualize_to_adversarial_analysis
+    - represent_requirements_to_adversarial_analysis
+    - business_rule_analysis_to_adversarial_analysis
     - analysis_skills_to_cross_artifact_analysis
     - business_rule_analysis_to_cross_artifact_analysis
+    - adversarial_analysis_to_cross_artifact_analysis
     - cross_artifact_analysis_to_multi_source_reasoning
     - multi_source_reasoning_to_consolidate_findings
     - findings_to_consolidate
@@ -161,6 +179,7 @@ failure_paths:
   unavailable_skill: blocked_or_partial_with_reason
   skill_failure: continue_independent_stages_and_preserve_failure
   business_rule_analysis_failure: continue_with_preserved_inputs_and_mark_business_rule_coverage_partial
+  adversarial_analysis_failure: continue_with_preserved_inputs_and_mark_adversarial_coverage_partial
   cross_artifact_failure: continue_with_preserved_inputs_and_mark_cross_artifact_coverage_partial
   multi_source_failure: continue_with_preserved_inputs_and_mark_finding_coverage_partial
   finding_engine_failure: analysis_result_blocked_or_partial_without_erasing_prior_findings
@@ -174,6 +193,7 @@ outputs:
     - Decision
   supporting:
     - BusinessRule
+    - Challenge
     - Observation
     - Finding
     - Evidence
@@ -192,6 +212,11 @@ boundaries:
     Business Rule Analysis establishes and assesses explicit domain rules with
     provenance and applicability. It does not replace requirements, constraints,
     cross-artifact analysis, or decision semantics.
+  AdversarialRequirementAnalysis: >-
+    Adversarial Requirement Analysis challenges declared inputs and records
+    Challenge, Observation, Evidence, Finding, and uncertainty objects. A
+    hypothetical challenge is not itself a project fact, implementation failure,
+    or readiness decision.
   CrossArtifactAnalysis: >-
     Cross-Artifact Analysis compares declared inputs, preserves artifact identity,
     and reports analytical correspondences or divergences. It does not rewrite
