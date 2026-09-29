@@ -59,7 +59,7 @@ Recevoir un paquet de résultats normalisé contenant :
 
 ## Cohérence inter-commandes
 
-Toute commande utilisateur produisant un rapport doit passer par ce moteur, directement ou via le superviseur. Une commande peut fournir moins de sections lorsque son domaine ne les justifie pas, mais elle ne doit pas créer son propre format de statut ou de sécurité.
+Toute commande utilisateur produisant un rapport doit passer par ce moteur, directement ou via le stage `compose_report` de l'orchestrateur. Une commande peut fournir moins de sections lorsque son domaine ne les justifie pas, mais elle ne doit pas créer son propre format de statut ou de sécurité.
 
 ## Échec
 

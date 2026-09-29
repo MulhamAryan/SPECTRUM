@@ -86,9 +86,13 @@ Aucune écriture Jira ou GitHub n'est effectuée automatiquement. Toute écritur
 
 Les contrats sont disponibles dans `integrations/`.
 
+## Profils
+
+`/spectrum:analyze-ticket <ticket> --profile=quick|standard|full [--lang=fr]` — `quick` : tri rapide, 3 agents, politique agile ; `standard` (défaut) : couverture complète sans seconde analyse ; `full` : avec seconde analyse indépendante isolée.
+
 ## Structure du dépôt
 
-- `core/` — fondations d'orchestration
+- `core/` — procédure d'orchestration et brief agent
 - `knowledge/` — connaissances de référence
 - `rules/` — règles et contrôles
 - `skills/` — compétences réutilisables
@@ -98,7 +102,10 @@ Les contrats sont disponibles dans `integrations/`.
 - `evidence/` — preuves et traçabilité
 - `decisions/` — logique de décision
 - `outputs/` — contrats et formats de rapport
-- `evaluation/` — évaluations et cas de test
+- `evaluation/` — invariants (structurels → `scripts/validate.py`, comportementaux → `examples/`)
+- `examples/` — jeu de tickets de référence et scoring
+- `experimental/` — matériel non branché (branche ISO 29148)
+- `hooks/`, `scripts/` — garde-fou lecture seule, validateur, scoring
 - `governance/` — gouvernance et provenance
 - `policies/` — politiques configurables
 - `integrations/` — contrats d'intégration externes
@@ -107,10 +114,16 @@ Les contrats sont disponibles dans `integrations/`.
 
 SPECTRUM est conçu pour analyser sans mutation par défaut. L'analyse, un constat, un verdict, un plan d'action, un cas de test ou une revue QA ne constitue jamais une autorisation d'écriture.
 
-## Intégrations d'agents
+## Plateforme
 
-SPECTRUM reste aussi agnostique que possible vis-à-vis de la plateforme d'agent.
+SPECTRUM est un plugin **Claude Code** (`.claude-plugin/`, `hooks/`, `commands/`, `agents/`, `skills/`). Il n'y a pas de support d'autre plateforme pour l'instant : les manifestes Gemini et `.agents/` placeholders ont été retirés jusqu'à ce qu'une intégration existe réellement.
 
-- Claude Code : `.claude-plugin/`
-- Interopérabilité Agent Skills : `.agents/`
-- Gemini CLI : `gemini-extension.json` et `.gemini/`
+## Garanties mécaniques
+
+- `hooks/hooks.json` rend la lecture seule effective pendant toute commande `/spectrum:` (voir `scripts/README.md`).
+- `scripts/validate.py` vérifie la cohérence structurelle du plugin ; la CI l'exécute à chaque push.
+- Chaque agent retourne un résultat conforme à `models/agent-execution-result.schema.json`.
+
+## Mesurer avant d'étendre
+
+`examples/` contient le jeu de tickets de référence et `scripts/score-examples.py` compare les rapports produits aux attentes humaines. C'est là que se décide toute évolution de politique ou de skill. Voir `CONTRIBUTING.md`.

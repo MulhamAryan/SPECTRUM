@@ -9,7 +9,16 @@ Analyse la spécification et les artefacts d'implémentation explicitement fourn
 
 ## Exécution et rendu
 
-Utilise le superviseur SPECTRUM et les Skills autorisés pour cette revue. Transmets ensuite les résultats normalisés au moteur central `${CLAUDE_PLUGIN_ROOT}/reporting/report-renderer.md`.
+## Orchestration
+
+Tu es l'orchestrateur (conversation principale). Charge `${CLAUDE_PLUGIN_ROOT}/core/orchestration-procedure.md`, `${CLAUDE_PLUGIN_ROOT}/workflows/ticket-analysis.yaml`, `${CLAUDE_PLUGIN_ROOT}/agents/registry.yaml` et `${CLAUDE_PLUGIN_ROOT}/governance/spectrum-safety-rules.yaml`, puis exécute **uniquement** ce sous-ensemble du graphe, dans l'ordre de ses dépendances :
+
+- Stages : ingest, contextualize, represent_requirements, analyze_business_rules, analyze_cross_artifacts, analyze_spec_implementation_drift, consolidate_findings, consolidate, compose_report
+- Agents invoqués via `Task` : context-analyst, business-rule-analyst, consistency-analyst, implementation-reviewer, report-composer
+
+Les artefacts d'implémentation sont obligatoires : sans eux, `analyze_spec_implementation_drift` est bloqué et la commande le dit au lieu d'analyser à vide.
+
+Chaque résultat d'agent est vérifié contre `${CLAUDE_PLUGIN_ROOT}/models/agent-execution-result.schema.json`. À la fin, transmets les résultats normalisés au rendu défini par `${CLAUDE_PLUGIN_ROOT}/reporting/report-renderer.md`.
 
 Le rapport utilisateur doit respecter `${CLAUDE_PLUGIN_ROOT}/models/reporting-pipeline.yaml`.
 

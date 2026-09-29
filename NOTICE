@@ -1,0 +1,21 @@
+SPECTRUM — Notices d'attribution
+
+Ce dépôt contient des paraphrases structurées et des inventaires dérivés de
+sources normatives protégées. Il ne reproduit pas le texte intégral de ces
+sources et n'est pas une publication de leurs auteurs.
+
+INCOSE Guide to Writing Requirements, v4 (INCOSE-TP-2010-006-04, 2023) et
+sa Summary Sheet (juin 2023) — © INCOSE. Les identifiants de règles (R1–R42),
+de caractéristiques (C1–C15) et d'attributs (A1–A49) ainsi que les
+correspondances des matrices sont cités à des fins d'analyse ; les résumés
+dans knowledge/sources/incose-gtwr-v4-2023/ sont des paraphrases SPECTRUM.
+
+ISO/IEC/IEEE 29148:2018 — © ISO/IEC/IEEE. Seuls des éléments publiquement
+consultables sur l'ISO Online Browsing Platform (table des matières,
+définitions publiques) ont été inventoriés ; aucun contenu payant n'est
+reproduit. Les contrôles dans rules/sources/iso-iec-ieee-29148-2018/ sont
+des interprétations SPECTRUM, pas des citations.
+
+Usage prévu : interne. Avant toute distribution publique du plugin (marketplace
+publique), faire vérifier la compatibilité des paraphrases avec les conditions
+de licence des éditeurs. Ce fichier n'est pas un avis juridique.
