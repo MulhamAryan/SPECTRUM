@@ -153,7 +153,7 @@ Transmettre les résultats vers :
 - `cross-artifact-analysis` pour confronter règles et autres artefacts ;
 - `verification-analysis` lorsque la règle possède une base de vérification explicite ;
 - `validation-analysis` lorsque la règle dépend d'un contexte d'usage ou d'un résultat attendu ;
-- `multi-source-context` / `multi-source-reasoning` pour comparer des sources attribuables ;
+- le stage `multi_source_reasoning` (moteur `spectrum-multi-source-reasoning`) pour comparer des sources attribuables ;
 - `finding-engine` pour la consolidation ;
 - `ticket-readiness` uniquement via le workflow et sa politique explicite.
 

@@ -59,7 +59,9 @@ Revue des frontières de sécurité et des permissions :
 
 La commande d'analyse complète orchestre les compétences et agents spécialisés disponibles, puis consolide les preuves, constats et éléments de décision dans un rapport utilisateur en français.
 
-Les capacités internes couvrent notamment l'analyse des exigences, la vérification et validation, les règles métier, l'analyse adversariale, la comparaison entre artefacts, l'analyse des écarts entre spécification et implémentation, l'analyse indépendante, le raisonnement multi-sources et la préparation au développement.
+Les capacités internes couvrent l'analyse des exigences (INCOSE GtWR v4), la vérification et validation, les règles métier, l'analyse adversariale, la comparaison entre artefacts, l'analyse des écarts entre spécification et implémentation, l'analyse indépendante, le raisonnement multi-sources, la revue QA et la préparation au développement.
+
+La branche ISO/IEC/IEEE 29148 n'est **pas** active dans le plugin : elle est conservée dans `experimental/` (voir son README) tant que son utilité n'est pas démontrée sur des tickets réels.
 
 ## Agents
 

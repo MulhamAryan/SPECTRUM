@@ -143,7 +143,7 @@ Transmettre les résultats vers :
 - `cross-artifact-analysis` pour confronter les divergences révélées avec d'autres artefacts ;
 - `verification-analysis` lorsqu'une vérification du comportement est explicitement définie ;
 - `validation-analysis` lorsqu'un résultat attendu ou un contexte utilisateur est concerné ;
-- `multi-source-context` / `multi-source-reasoning` pour comparer des informations attribuables ;
+- le stage `multi_source_reasoning` (moteur `spectrum-multi-source-reasoning`) pour comparer des informations attribuables ;
 - `finding-engine` pour consolidation ;
 - `ticket-readiness` uniquement via le workflow et sa politique explicite.
 
