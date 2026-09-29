@@ -179,21 +179,6 @@ Les findings restent analytiques et sont transmis au Finding Engine.
 - différence entre versions = contradiction immédiate ;
 - absence de test visible = preuve que le comportement n'est pas implémenté.
 
-## Critères d'évaluation
-
-Une exécution correcte doit :
-
-- préserver l'identité et la provenance des deux côtés ;
-- déclarer la base de comparaison utilisée ;
-- conserver les mappings explicites ;
-- distinguer absence de preuve et absence démontrée ;
-- gérer les mappings un-vers-plusieurs et plusieurs-vers-un ;
-- conserver les versions, baselines et temporalités ;
-- identifier les écarts observables sans inventer de runtime ;
-- produire des findings traçables ;
-- être reproductible à entrées et configuration équivalentes ;
-- ne produire aucune décision de readiness.
-
 ## Handoff
 
 Les résultats peuvent être transmis vers :
@@ -215,3 +200,7 @@ Cette Skill ne :
 - ne décide pas si un ticket est prêt ;
 - ne transforme pas automatiquement un drift en blocage ;
 - ne remplace pas `Cross-Artifact Analysis`, `Business Rule Analysis`, `Multi-Source Reasoning`, `Finding Engine` ou `Decision Engine`.
+
+## Référence
+
+Critères d'évaluation et sources détaillées : `REFERENCE.md` dans ce dossier (non chargé à l'exécution).

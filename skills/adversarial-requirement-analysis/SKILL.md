@@ -159,15 +159,6 @@ Cette Skill ne :
 - ne réécrit pas les sources ou exigences ;
 - ne choisit pas silencieusement entre des règles contradictoires.
 
-## Critères d'évaluation
+## Référence
 
-Une exécution correcte doit :
-
-- couvrir uniquement les catégories déclarées et applicables ;
-- conserver les hypothèses comme hypothèses lorsqu'elles ne sont pas établies ;
-- distinguer gap, incertitude et contradiction ;
-- conserver la temporalité et le périmètre ;
-- éviter les faux positifs liés aux cas limites ;
-- produire des findings traçables ;
-- être reproductible à entrées et configuration équivalentes ;
-- ne produire aucune décision de readiness.
+Critères d'évaluation et sources détaillées : `REFERENCE.md` dans ce dossier (non chargé à l'exécution).

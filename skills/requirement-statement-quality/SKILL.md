@@ -155,32 +155,6 @@ Vers :
 - Ne pas remplacer les analyses de faisabilité, de nécessité, de validation ou d'ensemble.
 - Ne pas modifier silencieusement l'expression source.
 
-## References
-Official INCOSE sources used by this Skill:
-- `INCOSE Guide to Writing Requirements v4`, INCOSE-TP-2010-006-04, version/revision 4, 2023-07-01.
-- `INCOSE Guide to Writing Requirements v4 – Summary Sheet`, June 2023.
-- `knowledge/sources/incose-gtwr-v4-2023/characteristics.yaml`
-- `knowledge/sources/incose-gtwr-v4-2023/rules.yaml`
-- `knowledge/sources/incose-gtwr-v4-2023/matrices.yaml`
-- `models/skill-relationships/incose-gtwr-v4.yaml`
+## Référence
 
-## Evaluation
-Évaluer au minimum :
-- formulation claire et singulière ;
-- règle applicable identifiée depuis la matrice officielle ;
-- ambiguïté lexicale ou contextuelle ;
-- terme non défini ;
-- pronom ou référence insuffisante ;
-- condition implicite ;
-- quantité sans borne ou plage ;
-- performance non mesurable ;
-- formulation multi-pensées ;
-- convention de langage incohérente ;
-- absolu ou quantification inadéquate ;
-- solution imposée sans contexte de justification ;
-- nécessité non établie ;
-- faisabilité non établie ;
-- exactitude par rapport à la source non établie ;
-- expression impossible à examiner faute de contexte ;
-- faux positif lorsqu'une source autorisée établit l'information ailleurs ;
-- régression par rapport aux résultats d'une version précédente.
+Critères d'évaluation et sources détaillées : `REFERENCE.md` dans ce dossier (non chargé à l'exécution).
