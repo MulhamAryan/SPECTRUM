@@ -1,0 +1,12 @@
+ticket: synth-03-bad
+decided_by: "<nom — humain, avant exécution>"
+expected_verdict: not_ready_for_implementation
+expected_blocking_findings:
+  - keywords: ["écran", "identif", "périmètre"]
+    note: "l'écran concerné n'est pas identifiable"
+  - keywords: ["rapide", "mesur", "seuil", "cible"]
+    note: "aucune cible de performance mesurable"
+  - keywords: ["Julien", "source", "orale", "documentée"]
+    note: "la connaissance est chez une personne, pas dans une source"
+tolerated_inconclusive: true
+note: "Un verdict inconclusif est aussi acceptable ici : le ticket ne permet même pas d'identifier le périmètre."

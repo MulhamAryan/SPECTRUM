@@ -1,0 +1,191 @@
+# Derived from ticket-readiness-v1.yaml — lightweight policy for the `quick` profile.
+policy:
+  id: ticket-readiness-agile
+  version: 1
+  interpretation_level: spectrum_policy
+  purpose: Lightweight readiness policy for small agile tickets (profile quick). Same outcomes and precedence
+    as ticket-readiness-v1, but only four criteria are required by default; the others are not_applicable
+    unless the ticket itself makes them material. Intended for triage, not for the final gate on a large
+    change.
+  authority: spectrum_product_policy
+  provenance:
+    origin: SPECTRUM
+    basis: explicit_product_decision_policy
+  derived_from: policies/ticket-readiness-v1.yaml
+applicability:
+  applies_to:
+  - software_development_ticket
+  - implementation_change_request
+  requires:
+  - ticket_scope_identifiable
+  - analysis_result_available
+  excludes:
+  - implementation_design_choices_explicitly_owned_by_design
+  - team_process_details_not_material_to_requirement_interpretation
+outcomes:
+  permitted:
+    ready_for_implementation:
+      meaning: The applicable criteria are established sufficiently that implementation can begin without
+        reconstructing material requirements from missing or contradictory information.
+    not_ready_for_implementation:
+      meaning: At least one policy-defined blocking condition prevents implementation from beginning without
+        material requirement reconstruction.
+    assessment_inconclusive:
+      meaning: The available analysis or evidence is insufficient to apply the policy reliably and the
+        policy does not permit an outcome from the unresolved state.
+  precedence:
+  - policy_applicability_failure
+  - insufficient_analysis_or_evidence
+  - explicit_blocking_condition
+  - explicit_satisfaction_of_all_applicable_criteria
+  - assessment_inconclusive
+statuses:
+  criterion:
+  - satisfied
+  - gap
+  - ambiguous
+  - contradictory
+  - uncertain
+  - blocked
+  - not_applicable
+criteria:
+  requirement_definition:
+    applicability: required
+    satisfied_when:
+    - intended_change_is_identifiable
+    - affected_requirement_or_behavior_is_identifiable
+    - wording_is_sufficient_to_establish_one_material_interpretation
+    blocking_conditions:
+    - material_requirement_is_missing
+    - material_requirement_is_ambiguous
+    - material_requirement_has_unresolved_contradictory_meanings
+    permitted_evidence:
+    - Requirement
+    - Observation
+    - Finding
+    - Source
+    - Evidence
+  business_and_stakeholder_context:
+    applicability: not_applicable_by_default
+    satisfied_when:
+    - material_business_or_stakeholder_intent_is_established
+    blocking_conditions:
+    - implementation_behavior_depends_on_unresolved_business_rule
+    - implementation_behavior_depends_on_unresolved_stakeholder_expectation
+    not_applicable_basis:
+    - ticket_does_not_raise_this_dimension_under_agile_policy
+    - behavior_is_fully_defined_without_additional_business_or_stakeholder_context
+    applicable_only_when: the ticket text itself makes this criterion material to implementation (business
+      and stakeholder context)
+  scope_and_boundaries:
+    applicability: required
+    satisfied_when:
+    - in_scope_change_is_identifiable
+    - material_out_of_scope_boundary_is_identifiable
+    blocking_conditions:
+    - scope_cannot_be_determined
+    - material_boundary_conflict_remains_unresolved
+  dependencies_and_relationships:
+    applicability: not_applicable_by_default
+    satisfied_when:
+    - material_dependencies_are_identified_or_explicitly_absent
+    blocking_conditions:
+    - required_dependency_is_unknown
+    - required_peer_or_interface_relationship_is_undefined
+    - dependency_conflict_affects_implementation
+    note: An explicitly established absence of a dependency is different from missing evidence about whether
+      a dependency exists.
+    applicable_only_when: the ticket text itself makes this criterion material to implementation (dependencies
+      and relationships)
+    not_applicable_basis:
+    - ticket_does_not_raise_this_dimension_under_agile_policy
+  constraints_and_conditions:
+    applicability: not_applicable_by_default
+    satisfied_when:
+    - material_constraints_and_conditions_are_established
+    blocking_conditions:
+    - applicable_constraint_is_unknown
+    - material_condition_of_use_is_unknown
+    - implementation_depends_on_unresolved_external_rule
+    applicable_only_when: the ticket text itself makes this criterion material to implementation (constraints
+      and conditions)
+    not_applicable_basis:
+    - ticket_does_not_raise_this_dimension_under_agile_policy
+  verification_and_acceptance_basis:
+    applicability: required
+    satisfied_when:
+    - expected_result_is_observable
+    - at_least_one_acceptance_criterion_or_example_is_stated_or_derivable_from_the_ticket
+    blocking_conditions:
+    - completion_cannot_be_observed_or_verified_under_applicable_policy
+    - required_acceptance_condition_is_missing
+    - required_verification_basis_is_ambiguous
+    prohibition:
+    - do_not_invent_test_cases_thresholds_methods_or_results
+  validation_and_intended_outcome:
+    applicability: not_applicable_by_default
+    satisfied_when:
+    - intended_outcome_is_established
+    - material_stakeholder_or_use_context_expectation_is_established_when_applicable
+    blocking_conditions:
+    - intended_outcome_is_materially_ambiguous
+    - stakeholder_acceptance_expectation_is_required_but_unknown
+    not_applicable_basis:
+    - ticket_does_not_raise_this_dimension_under_agile_policy
+    - intended_outcome_is_fully_defined_by_the_applicable_requirement_and_no_additional_validation_context_is_material
+    applicable_only_when: the ticket text itself makes this criterion material to implementation (validation
+      and intended outcome)
+  contradictions_and_uncertainties:
+    applicability: required
+    satisfied_when:
+    - no_material_unresolved_contradiction_or_uncertainty_affects_implementation
+    blocking_conditions:
+    - material_contradiction_affects_interpretation
+    - material_uncertainty_affects_implementation_behavior
+    - source_conflict_cannot_be_resolved_by_explicit_authorized_policy
+    note: Severity alone does not make a contradiction or uncertainty blocking; this policy blocks only
+      when the condition is material to implementation.
+  implementation_relevant_attributes:
+    applicability: not_applicable_by_default
+    satisfied_when:
+    - material_attributes_are_established_or_their_absence_is_explicitly_non_material
+    blocking_conditions:
+    - missing_attribute_changes_requirement_interpretation
+    - missing_attribute_changes_scope_or_applicability
+    - missing_attribute_changes_required_behavior
+    not_applicable_basis:
+    - ticket_does_not_raise_this_dimension_under_agile_policy
+    - no_implementation_relevant_attribute_affects_the_ticket_under_analysis
+    applicable_only_when: the ticket text itself makes this criterion material to implementation (implementation
+      relevant attributes)
+rules:
+  global:
+  - only_the_four_required_criteria_can_block_unless_the_ticket_makes_another_criterion_material
+  - an_optional_criterion_that_is_not_material_is_not_applicable_and_never_inconclusive
+  - do_not_require_every_available_attribute_or_characteristic
+  - applicability_must_be_established_before_evaluating_criterion
+  - absence_of_a_field_is_not_by_itself_a_blocking_condition
+  - finding_severity_is_not_a_readiness_outcome
+  - analysis_coverage_is_not_a_readiness_outcome
+  - source_authority_is_preserved_from_evidence
+  - unresolved_uncertainty_must_not_be_upgraded_to_fact
+  - implementation_design_detail_is_not_a_ticket_gap_when_explicitly_design_owned
+  - every_blocking_condition_requires_traceable_finding_or_evidence
+  - every_satisfied_criterion_requires_traceable_basis
+  inconclusive_guard:
+  - assessment_inconclusive_is_permitted_only_when_a_required_criterion_cannot_be_evaluated_from_the_ticket_and_provided_sources
+  - missing_optional_context_never_makes_the_assessment_inconclusive
+exceptions:
+  default: none
+  rule: No operator override is permitted unless a future policy version explicitly defines the exception,
+    applicability conditions, and required authority.
+traceability:
+  decision_to_policy: required
+  decision_to_evaluation: required
+  criterion_to_evidence_or_finding: required
+  blocking_condition_to_basis: required
+  not_applicable_to_basis: required
+calibration:
+  status: uncalibrated
+  rule: Adjust applicability defaults only from measured results on examples/ (scripts/score-examples.py);
+    never from a single report.
