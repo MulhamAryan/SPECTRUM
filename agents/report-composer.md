@@ -11,7 +11,7 @@ tools:
 ## Autorité d'exécution
 
 Consulte obligatoirement :
-- `${CLAUDE_PLUGIN_ROOT}/models/agent-skill-contract.yaml`
+- `${CLAUDE_PLUGIN_ROOT}/core/agent-brief.md`
 - `${CLAUDE_PLUGIN_ROOT}/models/reporting-pipeline.yaml`
 - `${CLAUDE_PLUGIN_ROOT}/outputs/ticket-analysis-report.yaml`
 - `${CLAUDE_PLUGIN_ROOT}/governance/spectrum-safety-rules.yaml`

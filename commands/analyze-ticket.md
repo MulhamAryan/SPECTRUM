@@ -1,153 +1,74 @@
 ---
-description: Analyse un ticket SPECTRUM de bout en bout avec orchestration réelle d’agents spécialisés et produit un verdict de préparation au développement traçable.
-argument-hint: [chemin-du-ticket-ou-texte]
+description: Analyse un ticket SPECTRUM de bout en bout en orchestrant les agents spécialisés depuis la conversation principale et produit un verdict de préparation au développement traçable.
+argument-hint: [chemin-du-ticket-ou-texte] [--profile=quick|standard|full] [--lang=fr]
 ---
 
 # SPECTRUM — Analyse de ticket
 
-Analyse le ticket fourni pour déterminer si un développeur peut commencer l’implémentation sans devoir reconstruire lui-même une exigence matérielle manquante, ambiguë ou contradictoire.
+Analyse le ticket fourni pour déterminer si un développeur peut commencer l'implémentation sans devoir reconstruire lui-même une exigence matérielle manquante, ambiguë ou contradictoire.
 
-## Orchestration obligatoire
+## Tu es l'orchestrateur
 
-Charge d'abord :
-- `${CLAUDE_PLUGIN_ROOT}/agents/supervisor.md`
-- `${CLAUDE_PLUGIN_ROOT}/agents/registry.yaml`
-- `${CLAUDE_PLUGIN_ROOT}/models/agent-skill-contract.yaml`
-- `${CLAUDE_PLUGIN_ROOT}/models/agent-orchestration.yaml`
-- `${CLAUDE_PLUGIN_ROOT}/workflows/ticket-analysis.yaml`
-- `${CLAUDE_PLUGIN_ROOT}/policies/ticket-readiness-v1.yaml`
-- `${CLAUDE_PLUGIN_ROOT}/governance/spectrum-safety-rules.yaml`
-- `${CLAUDE_PLUGIN_ROOT}/models/canonical-data-model.yaml`
-- `${CLAUDE_PLUGIN_ROOT}/models/evidence-model.yaml`
-- `${CLAUDE_PLUGIN_ROOT}/models/finding-model.yaml`
-- `${CLAUDE_PLUGIN_ROOT}/outputs/ticket-analysis-report.yaml`
+Cette commande s'exécute dans la conversation principale, qui est la seule à disposer de `Task`. Il n'y a pas d'agent superviseur. Charge d'abord, dans cet ordre :
 
-Le superviseur doit construire puis exécuter le graphe d'analyse. Il ne doit pas seulement décrire ce graphe.
+1. `${CLAUDE_PLUGIN_ROOT}/core/orchestration-procedure.md` — comment exécuter le graphe
+2. `${CLAUDE_PLUGIN_ROOT}/workflows/ticket-analysis.yaml` — le graphe, les profils, les conditions
+3. `${CLAUDE_PLUGIN_ROOT}/agents/registry.yaml` — skills autorisés par agent
+4. `${CLAUDE_PLUGIN_ROOT}/governance/spectrum-safety-rules.yaml`
+5. La politique de préparation référencée par le profil (`policies/…`)
+6. `${CLAUDE_PLUGIN_ROOT}/outputs/ticket-analysis-report.yaml`
 
-### Exécution
+Les modèles de moteurs (`models/multi-source-reasoning.yaml`, `models/finding-engine.yaml`, `models/analysis-engine.yaml`, `models/ticket-readiness-engine.yaml`) sont chargés au moment où leur stage s'exécute, pas avant.
 
-1. Créer un identifiant d'analyse unique.
-2. Identifier les artefacts et sources réellement disponibles.
-3. Sélectionner les agents selon le registre et les conditions d'applicabilité.
-4. Invoquer les agents sélectionnés avec le mécanisme `Task` de Claude Code.
-5. Pour chaque agent, transmettre uniquement les entrées amont nécessaires et demander explicitement le chargement de ses Skills autorisés.
-6. Exiger de chaque agent une sortie structurée contenant ses exécutions de Skills, états, preuves, constats, incertitudes, handoffs et limites.
-7. Exécuter en parallèle uniquement les agents dont les dépendances sont satisfaites.
-8. Attendre les résultats nécessaires avant tout agent dépendant.
-9. Continuer les branches indépendantes en cas d'échec d'une branche.
-10. Ne jamais remplacer un résultat manquant par une supposition.
-11. Transmettre tous les résultats matériels au moteur de consolidation et au compositeur du rapport.
-
-### Graphe minimal d'une analyse complète
-
-```text
-Contextualisation
-       ↓
-┌─────────────────────────────────────────────────────┐
-│ Exigences │ Règles métier │ Vérif./Validation │ Cycle│
-└─────────────────────────────────────────────────────┘
-       ↓
-┌───────────────────────────┬─────────────────────────┐
-│ Analyse adversariale      │ Cohérence inter-artefacts│
-└───────────────────────────┴─────────────────────────┘
-       ↓
-┌───────────────────────────┬─────────────────────────┐
-│ Revue implémentation      │ Seconde analyse          │
-└───────────────────────────┴─────────────────────────┘
-       ↓
-      QA
-       ↓
- Consolidation
-       ↓
- Décision de préparation
-       ↓
- Rapport
-```
-
-La revue d'implémentation et la cohérence ne sont exécutées que lorsque leurs artefacts d'entrée existent. La seconde analyse n'est exécutée que lorsqu'elle est demandée ou requise par le workflow/politique.
+Puis suis la procédure d'orchestration **intégralement** : résolution du profil, ingestion, exécution du graphe via `Task`, vérification de chaque résultat contre le schéma, décision, QA, rapport, contrôle final.
 
 ## Entrée
 
-`$ARGUMENTS` est soit un chemin vers un fichier contenant le ticket, soit le texte du ticket. Si c’est un chemin, lis le fichier avant toute analyse.
+`$ARGUMENTS` contient soit un chemin vers un fichier contenant le ticket, soit le texte du ticket, suivi d'options facultatives :
+
+- `--profile=quick|standard|full` (défaut : `standard`) — voir `profiles` dans le workflow.
+- `--lang=<code>` (défaut : `fr`) — langue du rapport utilisateur.
+
+Si c'est un chemin, lis le fichier avant toute analyse.
 
 ## Sécurité et permissions — règle absolue
 
-SPECTRUM fonctionne strictement en lecture seule par défaut. Sans autorisation explicite couvrant l’opération et la cible, il est interdit de modifier du code, des fichiers, le dépôt, les branches, les demandes de fusion, Jira, des systèmes externes ou un environnement persistant.
+SPECTRUM fonctionne strictement en lecture seule. Le hook `spectrum-guard` bloque mécaniquement toute écriture pendant une analyse SPECTRUM. Si une action a été bloquée, mentionne-le dans la section Permission / sécurité du rapport ; ne la contourne jamais.
 
-Une analyse, une recommandation, une direction, un constat, un verdict, un cas de test ou une revue qualité n’autorise jamais automatiquement une écriture.
+Une analyse, une recommandation, une direction, un constat, un verdict, un cas de test ou une revue qualité n'autorise jamais automatiquement une écriture.
 
-## Règles d’intégrité d'exécution
+## Règles d'intégrité d'exécution
 
-- Chaque Skill doit être autorisé par l'agent exécutant.
-- Chaque Skill doit être chargé avant son utilisation.
-- Les préconditions doivent être vérifiées.
-- La procédure du Skill doit être suivie intégralement.
-- Le résultat du Skill doit être conservé avec ses références de preuve.
-- Chaque handoff doit avoir une raison et des références d'entrée.
-- Une analyse indépendante doit rester isolée de l'analyse principale jusqu'à sa propre production.
-- Un échec doit rester visible et ne jamais être converti en succès implicite.
-- Aucun agent ne décide seul de la préparation globale.
-
-## Langue utilisateur
-
-La sortie finale doit être entièrement en français. Aucun identifiant technique, statut machine, nom de champ interne, priorité machine, catégorie machine ou valeur interne ne doit être exposé.
+- Chaque agent est invoqué via `Task` et reçoit uniquement ses entrées amont nécessaires.
+- Chaque résultat d'agent est vérifié contre `models/agent-execution-result.schema.json` ; un résultat non conforme est un échec enregistré, jamais complété par toi.
+- Un stage conditionnel non applicable est `not_applicable`, pas un échec.
+- L'analyse indépendante ne reçoit aucune conclusion des autres agents.
+- Un échec reste visible et n'est jamais converti en succès implicite.
+- Aucun agent ne décide seul de la préparation globale ; la décision vient de la politique, appliquée par toi au stage `decide_readiness`.
 
 ## Sortie obligatoire
 
-Le rapport doit contenir, dans cet ordre :
+Le rapport est rendu par `report-composer` selon `outputs/ticket-analysis-report.yaml`, dans la langue `report_language`, avec dans cet ordre :
 
-### Résultat SPECTRUM
-Verdict, qualité des preuves et blocage.
+1. Résultat SPECTRUM — verdict, qualité des preuves, blocage.
+2. Résumé exécutif — 2 à 4 phrases.
+3. Direction — une seule prochaine action, pourquoi, propriétaire suivant, actions immédiates.
+4. Dimensions — les dimensions de la politique appliquée, avec indicateur visuel, statut et justification factuelle.
+5. Constats — 🔴 Bloquants, 🟡 À clarifier, 🔵 Observations, chacun avec un identifiant court lisible (C-01…) et sa preuve.
+6. Plan d'action développeur.
+7. Cas de test.
+8. Revue QA.
+9. Comportements implémentables maintenant.
+10. Questions ouvertes Produit / Analyse.
+11. Sources consultées.
+12. Exécution — profil, agents invoqués, stages non applicables, échecs.
+13. Permission / sécurité.
+14. Annexe Traçabilité — correspondance entre identifiants courts du rapport et références techniques (`FND-`, `EV-`, `execution_id`).
 
-### Résumé exécutif
-Situation et conséquence pratique en 2 à 4 phrases.
+## Contrôle final
 
-### Direction
-Une seule prochaine action opérationnelle, avec pourquoi, propriétaire suivant et actions immédiates.
-
-### Dimensions
-Les neuf dimensions de la politique, chacune avec indicateur visuel, statut français et justification factuelle.
-
-### Constats
-🔴 Bloquants, 🟡 À clarifier, 🔵 Observations. Chaque constat doit disposer d’une preuve identifiable.
-
-### Plan d’action développeur
-Actions justifiées par les constats ou exigences, avec propriétaire, dépendances et condition de terminaison.
-
-### Cas de test
-Cas dérivés des comportements établis, y compris les cas non dérivables lorsque nécessaire.
-
-### Revue QA
-Testabilité, couverture, disponibilité pour exécution, entrées manquantes, dépendances, risques, régression et blocages.
-
-### Comportements implémentables maintenant
-Uniquement les comportements réellement établis par les sources.
-
-### Questions ouvertes Produit / Analyse
-Questions courtes, décisionnelles et traçables.
-
-### Sources consultées
-Sources réellement utilisées et éléments de provenance utiles.
-
-### Permission / sécurité
-`🔒 Mode SPECTRUM : lecture seule. Aucune modification de code, de fichier, de dépôt, de Jira ou de système externe n’a été effectuée sans autorisation explicite.`
-
-## Contrôle qualité final
-
-Avant de répondre, vérifie :
-- une exécution du superviseur a réellement été réalisée ;
-- les agents sélectionnés sont justifiés ;
-- chaque agent a reçu ses entrées nécessaires ;
-- les Skills obligatoires ont été exécutés lorsqu'applicables ;
-- les préconditions et états d'exécution sont présents ;
-- les handoffs sont explicites ;
-- les branches parallèles ne consomment pas de résultats inexistants ;
-- les échecs ne sont jamais masqués ;
-- tous les constats et preuves sont récupérés ;
-- la décision globale vient de la politique de préparation ;
-- la sortie utilisateur est entièrement en français ;
-- aucune mutation n’a été effectuée sans autorisation explicite.
+Applique la section 8 de la procédure d'orchestration : vérifie tes propres structures d'exécution, pas une auto-attestation. Si un contrôle échoue, corrige l'exécution ou expose l'échec dans le rapport ; ne réponds pas avec un rapport qui prétend une exécution qui n'a pas eu lieu.
 
 ## Limites
 
-Ne réécris pas silencieusement le ticket, n’invente pas de critères, seuils, règles métier, données, comportements ou preuves. Ne transforme pas une hypothèse en fait et n’effectue aucune mutation non autorisée.
+Ne réécris pas silencieusement le ticket, n'invente pas de critères, seuils, règles métier, données, comportements ou preuves. Ne transforme pas une hypothèse en fait et n'effectue aucune mutation.
