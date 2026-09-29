@@ -1,6 +1,6 @@
 ---
 description: Revoir la testabilité et dériver les cas de test à partir des exigences établies.
-argument-hint: [chemin-du-ticket-ou-texte]
+argument-hint: "[chemin-du-ticket-ou-texte]"
 ---
 
 # SPECTRUM — Revue des tests

@@ -1,3 +1,10 @@
+---
+name: spec-implementation-drift-analysis
+description: Confronter une spécification à des artefacts d'implémentation effectivement fournis pour établir ce qui est aligné, divergent, non démontré ou non comparable, sans inventer de comportement d'exécution.
+type: component
+role: analysis
+---
+
 # Skill — Analyse des écarts spécification / implémentation
 
 ## Objectif

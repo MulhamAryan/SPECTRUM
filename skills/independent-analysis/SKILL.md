@@ -1,3 +1,10 @@
+---
+name: independent-analysis
+description: Produire une seconde analyse isolée et comparable d'un périmètre déjà analysé, puis une comparaison traçable où l'accord n'est pas la vérité et le désaccord n'est pas une preuve d'erreur.
+type: component
+role: analysis
+---
+
 # Skill — Analyse indépendante
 
 ## Objectif

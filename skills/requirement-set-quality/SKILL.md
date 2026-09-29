@@ -1,3 +1,10 @@
+---
+name: requirement-set-quality
+description: Analyser la qualité d'un ensemble de besoins ou d'exigences contre les caractéristiques d'ensemble C10–C15 et les règles GtWR v4 de niveau ensemble (R29, R41, R42) explicitement reliées.
+type: component
+role: analysis
+---
+
 # Skill: requirement-set-quality
 
 ## Purpose

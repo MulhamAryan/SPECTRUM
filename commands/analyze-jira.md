@@ -1,6 +1,6 @@
 ---
 description: Récupérer et analyser un ticket Jira avec SPECTRUM en lecture seule.
-argument-hint: [clé-ou-url-du-ticket]
+argument-hint: "[clé-ou-url-du-ticket]"
 ---
 
 # SPECTRUM — Analyse depuis Jira

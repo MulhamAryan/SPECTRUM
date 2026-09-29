@@ -1,6 +1,6 @@
 ---
 description: Comparer un ticket ou une spécification avec les artefacts d'implémentation fournis et détecter les écarts traçables.
-argument-hint: [chemin-du-ticket-et-des-artefacts]
+argument-hint: "[chemin-du-ticket-et-des-artefacts]"
 ---
 
 # SPECTRUM — Revue de l'implémentation

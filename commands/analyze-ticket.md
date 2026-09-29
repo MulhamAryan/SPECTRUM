@@ -1,6 +1,6 @@
 ---
 description: Analyse un ticket SPECTRUM de bout en bout en orchestrant les agents spécialisés depuis la conversation principale et produit un verdict de préparation au développement traçable.
-argument-hint: [chemin-du-ticket-ou-texte] [--profile=quick|standard|full] [--lang=fr]
+argument-hint: "[chemin-du-ticket-ou-texte] [--profile=quick|standard|full] [--lang=fr]"
 ---
 
 # SPECTRUM — Analyse de ticket

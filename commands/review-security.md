@@ -1,6 +1,6 @@
 ---
 description: Vérifier les frontières de sécurité et de permission d'une analyse SPECTRUM sans effectuer de mutation.
-argument-hint: [chemin-du-ticket-ou-texte]
+argument-hint: "[chemin-du-ticket-ou-texte]"
 ---
 
 # SPECTRUM — Revue sécurité et permissions

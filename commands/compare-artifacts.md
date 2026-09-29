@@ -1,6 +1,6 @@
 ---
 description: Comparer deux artefacts ou deux versions pour détecter les correspondances, écarts et contradictions traçables.
-argument-hint: [artefact-a] [artefact-b]
+argument-hint: "[artefact-a] [artefact-b]"
 ---
 
 # SPECTRUM — Comparaison d'artefacts

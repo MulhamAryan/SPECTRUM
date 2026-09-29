@@ -1,6 +1,6 @@
 ---
 description: Revoir une exigence ou un ticket sous l'angle qualité des exigences, contexte, relations et traçabilité.
-argument-hint: [chemin-du-ticket-ou-texte]
+argument-hint: "[chemin-du-ticket-ou-texte]"
 ---
 
 # SPECTRUM — Revue d'exigence

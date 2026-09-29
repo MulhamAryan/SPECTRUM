@@ -1,3 +1,10 @@
+---
+name: adversarial-requirement-analysis
+description: Soumettre exigences, règles métier, contextes et scénarios à des défis structurés (hypothèses implicites, cas limites, exceptions, transitions d'état, échecs, frontières d'autorisation) pour révéler gaps et contradictions sans promouvoir une hypothèse en fait.
+type: component
+role: analysis
+---
+
 # Skill — Analyse adversariale des exigences
 
 ## Objectif

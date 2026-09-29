@@ -1,3 +1,10 @@
+---
+name: business-rule-analysis
+description: Identifier et évaluer les règles métier explicites d'un périmètre — applicabilité, conditions, exceptions, portée temporelle, traçabilité, cohérence — sans en inventer le contenu.
+type: component
+role: analysis
+---
+
 # Skill — Analyse des règles métier
 
 ## Objectif
