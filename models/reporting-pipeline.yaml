@@ -1,4 +1,4 @@
-version: 1
+version: 2
 name: spectrum-reporting-pipeline
 purpose: >-
   Define the single reporting pipeline used by all SPECTRUM user-facing commands.
@@ -9,8 +9,9 @@ principles:
   report_composer_is_renderer: true
   no_reanalysis_during_render: true
   no_readiness_recalculation: true
-  french_user_output: true
-  technical_identifiers_hidden: true
+  user_output_in_report_language: true   # default fr, set by --lang
+  readable_short_ids_in_body: true        # C-01, A-02, T-03, Q-04 — human-readable, stable within one report
+  technical_ids_only_in_traceability_annex: true
   traceability_preserved: true
 
 input_contract:
@@ -34,7 +35,8 @@ normalization:
     - preserve_provenance
     - group_findings
     - resolve_display_labels
-    - map_machine_statuses_to_french_labels
+    - map_machine_statuses_to_labels_in_report_language
+    - assign_short_readable_ids_and_keep_mapping_to_technical_refs
     - validate_required_sections
     - validate_traceability
     - validate_permission_notice
@@ -49,10 +51,11 @@ normalization:
 rendering:
   renderer: report-composer
   output_contract: outputs/ticket-analysis-report.yaml
-  language: fr
+  language: report_language   # from workflow input, default fr
   status_icons: required
-  machine_values: hidden
-  technical_ids: hidden
+  machine_values: hidden_in_body
+  short_ids: C-nn findings, A-nn actions, T-nn tests, Q-nn questions
+  technical_ids: annex_only   # FND-, EV-, execution_id, stage ids appear only in the Traceability annex
   source_quotes: preserve_only_when_already_provided_and_authorized
 
 common_sections:
@@ -61,7 +64,9 @@ common_sections:
     - Resume_executif
     - Constats
     - Sources_consultees
+    - Execution
     - Permission_securite
+    - Annexe_tracabilite
   conditional:
     - Direction
     - Dimensions
@@ -79,11 +84,13 @@ validation:
     - every_displayed_action_has_source_or_finding_basis
     - every_displayed_test_has_requirement_or_acceptance_basis_or_is_test_non_derivable
   after_render:
-    - output_is_entirely_french
+    - output_body_is_entirely_in_report_language
     - no_machine_status_is_exposed
     - no_machine_category_is_exposed
     - no_machine_priority_is_exposed
-    - no_internal_identifier_is_exposed_unless_requested_as_source_content
+    - no_technical_identifier_in_body_outside_the_traceability_annex
+    - every_short_id_in_body_resolves_in_the_traceability_annex
+    - execution_section_lists_profile_agents_not_applicable_stages_and_failures
     - no_numeric_quality_score_is_added
     - readiness_decision_matches_upstream_decision
     - every_finding_remains_traceable
