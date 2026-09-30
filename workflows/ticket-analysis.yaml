@@ -1,14 +1,23 @@
 workflow:
   id: ticket-analysis
-  version: 7
+  version: 8
   interpretation_level: spectrum_workflow
   purpose: >-
     Orchestrate end-to-end analysis of a software-development ticket from source
     ingestion and canonicalization through scoped analytical Skills, business-rule
     analysis, adversarial requirement analysis, cross-artifact analysis,
     specification-implementation drift analysis, independent analysis,
-    multi-source reasoning, finding consolidation, and explicit ticket-readiness
-    decision evaluation.
+    multi-source reasoning, finding consolidation, explicit ticket-readiness
+    decision evaluation, QA review and report composition.
+  authority: >-
+    This file is the SINGLE SOURCE OF TRUTH for the execution graph. Each stage
+    declares the agent that executes it and the phase it belongs to. No other
+    file may define a competing graph (see models/agent-orchestration.yaml,
+    which only holds principles, routing conditions and failure policy).
+  executor: >-
+    The graph is executed by the orchestrator, i.e. the slash command itself in
+    the main Claude Code conversation, following core/orchestration-procedure.md.
+    Sub-agents cannot spawn sub-agents, so there is no supervisor agent.
 
 inputs:
   required:
@@ -23,65 +32,112 @@ inputs:
     - independent_analysis_profile
     - analysis_profile
     - readiness_policy_ref
+    - report_language
   provenance: required
+
+# Execution profiles select which stages run and which readiness policy applies.
+# The orchestrator resolves the profile BEFORE building the graph.
+profiles:
+  default: standard
+  quick:
+    description: Fast triage of a small ticket; three agents, lightweight agile policy.
+    readiness_policy_ref: policies/ticket-readiness-agile-v1.yaml
+    stages:
+      - ingest
+      - contextualize
+      - represent_requirements
+      - analyze_requirements
+      - analyze_adversarial_requirements
+      - consolidate_findings
+      - consolidate
+      - decide_readiness
+      - qa
+      - compose_report
+  standard:
+    description: Full analytical coverage without the independent second analysis.
+    readiness_policy_ref: policies/ticket-readiness-v1.yaml
+    stages: all_except
+    excluded_stages:
+      - analyze_independent
+  full:
+    description: Everything, including the isolated independent second analysis.
+    readiness_policy_ref: policies/ticket-readiness-v1.yaml
+    stages: all
 
 stages:
   - id: ingest
+    phase: ingest
+    agent: orchestrator
     purpose: establish ticket, source, artifact, business-rule candidate, implementation artifact, and provenance inputs
     produces: [Ticket, Source, SourceFragment, Artifact, Evidence]
     failure_behavior: preserve_inputs_and_stop_dependent_stages
 
   - id: contextualize
+    phase: contextualize
+    agent: context-analyst
     purpose: establish explicit context, stakeholders, entities, constraints, scenarios, and relevant relationships
     depends_on: [ingest]
     skills: [requirements-context, requirement-relationship-traceability]
     produces: [Context, Stakeholder, Entity, Constraint, Scenario, Relationship, Observation, Finding]
 
   - id: represent_requirements
+    phase: contextualize
+    agent: context-analyst
+    note: executed in the same context-analyst invocation as contextualize
     purpose: represent needs, requirements, requirement sets, and applicable attributes
     depends_on: [contextualize]
-    skills: [requirement-relationship-traceability, requirements-attribute-management, requirement-set-quality]
+    skills: [requirement-expression, requirement-relationship-traceability, requirements-attribute-management]
     produces: [Requirement, RequirementSet, Attribute, Relationship, Observation, Finding]
 
   - id: analyze_requirements
+    phase: primary_analysis
+    agent: requirement-analyst
     purpose: execute statement and set quality analysis
     depends_on: [represent_requirements]
     skills: [requirement-statement-quality, requirement-set-quality]
     produces: [Observation, Finding, Evidence]
 
   - id: analyze_verification_validation
+    phase: primary_analysis
+    agent: verification-validation-analyst
     purpose: analyze verification basis and validation context where applicable
     depends_on: [represent_requirements]
     skills: [verification-analysis, validation-analysis]
     produces: [Observation, Finding, Evidence]
 
   - id: analyze_lifecycle_change
+    phase: primary_analysis
+    agent: lifecycle-change-analyst
+    when: lifecycle_or_change_context_applicable
     purpose: analyze baseline and change information when lifecycle/change context is applicable
     depends_on: [represent_requirements]
     skills: [baseline-change-management]
     produces: [Observation, Finding, Baseline, Change]
 
   - id: analyze_business_rules
+    phase: primary_analysis
+    agent: business-rule-analyst
     purpose: identify and assess explicit business rules, applicability, conditions, exceptions, temporal scope, traceability, and consistency
-    depends_on:
-      - contextualize
-      - represent_requirements
+    depends_on: [represent_requirements]
     skills: [business-rule-analysis]
     produces: [BusinessRule, Observation, Finding, Evidence]
 
   - id: analyze_adversarial_requirements
+    phase: adversarial
+    agent: adversarial-analyst
     purpose: challenge declared requirements, rules, contexts, scenarios, constraints, and dependencies for boundary conditions, assumptions, exceptions, failure paths, state transitions, temporal edges, and other applicable adversarial conditions
     depends_on:
-      - contextualize
       - represent_requirements
       - analyze_business_rules
     skills: [adversarial-requirement-analysis]
     produces: [Challenge, Observation, Finding, Evidence]
 
   - id: analyze_cross_artifacts
+    phase: consistency
+    agent: consistency-analyst
+    when: two_or_more_comparable_artifacts_available
     purpose: compare declared ticket, requirements, business rules, challenges, and project artifacts to detect cross-artifact alignment gaps, mismatches, contradictions, and unresolved correspondences
     depends_on:
-      - represent_requirements
       - analyze_requirements
       - analyze_verification_validation
       - analyze_lifecycle_change
@@ -91,31 +147,40 @@ stages:
     produces: [Observation, Finding, Evidence]
 
   - id: analyze_spec_implementation_drift
+    phase: implementation_and_independent
+    agent: implementation-reviewer
+    when: implementation_artifacts_available
     purpose: compare declared specification with supplied implementation artifacts to detect observable drift, missing implementation evidence, undocumented implementation behavior, ambiguous mappings, and version or baseline misalignment
     depends_on:
-      - represent_requirements
       - analyze_business_rules
       - analyze_cross_artifacts
     skills: [spec-implementation-drift-analysis]
     produces: [DriftAssessment, Observation, Finding, Evidence]
 
   - id: analyze_independent
+    phase: implementation_and_independent
+    agent: independent-reviewer
+    when: independent_analysis_requested_or_policy_requires_second_opinion
+    # DECISION (v8): the independent analysis runs IN PARALLEL with the drift
+    # analysis and does NOT depend on it. It is scheduled after the primary,
+    # adversarial and cross-artifact stages only so that its scope is comparable;
+    # the isolation rule below forbids it from reading their conclusions.
     purpose: perform a distinct analysis on the declared scope and compare it with a reference analysis without granting either analysis superior authority
     depends_on:
-      - analyze_requirements
-      - analyze_verification_validation
-      - analyze_lifecycle_change
-      - analyze_business_rules
       - analyze_adversarial_requirements
       - analyze_cross_artifacts
-      - analyze_spec_implementation_drift
+    isolation:
+      must_use_distinct_execution_context: true
+      must_not_read_primary_agent_conclusions_before_own_analysis: true
+      comparison_is_performed_after_own_analysis_is_complete: true
     skills: [independent-analysis]
     produces: [IndependentAnalysis, OpinionResult, Observation, Finding, Evidence]
 
   - id: multi_source_reasoning
+    phase: reasoning
+    agent: orchestrator
     purpose: compare and reconcile information from multiple attributable sources while preserving conflicts and uncertainty
     depends_on:
-      - represent_requirements
       - analyze_requirements
       - analyze_verification_validation
       - analyze_lifecycle_change
@@ -128,48 +193,77 @@ stages:
     produces: [Evidence, Observation, Finding, Relationship, SourceResolution]
 
   - id: consolidate_findings
+    phase: reasoning
+    agent: orchestrator
     purpose: group and consolidate analytical findings without erasing provenance, contradictions, or uncertainty
-    depends_on:
-      - analyze_requirements
-      - analyze_verification_validation
-      - analyze_lifecycle_change
-      - analyze_business_rules
-      - analyze_adversarial_requirements
-      - analyze_cross_artifacts
-      - analyze_spec_implementation_drift
-      - analyze_independent
-      - multi_source_reasoning
+    depends_on: [multi_source_reasoning]
     engine: spectrum-finding-engine
     produces: [Finding, FindingAggregationResult]
 
   - id: consolidate
+    phase: reasoning
+    agent: orchestrator
     purpose: produce a complete AnalysisResult while preserving evidence, findings, uncertainty, coverage, challenge coverage, drift coverage, and independent-analysis coverage
     depends_on: [consolidate_findings]
     engine: spectrum-analysis-engine
     produces: [AnalysisResult]
 
   - id: decide_readiness
+    phase: decision
+    agent: orchestrator
     purpose: apply the explicit ticket-readiness policy to the completed analytical result
     depends_on: [consolidate]
     requires: [readiness_policy_ref]
     engine: spectrum-ticket-readiness-engine
     produces: [DecisionEvaluation, Decision]
 
+  - id: qa
+    phase: qa
+    agent: qa-analyst
+    purpose: assess testability and derive test cases exclusively from established behaviors, consuming upstream verification/validation outputs
+    depends_on:
+      - analyze_verification_validation
+      - analyze_adversarial_requirements
+      - analyze_cross_artifacts
+      - analyze_spec_implementation_drift
+    consumes_outputs_of:
+      - verification-validation-analyst
+      - adversarial-analyst
+      - business-rule-analyst
+    produces: [TestCase, TestabilityAssessment, QaBlocker, RegressionScope]
+
+  - id: compose_report
+    phase: report
+    agent: report-composer
+    purpose: transform the analysis result, decision and QA review into the user-facing report defined by outputs/ticket-analysis-report.yaml
+    depends_on: [decide_readiness, qa]
+    produces: [UserReport]
+
 execution_model:
   orchestration: dependency_graph
+  executor: orchestrator_in_main_conversation_using_Task
   parallelizable_groups:
     - [analyze_requirements, analyze_verification_validation, analyze_lifecycle_change, analyze_business_rules]
+    - [analyze_spec_implementation_drift, analyze_independent]
+    - [multi_source_reasoning, qa]
+  conditional_stages:
+    rule: >-
+      A stage with a `when` condition that is not satisfied is recorded with
+      status not_applicable. Downstream stages treat a not_applicable dependency
+      as satisfied; they must not treat it as failed or blocked.
   rules:
     - dependencies_must_resolve_before_execution
     - independent_stages_may_execute_in_parallel
     - adversarial_analysis_runs_after_required_context_and_business_rule_inputs_are_available
     - cross_artifact_analysis_runs_after_requirement_context_and_scoped_analyses
     - spec_implementation_drift_runs_after_cross_artifact_mapping_and_required_specification_inputs
-    - independent_analysis_runs_after_declared_primary_analysis_scope_is_available
+    - independent_analysis_runs_in_parallel_with_drift_analysis_and_never_reads_primary_conclusions
+    - qa_consumes_upstream_verification_and_validation_outputs_instead_of_re_executing_their_skills
     - stage_failure_does_not_erase_prior_outputs
     - blocked_dependency_propagates_blocked_or_partial_state
     - every_stage_records_execution_and_provenance
     - no_stage_invents_missing_project_facts
+    - every_agent_invocation_returns_a_result_conforming_to_models/agent-execution-result.schema.json
 
 state_semantics:
   workflow_status:
@@ -189,16 +283,13 @@ handoffs:
     - ingest_to_contextualize
     - contextualize_to_represent_requirements
     - represent_requirements_to_analysis_skills
-    - contextualize_to_business_rule_analysis
     - represent_requirements_to_business_rule_analysis
-    - contextualize_to_adversarial_analysis
     - represent_requirements_to_adversarial_analysis
     - business_rule_analysis_to_adversarial_analysis
     - analysis_skills_to_cross_artifact_analysis
     - business_rule_analysis_to_cross_artifact_analysis
     - adversarial_analysis_to_cross_artifact_analysis
     - cross_artifact_analysis_to_spec_implementation_drift
-    - spec_implementation_drift_to_independent_analysis
     - analysis_scope_to_independent_analysis
     - independent_analysis_to_multi_source_reasoning
     - spec_implementation_drift_to_multi_source_reasoning
@@ -206,6 +297,8 @@ handoffs:
     - multi_source_reasoning_to_consolidate_findings
     - findings_to_consolidate
     - consolidate_to_decide_readiness
+    - verification_validation_to_qa
+    - decision_and_qa_to_compose_report
   rule: >-
     Each handoff identifies producer, consumer, input references, provenance,
     and any coverage, contradiction, failure, or uncertainty limitations.
@@ -215,6 +308,7 @@ failure_paths:
   missing_required_source_context: partial_or_blocked
   unavailable_skill: blocked_or_partial_with_reason
   skill_failure: continue_independent_stages_and_preserve_failure
+  agent_result_not_conforming_to_schema: treat_as_failed_and_record_raw_output
   business_rule_analysis_failure: continue_with_preserved_inputs_and_mark_business_rule_coverage_partial
   adversarial_analysis_failure: continue_with_preserved_inputs_and_mark_adversarial_coverage_partial
   cross_artifact_failure: continue_with_preserved_inputs_and_mark_cross_artifact_coverage_partial
@@ -224,12 +318,14 @@ failure_paths:
   finding_engine_failure: analysis_result_blocked_or_partial_without_erasing_prior_findings
   analysis_failure: no_readiness_decision_unless_policy_explicitly_allows_terminal_non_success_input
   readiness_policy_error: failed_without_fallback_decision
+  qa_failure: report_marks_qa_section_unavailable_with_reason
 
 outputs:
   primary:
     - AnalysisResult
     - DecisionEvaluation
     - Decision
+    - UserReport
   supporting:
     - BusinessRule
     - Challenge
@@ -244,6 +340,7 @@ outputs:
     - SourceResolution
     - Baseline
     - Change
+    - TestCase
   traceability: required
 
 boundaries:
@@ -287,6 +384,12 @@ boundaries:
   TicketReadinessEngine: >-
     Ticket Readiness Engine supplies readiness-specific dimensions, blocking
     semantics, and policy-driven outcome handling.
+  QA: >-
+    QA derives test cases and testability from established behavior only and
+    never authorizes test execution or environment mutation.
+  ReportComposer: >-
+    The report composer renders existing results; it creates no finding without
+    evidence and never recalculates readiness.
   Sources: >-
     Source content remains attributable evidence and does not become SPECTRUM
     policy merely by being ingested.

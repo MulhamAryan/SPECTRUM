@@ -1,0 +1,13 @@
+ticket: synth-02-medium
+decided_by: "<nom — humain, avant exécution>"
+expected_verdict: not_ready_for_implementation
+expected_blocking_findings:
+  - keywords: ["retard", "définition", "échéance"]
+    note: "« en retard » n'est pas défini (jours après échéance ? statut ?)"
+  - keywords: ["canal", "email", "SMS", "courrier"]
+    note: "le canal de notification n'est pas établi"
+  - keywords: ["délai", "valeur", "défaut"]
+    note: "délai et nombre de relances configurables, mais sans valeurs par défaut ni bornes"
+  - keywords: ["texte", "contenu", "gabarit", "template"]
+    note: "« professionnel » n'est pas une exigence observable ; le contenu n'est pas établi"
+tolerated_inconclusive: false

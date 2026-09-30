@@ -116,7 +116,7 @@ Une affirmation issue d'une simple recherche textuelle doit rester identifiable 
 ## Handoff
 Vers :
 - `requirements-context` si le résultat dépend d'un contexte métier ou d'une condition d'applicabilité absente ;
-- `multi-source-context` ou `multi-source-reasoning` lorsqu'il existe plusieurs sources ou versions à confronter ;
+- le stage `multi_source_reasoning` (moteur `spectrum-multi-source-reasoning`) lorsqu'il existe plusieurs sources ou versions à confronter ;
 - `verification-analysis` lorsque la divergence porte sur la base de vérification ;
 - `validation-analysis` lorsque le désalignement concerne la validation au niveau ensemble ;
 - `finding-engine` pour consolidation ;
@@ -138,29 +138,6 @@ Vers :
 - Ne pas résoudre silencieusement une contradiction.
 - Ne pas créer de score global de cohérence.
 
-## References
-- `models/canonical-data-model.yaml`
-- `models/finding-model.yaml`
-- `models/evidence-model.yaml`
-- `models/skill-execution-contract.yaml`
-- `models/cross-artifact-analysis.yaml`
-- `evaluation/contracts/cross-artifact-analysis.yaml`
-- `evaluation/cases/cross-artifact-analysis.yaml`
+## Référence
 
-## Evaluation
-Vérifier au minimum :
-- cohérence sémantique ;
-- correspondance de champs ;
-- terminologie et mappings de représentation ;
-- alignement des conditions et contraintes ;
-- alignement avec les critères d'acceptation ;
-- traçabilité ;
-- différences de version ;
-- différences de temporalité ;
-- différences d'applicabilité ;
-- relations un-à-plusieurs ;
-- champs calculés ;
-- faux positifs dus à une absence de match textuel ;
-- preuves insuffisantes ;
-- contradictions conservées ;
-- absence de décision globale générée par le Skill.
+Critères d'évaluation et sources détaillées : `REFERENCE.md` dans ce dossier (non chargé à l'exécution).

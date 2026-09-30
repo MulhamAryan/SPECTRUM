@@ -1,3 +1,10 @@
+---
+name: business-rule-analysis
+description: Identifier et évaluer les règles métier explicites d'un périmètre — applicabilité, conditions, exceptions, portée temporelle, traçabilité, cohérence — sans en inventer le contenu.
+type: component
+role: analysis
+---
+
 # Skill — Analyse des règles métier
 
 ## Objectif
@@ -146,7 +153,7 @@ Transmettre les résultats vers :
 - `cross-artifact-analysis` pour confronter règles et autres artefacts ;
 - `verification-analysis` lorsque la règle possède une base de vérification explicite ;
 - `validation-analysis` lorsque la règle dépend d'un contexte d'usage ou d'un résultat attendu ;
-- `multi-source-context` / `multi-source-reasoning` pour comparer des sources attribuables ;
+- le stage `multi_source_reasoning` (moteur `spectrum-multi-source-reasoning`) pour comparer des sources attribuables ;
 - `finding-engine` pour la consolidation ;
 - `ticket-readiness` uniquement via le workflow et sa politique explicite.
 
@@ -161,20 +168,6 @@ Transmettre les résultats vers :
 - attribuer une priorité non fournie ;
 - supprimer une contradiction pour obtenir une sortie cohérente.
 
-## Critères d'évaluation
-
-Une exécution correcte doit :
-
-- conserver l'identité et la provenance des règles ;
-- distinguer règle, exigence et contrainte technique ;
-- préserver conditions, exceptions et temporalité lorsqu'elles sont connues ;
-- ne pas confondre ambiguïté et contradiction ;
-- ne pas confondre absence de correspondance et absence de règle ;
-- conserver les conflits entre sources ;
-- produire des findings traçables ;
-- être reproductible à entrées et configuration équivalentes ;
-- ne produire aucune décision de readiness.
-
 ## Non-objectifs
 
 Cette Skill ne :
@@ -185,3 +178,7 @@ Cette Skill ne :
 - ne déduit pas des règles métier non étayées ;
 - ne réalise pas à elle seule l'analyse exhaustive d'une implémentation ;
 - ne remplace pas `Cross-Artifact Analysis`, `Multi-Source Reasoning`, `Finding Engine` ou `Decision Engine`.
+
+## Référence
+
+Critères d'évaluation et sources détaillées : `REFERENCE.md` dans ce dossier (non chargé à l'exécution).

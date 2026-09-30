@@ -1,12 +1,15 @@
-version: 1
+version: 2
 name: agent-orchestration
 purpose: >-
-  Define the executable orchestration contract for SPECTRUM specialized agents.
-  This model turns the agent registry and Agent→Skill contract into an
-  explicit execution graph.
+  Principles, routing conditions and failure policy for SPECTRUM specialized
+  agents. This model NO LONGER defines an execution graph: the graph (stages,
+  agents, phases, dependencies, parallel groups, profiles) lives exclusively in
+  workflows/ticket-analysis.yaml and is executed following
+  core/orchestration-procedure.md.
 
 principles:
-  supervisor_is_scheduler: true
+  orchestrator_is_the_slash_command_in_main_conversation: true
+  there_is_no_supervisor_agent: true
   agent_is_execution_boundary: true
   skill_is_atomic_analysis_unit: true
   parallel_only_when_dependencies_are_satisfied: true
@@ -14,47 +17,33 @@ principles:
   no_silent_result_loss: true
   no_agent_global_readiness: true
   no_external_mutation: true
+  every_agent_result_is_schema_validated: true
 
 invocation:
   mechanism: Task
-  rule: >-
-    The supervisor invokes each selected specialized agent through the Claude
-    Code Task mechanism using the agent definition identified by the registry.
+  invoked_by: orchestrator
   required_context:
     - analysis_id
+    - profile
+    - stage_ids
     - target_refs
     - source_refs
     - available_artifact_refs
-    - prior_execution_refs
-    - applicable_workflow_stage
-    - agent_registry_entry
-    - agent_skill_contract
+    - required_upstream_results_only
+    - report_language
   required_agent_behavior:
-    - load_own_agent_definition
-    - load_registry_entry
-    - load_agent_skill_contract
+    - load_core_agent_brief
     - load_each_selected_skill_before_use
     - follow_skill_procedure
-    - return_structured_execution_result
+    - return_single_yaml_block_conforming_to_agent_execution_result_schema
     - preserve_evidence_and_finding_refs
   isolation:
-    independent_analysis:
-      must_use_distinct_execution_context: true
-      must_not_read_primary_agent_conclusions_before_own_analysis: true
+    independent-reviewer:
+      receives_no_conclusion_from_other_agents: true
+      comparison_is_done_by_orchestrator_after_return: true
 
 execution_result:
-  required_fields:
-    - execution_id
-    - agent_id
-    - status
-    - selected_skill_executions
-    - observations
-    - findings
-    - evidence_refs
-    - uncertainty_refs
-    - handoff_refs
-    - limitations
-    - provenance
+  schema: models/agent-execution-result.schema.json
   allowed_statuses:
     - completed
     - completed_with_findings
@@ -63,64 +52,29 @@ execution_result:
     - failed
     - not_applicable
 
-phases:
-  - id: contextualize
-    agents:
-      - requirement-analyst
-    parallel: false
-  - id: primary_analysis
-    parallel: true
-    agents:
-      - requirement-analyst
-      - business-rule-analyst
-      - verification-validation-analyst
-      - lifecycle-change-analyst
-  - id: adversarial_and_consistency
-    parallel: true
-    agents:
-      - adversarial-analyst
-      - consistency-analyst
-    depends_on:
-      - primary_analysis
-  - id: implementation_and_independent
-    parallel: true
-    agents:
-      - implementation-reviewer
-      - independent-reviewer
-    depends_on:
-      - adversarial_and_consistency
-  - id: qa
-    agents:
-      - qa-analyst
-    depends_on:
-      - primary_analysis
-      - adversarial_and_consistency
-      - implementation_and_independent
-  - id: consolidation
-    agents:
-      - report-composer
-    depends_on:
-      - primary_analysis
-      - adversarial_and_consistency
-      - implementation_and_independent
-      - qa
-
 routing:
-  implementation-reviewer:
-    required_when:
-      - implementation_artifacts_available
-      - implementation_evidence_requested
+  context-analyst:
+    required_when: [always]
+  requirement-analyst:
+    required_when: [always]
+  verification-validation-analyst:
+    required_when: [profile_is_standard_or_full]
+  lifecycle-change-analyst:
+    required_when: [profile_is_standard_or_full, lifecycle_or_change_context_applicable]
+  business-rule-analyst:
+    required_when: [profile_is_standard_or_full]
+  adversarial-analyst:
+    required_when: [always]
   consistency-analyst:
-    required_when:
-      - two_or_more_comparable_artifacts_available
+    required_when: [two_or_more_comparable_artifacts_available]
+  implementation-reviewer:
+    required_when: [implementation_artifacts_available]
   independent-reviewer:
-    required_when:
-      - independent_analysis_requested
-      - workflow_policy_requires_second_opinion
+    required_when: [profile_is_full, independent_analysis_requested, workflow_policy_requires_second_opinion]
   qa-analyst:
-    required_when:
-      - ticket_analysis_requested
-      - test_review_requested
+    required_when: [always]
+  report-composer:
+    required_when: [always]
 
 handoffs:
   explicit_only: true
@@ -136,10 +90,12 @@ failure_policy:
   on_required_agent_failure: mark_downstream_stage_blocked_when_dependency_is_material
   on_skill_failure: do_not_simulate_success
   on_missing_context: emit_gap_or_blocked_status
+  on_non_conforming_agent_output: mark_failed_and_keep_raw_output
 
 completion:
-  ready_for_consolidation_only_when:
+  ready_for_report_only_when:
     - all_material_selected_agents_have_returned
     - all_required_skill_failures_are_recorded
     - all_handoffs_are_recorded
     - all_findings_and_evidence_are_traceable
+    - readiness_decision_exists_or_its_absence_is_explained

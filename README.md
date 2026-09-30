@@ -59,7 +59,9 @@ Revue des frontières de sécurité et des permissions :
 
 La commande d'analyse complète orchestre les compétences et agents spécialisés disponibles, puis consolide les preuves, constats et éléments de décision dans un rapport utilisateur en français.
 
-Les capacités internes couvrent notamment l'analyse des exigences, la vérification et validation, les règles métier, l'analyse adversariale, la comparaison entre artefacts, l'analyse des écarts entre spécification et implémentation, l'analyse indépendante, le raisonnement multi-sources et la préparation au développement.
+Les capacités internes couvrent l'analyse des exigences (INCOSE GtWR v4), la vérification et validation, les règles métier, l'analyse adversariale, la comparaison entre artefacts, l'analyse des écarts entre spécification et implémentation, l'analyse indépendante, le raisonnement multi-sources, la revue QA et la préparation au développement.
+
+La branche ISO/IEC/IEEE 29148 n'est **pas** active dans le plugin : elle est conservée dans `experimental/` (voir son README) tant que son utilité n'est pas démontrée sur des tickets réels.
 
 ## Agents
 
@@ -84,9 +86,13 @@ Aucune écriture Jira ou GitHub n'est effectuée automatiquement. Toute écritur
 
 Les contrats sont disponibles dans `integrations/`.
 
+## Profils
+
+`/spectrum:analyze-ticket <ticket> --profile=quick|standard|full [--lang=fr]` — `quick` : tri rapide, 3 agents, politique agile ; `standard` (défaut) : couverture complète sans seconde analyse ; `full` : avec seconde analyse indépendante isolée.
+
 ## Structure du dépôt
 
-- `core/` — fondations d'orchestration
+- `core/` — procédure d'orchestration et brief agent
 - `knowledge/` — connaissances de référence
 - `rules/` — règles et contrôles
 - `skills/` — compétences réutilisables
@@ -96,7 +102,10 @@ Les contrats sont disponibles dans `integrations/`.
 - `evidence/` — preuves et traçabilité
 - `decisions/` — logique de décision
 - `outputs/` — contrats et formats de rapport
-- `evaluation/` — évaluations et cas de test
+- `evaluation/` — invariants (structurels → `scripts/validate.py`, comportementaux → `examples/`)
+- `examples/` — jeu de tickets de référence et scoring
+- `experimental/` — matériel non branché (branche ISO 29148)
+- `hooks/`, `scripts/` — garde-fou lecture seule, validateur, scoring
 - `governance/` — gouvernance et provenance
 - `policies/` — politiques configurables
 - `integrations/` — contrats d'intégration externes
@@ -105,10 +114,16 @@ Les contrats sont disponibles dans `integrations/`.
 
 SPECTRUM est conçu pour analyser sans mutation par défaut. L'analyse, un constat, un verdict, un plan d'action, un cas de test ou une revue QA ne constitue jamais une autorisation d'écriture.
 
-## Intégrations d'agents
+## Plateforme
 
-SPECTRUM reste aussi agnostique que possible vis-à-vis de la plateforme d'agent.
+SPECTRUM est un plugin **Claude Code** (`.claude-plugin/`, `hooks/`, `commands/`, `agents/`, `skills/`). Il n'y a pas de support d'autre plateforme pour l'instant : les manifestes Gemini et `.agents/` placeholders ont été retirés jusqu'à ce qu'une intégration existe réellement.
 
-- Claude Code : `.claude-plugin/`
-- Interopérabilité Agent Skills : `.agents/`
-- Gemini CLI : `gemini-extension.json` et `.gemini/`
+## Garanties mécaniques
+
+- `hooks/hooks.json` rend la lecture seule effective pendant toute commande `/spectrum:` (voir `scripts/README.md`).
+- `scripts/validate.py` vérifie la cohérence structurelle du plugin ; la CI l'exécute à chaque push.
+- Chaque agent retourne un résultat conforme à `models/agent-execution-result.schema.json`.
+
+## Mesurer avant d'étendre
+
+`examples/` contient le jeu de tickets de référence et `scripts/score-examples.py` compare les rapports produits aux attentes humaines. C'est là que se décide toute évolution de politique ou de skill. Voir `CONTRIBUTING.md`.

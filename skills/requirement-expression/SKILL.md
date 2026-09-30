@@ -66,10 +66,6 @@ Vers `verification-analysis` et le workflow.
 ## Non-goals
 Ne pas inventer une valeur cible ; ne pas décider READY ; ne pas transformer automatiquement un finding en réécriture métier.
 
-## References
-- `ISO/IEC/IEEE 29148:2018`
-- `ISO29148-R003`
-- `rules/sources/iso-iec-ieee-29148-2018/rules.yaml`
+## Référence
 
-## Evaluation
-Tester : exigence claire, terme vague, valeur manquante, ambiguïté contextuelle, exigence composée, régression.
+Critères d'évaluation et sources détaillées : `REFERENCE.md` dans ce dossier (non chargé à l'exécution).

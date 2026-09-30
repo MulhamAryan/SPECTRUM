@@ -12,7 +12,7 @@ tools:
 
 ## Autorité d'exécution
 
-Consulte `${CLAUDE_PLUGIN_ROOT}/agents/registry.yaml` et `${CLAUDE_PLUGIN_ROOT}/models/agent-skill-contract.yaml` avant toute analyse.
+Charge `${CLAUDE_PLUGIN_ROOT}/core/agent-brief.md` avant toute analyse et respecte son format de retour.
 
 ## Skill obligatoire
 

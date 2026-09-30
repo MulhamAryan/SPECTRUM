@@ -1,6 +1,11 @@
 report:
   id: ticket-analysis-report
-  version: 1
+  version: 2
+  language: report_language (default fr)
+  identifiers:
+    body: short readable ids — C-nn (constat), A-nn (action), T-nn (test), Q-nn (question)
+    annex: technical refs (FND-, EV-, OBS-, execution_id, stage) mapped from short ids
+    rule: a finding without evidence in the annex is not rendered as a finding
   purpose: >-
     Define the minimum user-facing report produced by SPECTRUM after ticket
     analysis. The report combines readiness diagnosis with operational direction,
@@ -86,7 +91,26 @@ sections:
       related_refs: finding, dimension, or test references
     rule: questions must be actionable and traceable.
 
+  execution:
+    required: true
+    fields:
+      profile: quick | standard | full
+      agents_invoked: list with status per agent
+      stages_not_applicable: list with the reason (condition not met)
+      failures: list of failed stages/agents with reason — never omitted
+      blocked_actions: write actions blocked by the read-only guard, if any
+    rule: the reader must be able to see what actually ran; a failure hidden here is a contract violation.
+
+  traceability_annex:
+    required: true
+    fields:
+      short_id: C-nn | A-nn | T-nn | Q-nn
+      technical_refs: FND-/OBS-/EV- ids, execution_id, stage, skill
+      evidence_excerpt: exact excerpt with source and location
+    rule: every short id used in the body appears here once.
+
 traceability:
+  short_id_to_technical_ref: required
   direction_to_findings: required
   action_to_finding_or_requirement: required
   test_to_requirement_or_acceptance_basis: required

@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/MulhamAryan/SPECTRUM/models/agent-execution-result.schema.json",
+  "title": "SPECTRUM agent execution result",
+  "description": "Single YAML/JSON block that every specialized agent must return to the orchestrator. The orchestrator rejects any result that does not conform.",
+  "type": "object",
+  "required": ["execution_id", "agent_id", "stage_ids", "status", "skill_executions", "observations", "findings", "evidence_refs", "handoffs", "limitations", "provenance"],
+  "additionalProperties": false,
+  "properties": {
+    "execution_id": {"type": "string", "minLength": 1},
+    "agent_id": {"type": "string", "enum": ["context-analyst", "requirement-analyst", "verification-validation-analyst", "lifecycle-change-analyst", "business-rule-analyst", "adversarial-analyst", "consistency-analyst", "implementation-reviewer", "independent-reviewer", "qa-analyst", "report-composer"]},
+    "stage_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "status": {"type": "string", "enum": ["completed", "completed_with_findings", "completed_with_gaps", "blocked", "failed", "not_applicable"]},
+    "skill_executions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["skill_id", "status", "preconditions_met"],
+        "properties": {
+          "skill_id": {"type": "string"},
+          "status": {"type": "string", "enum": ["completed", "completed_with_findings", "completed_with_gaps", "blocked", "failed", "not_applicable"]},
+          "preconditions_met": {"type": "boolean"},
+          "input_refs": {"type": "array", "items": {"type": "string"}},
+          "output_refs": {"type": "array", "items": {"type": "string"}},
+          "reason": {"type": "string"}
+        }
+      }
+    },
+    "observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "statement", "evidence_refs"],
+        "properties": {
+          "id": {"type": "string"},
+          "statement": {"type": "string"},
+          "evidence_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "skill_id": {"type": "string"}
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "severity_hint", "statement", "evidence_refs"],
+        "properties": {
+          "id": {"type": "string"},
+          "type": {"type": "string"},
+          "severity_hint": {"type": "string", "enum": ["blocking_candidate", "clarification", "observation"]},
+          "statement": {"type": "string"},
+          "evidence_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "dimension_hint": {"type": "string"},
+          "uncertainty": {"type": "string"}
+        }
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "source", "excerpt"],
+        "properties": {
+          "id": {"type": "string"},
+          "source": {"type": "string"},
+          "location": {"type": "string"},
+          "excerpt": {"type": "string"}
+        }
+      }
+    },
+    "uncertainties": {"type": "array", "items": {"type": "string"}},
+    "handoffs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["to", "reason", "input_refs"],
+        "properties": {
+          "to": {"type": "string"},
+          "reason": {"type": "string"},
+          "input_refs": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "provenance": {
+      "type": "object",
+      "required": ["agent_definition", "skills_loaded"],
+      "properties": {
+        "agent_definition": {"type": "string"},
+        "skills_loaded": {"type": "array", "items": {"type": "string"}},
+        "model": {"type": "string"}
+      }
+    },
+    "stage_specific": {"type": "object", "description": "Free-form stage payload (e.g. test_cases for qa-analyst, independent_analysis for independent-reviewer, drift_assessments for implementation-reviewer)."}
+  }
+}

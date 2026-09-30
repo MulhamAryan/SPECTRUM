@@ -1,6 +1,6 @@
 ---
 description: Analyser une spécification avec les artefacts GitHub disponibles, en lecture seule.
-argument-hint: [dépôt-ou-chemin-ou-demande]
+argument-hint: "[dépôt-ou-chemin-ou-demande]"
 ---
 
 # SPECTRUM — Analyse depuis GitHub

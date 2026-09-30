@@ -1,3 +1,10 @@
+---
+name: independent-analysis
+description: Produire une seconde analyse isolée et comparable d'un périmètre déjà analysé, puis une comparaison traçable où l'accord n'est pas la vérité et le désaccord n'est pas une preuve d'erreur.
+type: component
+role: analysis
+---
+
 # Skill — Analyse indépendante
 
 ## Objectif
@@ -144,20 +151,6 @@ Transmettre les résultats vers :
 - comparer des analyses de versions ou périmètres différents sans le déclarer ;
 - donner à l'analyse indépendante une autorité de décision.
 
-## Critères d'évaluation
-
-Une exécution correcte doit :
-
-- déclarer l'identité et la frontière d'indépendance ;
-- préserver les entrées et leur provenance ;
-- ne pas hériter silencieusement de conclusions antérieures ;
-- produire des observations et findings traçables ;
-- distinguer accord, divergence et inconclusivité ;
-- conserver les différences de version et de périmètre ;
-- préserver les conflits non résolus ;
-- être reproductible avec la même configuration et les mêmes entrées ;
-- ne produire aucune décision de readiness.
-
 ## Non-objectifs
 
 Cette Skill ne :
@@ -168,3 +161,7 @@ Cette Skill ne :
 - ne crée pas de politique de décision ;
 - ne réécrit pas les analyses ou sources précédentes ;
 - ne fournit pas un score global de confiance ou de qualité.
+
+## Référence
+
+Critères d'évaluation et sources détaillées : `REFERENCE.md` dans ce dossier (non chargé à l'exécution).

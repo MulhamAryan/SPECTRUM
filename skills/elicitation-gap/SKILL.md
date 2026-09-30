@@ -66,10 +66,6 @@ Transmettre au workflow pour influencer la sélection des analyses et l'évaluat
 ## Non-goals
 Ne pas conduire l'entretien d'élicitation, ne pas inventer une réponse, ne pas choisir arbitrairement entre sources contradictoires.
 
-## References
-- `ISO/IEC/IEEE 29148:2018`
-- `ISO29148-R007`
-- `rules/sources/iso-iec-ieee-29148-2018/rules.yaml`
+## Référence
 
-## Evaluation
-Tester : gap réellement absent, information trouvée ailleurs, information partielle, contradiction, faux positif d'absence, régression.
+Critères d'évaluation et sources détaillées : `REFERENCE.md` dans ce dossier (non chargé à l'exécution).

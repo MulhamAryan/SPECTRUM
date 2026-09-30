@@ -1,3 +1,10 @@
+---
+name: adversarial-requirement-analysis
+description: Soumettre exigences, règles métier, contextes et scénarios à des défis structurés (hypothèses implicites, cas limites, exceptions, transitions d'état, échecs, frontières d'autorisation) pour révéler gaps et contradictions sans promouvoir une hypothèse en fait.
+type: component
+role: analysis
+---
+
 # Skill — Analyse adversariale des exigences
 
 ## Objectif
@@ -136,7 +143,7 @@ Transmettre les résultats vers :
 - `cross-artifact-analysis` pour confronter les divergences révélées avec d'autres artefacts ;
 - `verification-analysis` lorsqu'une vérification du comportement est explicitement définie ;
 - `validation-analysis` lorsqu'un résultat attendu ou un contexte utilisateur est concerné ;
-- `multi-source-context` / `multi-source-reasoning` pour comparer des informations attribuables ;
+- le stage `multi_source_reasoning` (moteur `spectrum-multi-source-reasoning`) pour comparer des informations attribuables ;
 - `finding-engine` pour consolidation ;
 - `ticket-readiness` uniquement via le workflow et sa politique explicite.
 
@@ -152,15 +159,6 @@ Cette Skill ne :
 - ne réécrit pas les sources ou exigences ;
 - ne choisit pas silencieusement entre des règles contradictoires.
 
-## Critères d'évaluation
+## Référence
 
-Une exécution correcte doit :
-
-- couvrir uniquement les catégories déclarées et applicables ;
-- conserver les hypothèses comme hypothèses lorsqu'elles ne sont pas établies ;
-- distinguer gap, incertitude et contradiction ;
-- conserver la temporalité et le périmètre ;
-- éviter les faux positifs liés aux cas limites ;
-- produire des findings traçables ;
-- être reproductible à entrées et configuration équivalentes ;
-- ne produire aucune décision de readiness.
+Critères d'évaluation et sources détaillées : `REFERENCE.md` dans ce dossier (non chargé à l'exécution).

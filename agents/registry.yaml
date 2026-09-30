@@ -1,19 +1,38 @@
-version: 1
+version: 2
 name: spectrum-agent-registry
 purpose: >-
-  Registry of specialized SPECTRUM agents, their mandatory Skills, optional Skills,
-  inputs, outputs, handoffs and boundaries.
+  Registry of specialized SPECTRUM agents, the workflow stages they execute, their
+  mandatory and optional Skills, outputs and forbidden decisions. Agents load
+  core/agent-brief.md, not this file; the orchestrator uses this registry to
+  build Task prompts and to validate returned skill_executions.
 
 agents:
-  requirement-analyst:
-    mission: Expliquer et contrôler la qualité, le contexte et les relations des exigences.
+  context-analyst:
+    mission: Établir le contexte, les parties prenantes, les entités, les contraintes et les scénarios, puis représenter les exigences et leurs attributs.
+    stages: [contextualize, represent_requirements]
     required_skills:
-      - requirement-expression
-      - requirement-statement-quality
       - requirements-context
       - requirement-relationship-traceability
-      - requirement-set-quality
+      - requirement-expression
       - requirements-attribute-management
+    optional_skills:
+      - elicitation-gap
+    outputs:
+      - context
+      - requirement_representations
+      - attribute_observations
+      - findings
+      - evidence_refs
+    forbidden_decisions:
+      - global_readiness
+      - requirement_quality_verdict
+
+  requirement-analyst:
+    mission: Contrôler la qualité des exigences individuelles et des ensembles d'exigences.
+    stages: [analyze_requirements]
+    required_skills:
+      - requirement-statement-quality
+      - requirement-set-quality
     optional_skills:
       - elicitation-gap
     outputs:
@@ -27,6 +46,7 @@ agents:
 
   business-rule-analyst:
     mission: Identifier et analyser les règles métier explicites sans inventer leur contenu.
+    stages: [analyze_business_rules]
     required_skills:
       - business-rule-analysis
     optional_skills: []
@@ -41,6 +61,7 @@ agents:
 
   verification-validation-analyst:
     mission: Examiner la vérifiabilité, la validation et la base d'acceptation établie.
+    stages: [analyze_verification_validation]
     required_skills:
       - verification-analysis
       - validation-analysis
@@ -56,6 +77,7 @@ agents:
 
   lifecycle-change-analyst:
     mission: Examiner les relations, attributs, baselines et changements applicables au ticket.
+    stages: [analyze_lifecycle_change]
     required_skills:
       - baseline-change-management
       - requirements-attribute-management
@@ -71,6 +93,7 @@ agents:
 
   adversarial-analyst:
     mission: Mettre les exigences à l'épreuve avec des défis traçables et applicables.
+    stages: [analyze_adversarial_requirements]
     required_skills:
       - adversarial-requirement-analysis
     optional_skills:
@@ -85,6 +108,7 @@ agents:
 
   consistency-analyst:
     mission: Comparer plusieurs artefacts sans confondre différence de représentation et contradiction.
+    stages: [analyze_cross_artifacts]
     required_skills:
       - cross-artifact-analysis
     optional_skills:
@@ -98,6 +122,7 @@ agents:
 
   implementation-reviewer:
     mission: Examiner les écarts entre spécification fournie et implémentation fournie.
+    stages: [analyze_spec_implementation_drift]
     required_skills:
       - spec-implementation-drift-analysis
     optional_skills:
@@ -112,6 +137,7 @@ agents:
 
   independent-reviewer:
     mission: Produire une seconde analyse isolée et comparable avant toute consolidation.
+    stages: [analyze_independent]
     required_skills:
       - independent-analysis
     optional_skills:
@@ -127,25 +153,31 @@ agents:
       - truth_by_agreement
 
   qa-analyst:
-    mission: Déterminer la testabilité et produire les cas de test uniquement à partir du comportement établi.
+    mission: Déterminer la testabilité et produire les cas de test uniquement à partir du comportement établi, en consommant les résultats amont sans rejouer leurs Skills.
+    stages: [qa]
+    consumes_outputs_of:
+      - verification-validation-analyst
+      - adversarial-analyst
+      - business-rule-analyst
     required_skills:
-      - verification-analysis
-      - validation-analysis
       - requirement-relationship-traceability
     optional_skills:
-      - adversarial-requirement-analysis
-      - business-rule-analysis
+      - verification-analysis
+      - validation-analysis
+    optional_skills_rule: only when the corresponding upstream result is missing or failed
     outputs:
       - test_cases
       - testability_assessment
       - qa_blockers
       - regression_scope
+      - missing_inputs
     forbidden_decisions:
       - global_readiness
       - test_execution_without_permission
 
   report-composer:
     mission: Transformer les résultats analytiques en rapport utilisateur français et traçable.
+    stages: [compose_report]
     required_skills: []
     optional_skills: []
     outputs:

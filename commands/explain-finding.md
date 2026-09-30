@@ -1,6 +1,6 @@
 ---
 description: Expliquer un constat SPECTRUM avec ses preuves, son impact et la résolution attendue.
-argument-hint: [identifiant-du-constat]
+argument-hint: "[identifiant-du-constat]"
 ---
 
 # SPECTRUM — Explication d'un constat

@@ -1,0 +1,8 @@
+ticket: synth-01-good
+decided_by: "<nom — humain, avant exécution>"
+expected_verdict: ready_for_implementation
+expected_blocking_findings: []
+expected_clarifications_optional:
+  - keywords: ["fuseau", "date d'émission", "UTC"]
+    note: "la date d'émission n'a pas de fuseau ; acceptable en clarification, pas bloquant"
+tolerated_inconclusive: false
