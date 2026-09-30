@@ -2,6 +2,11 @@
 
 Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : SemVer.
 
+## [0.5.1] — 2026-09-30
+
+### Corrigé
+- `scripts/spectrum-guard.py` → `scripts/spectrum-guard.js` : le hook read-only échouait sur Windows (`python3` = stub Microsoft Store). Node est la seule dépendance garantie par Claude Code, portage à comportement identique. `hooks/hooks.json`, `scripts/test-guard.sh` et la CI mis à jour en conséquence.
+
 ## [0.5.0] — 2026-09-30
 
 Hardening release issue de l'audit du 30/09/2026 (branche `fix/hardening-plan`).
