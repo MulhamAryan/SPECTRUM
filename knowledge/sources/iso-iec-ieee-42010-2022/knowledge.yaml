@@ -1,0 +1,114 @@
+source:
+  id: iso-iec-ieee-42010-2022
+  title: "ISO/IEC/IEEE 42010:2022 — Software, systems and enterprise — Architecture description"
+  status: normative_reference
+  provenance: public_scope_statement_corroborated_by_multiple_public_listings
+  edition: 2022
+  publication: 2022-11
+  evidence_basis: >-
+    Direct fetch of the official ISO catalogue page (iso.org/standard/74393.html)
+    returned HTTP 403 in this session. The scope statement recorded below was
+    corroborated via public search-result snippets from independent listings
+    (ISO's own indexed summary, IEEE SA, ANSI/ITeh catalogue pages) that quote
+    the same scope text. This is a weaker evidence basis than direct OBP
+    browsing (contrast knowledge/sources/iso-iec-ieee-29148-2018/, which was
+    built from direct OBP table-of-contents access) and is explicitly flagged
+    as such throughout this file.
+  note: >-
+    Structured SPECTRUM knowledge derived only from publicly visible scope/
+    abstract text. This file paraphrases and structures public information; it
+    does not reproduce the copyrighted standard.
+
+scope_and_purpose:
+  role_in_spectrum: foundational_reference
+  provenance: public_scope_statement
+  public_scope_points:
+    - specifies_requirements_for_structure_and_expression_of_an_architecture_description_AD
+    - applies_to_software_systems_enterprises_systems_of_systems_families_of_systems_products_product_lines_service_lines_technologies_business_domains
+    - distinguishes_the_architecture_of_an_entity_of_interest_from_an_AD_expressing_that_architecture
+    - specifies_conformance_requirements_for_AD_ADF_ADL_architecture_viewpoint_and_model_kind
+  explicitly_out_of_scope:
+    - processes_by_which_an_AD_is_created_utilized_or_managed
+    - architecting_methods_models_notations_techniques_or_tools
+    - any_specific_format_or_media_for_recording_an_AD
+
+concepts_confirmed_from_public_scope:
+  - id: architecture_description
+    abbreviation: AD
+    evidence_basis: public_scope_statement
+  - id: architecture_description_framework
+    abbreviation: ADF
+    evidence_basis: public_scope_statement
+  - id: architecture_description_language
+    abbreviation: ADL
+    evidence_basis: public_scope_statement
+  - id: architecture_viewpoint
+    evidence_basis: public_scope_statement
+  - id: model_kind
+    evidence_basis: public_scope_statement
+  - id: entity_of_interest
+    evidence_basis: public_scope_statement
+  - id: conformance
+    evidence_basis: public_scope_statement
+
+concepts_widely_publicly_known_but_unverified_this_session:
+  status: UNVERIFIED
+  note: >-
+    The broader 42010 conceptual family (stakeholder, concern, view, viewpoint
+    correspondence, architecture rationale, architecture decision) is widely
+    documented in public secondary literature going back to the 42010:2011
+    edition and its predecessor IEEE 1471-2000. No direct fetch of the
+    2022 edition's own clause text was possible in this session (403 on the
+    ISO catalogue page). These concepts are therefore NOT treated as a verified
+    basis for any rule in rules/sources/iso-iec-ieee-42010-2022/rules.yaml and
+    are listed here only so a future session with verified access can complete
+    the extraction rather than silently omitting the gap.
+  candidate_concepts_pending_verification:
+    - stakeholder
+    - concern
+    - view
+    - viewpoint
+    - view_viewpoint_correspondence
+    - architecture_rationale
+    - architecture_decision
+
+architecture_mapping:
+  knowledge: true
+  rules: bounded_to_public_scope_statement_only
+  skills: informs_architecture-description_and_architecture-reconstruction
+  workflows: workflows/feature-documentation.yaml
+  agents: not_directly_defined_by_the_standard
+  data_model:
+    informed_by:
+      - architecture_elements
+      - architecture_views
+      - concerns
+      - architecture_decision_records
+  decision_logic: none
+  outputs: technical_documentation_layer
+  governance_provenance: required
+
+implementation_constraints:
+  - id: provenance_required
+    statement: >-
+      Every knowledge element derived from the standard must retain source
+      identity and an explicit evidence_basis distinguishing verified public
+      scope text from unverified prior general knowledge.
+  - id: no_normative_invention
+    statement: >-
+      SPECTRUM must not present a product interpretation (e.g. the SPECTRUM
+      Concern, ArchitectureView, or ArchitectureDecisionRecord canonical
+      entities) as an ISO requirement. These are SPECTRUM architecture choices
+      informed by, not dictated by, the standard.
+  - id: no_copyright_reproduction
+    statement: Do not reproduce the copyrighted standard in the repository.
+  - id: version_control
+    statement: >-
+      The source version (2022 edition) must remain explicit so a future
+      edition can be mapped separately.
+  - id: conformance_claim_control
+    statement: >-
+      Implementation of selected architecture-description practices must not
+      be represented as formal standard conformance without an explicit
+      assessment referencing the standard's own conformance clause (AD, ADF,
+      ADL, viewpoint, model kind conformance) — none of which SPECTRUM claims.

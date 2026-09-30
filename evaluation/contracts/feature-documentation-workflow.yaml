@@ -1,0 +1,62 @@
+workflow: feature-documentation
+contract_version: 1
+
+invariants:
+  - id: FDW-001
+    rule: workflow_has_explicit_feature_ref_input_and_version
+  - id: FDW-002
+    rule: every_stage_has_explicit_dependency_or_is_root_stage
+  - id: FDW-003
+    rule: stage_dependencies_form_an_acyclic_graph
+  - id: FDW-004
+    rule: each_stage_uses_declared_skill_or_is_the_renderer_stage
+  - id: FDW-005
+    rule: architecture_and_test_documentation_stages_may_run_in_parallel
+  - id: FDW-006
+    rule: no_stage_of_this_workflow_produces_Decision
+  - id: FDW-007
+    rule: this_workflow_is_never_invoked_by_and_never_invokes_workflows/ticket-analysis.yaml
+  - id: FDW-008
+    rule: absence_of_implementation_evidence_is_reported_as_absence_not_as_feature_does_not_exist
+  - id: FDW-009
+    rule: architecture_element_observed_derived_inferred_unknown_status_is_represented_via_existing_evidence_model_vocabulary
+  - id: FDW-010
+    rule: architecture_decision_record_without_explicit_rationale_carries_the_inferred_from_implementation_marker
+  - id: FDW-011
+    rule: ticket_intent_and_implementation_reality_divergence_is_preserved_not_silently_resolved
+  - id: FDW-012
+    rule: test_documentation_reports_only_tests_actually_present_never_invented
+  - id: FDW-013
+    rule: absence_of_test_evidence_is_not_automatically_qualified_as_a_defect
+  - id: FDW-014
+    rule: a_diagram_is_a_derived_representation_never_a_source_of_truth
+  - id: FDW-015
+    rule: documentation_composer_never_publishes_automatically_to_confluence_or_any_external_system
+  - id: FDW-016
+    rule: lifecycle_documentation_consolidates_by_reference_and_never_re_analyzes_upstream_evidence
+
+negative_controls:
+  - id: FDW-N001
+    reject: inject_a_new_stage_into_workflows/ticket-analysis.yaml_to_support_document_feature
+  - id: FDW-N002
+    reject: modify_agents/report-composer.md_or_models/reporting-pipeline.yaml_to_serve_this_workflow
+  - id: FDW-N003
+    reject: produce_a_readiness_or_policy_decision_from_this_workflow
+  - id: FDW-N004
+    reject: fabricate_an_architecture_element_or_relationship_absent_from_supplied_evidence
+  - id: FDW-N005
+    reject: fabricate_a_test_case_expected_result_or_coverage_percentage
+  - id: FDW-N006
+    reject: fabricate_a_rationale_for_an_undocumented_architecture_or_design_decision
+  - id: FDW-N007
+    reject: silently_resolve_a_contradiction_between_existing_documentation_and_observed_code
+  - id: FDW-N008
+    reject: claim_formal_conformance_to_iso_iec_ieee_42010_15289_29119_3_or_ieee_1016
+  - id: FDW-N009
+    reject: treat_a_migration_or_config_file_present_in_the_repository_as_proof_it_executed_in_an_environment
+  - id: FDW-N010
+    reject: publish_or_claim_to_have_published_the_rendered_document_to_confluence
+
+acceptance:
+  scope: feature_documentation_workflow_structure_independence_from_ticket_analysis_evidence_discipline_architecture_reconstruction_and_description_software_design_description_test_documentation_lifecycle_consolidation_and_composition_boundaries
+  source_semantics: delegated_to_skills_and_the_documentation_composer_agent

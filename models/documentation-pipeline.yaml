@@ -1,0 +1,125 @@
+version: 1
+name: spectrum-documentation-pipeline
+purpose: >-
+  Define the single reporting pipeline used by /spectrum:document-feature. This
+  pipeline is independent from models/reporting-pipeline.yaml (used exclusively
+  by /spectrum:analyze-ticket and its review-* subsets) and never renders a
+  ticket-readiness report or vice versa.
+
+independence:
+  from: models/reporting-pipeline.yaml
+  rule: >-
+    This file does not modify, extend, or compete with reporting-pipeline.yaml.
+    /spectrum:document-feature never produces a Decision, never runs
+    workflows/ticket-analysis.yaml, and is never invoked as part of
+    /spectrum:analyze-ticket.
+
+principles:
+  one_documentation_pipeline: true
+  documentation_is_a_composition_not_a_decision: true
+  documentation_composer_is_renderer: true
+  no_reanalysis_during_render: true
+  no_architecture_invention_during_render: true
+  user_output_in_report_language: true   # default fr, set by --lang
+  readable_short_ids_in_body: true        # AE-01, AV-01, AD-01, D-01, T-01, Q-01 — human-readable, stable within one document
+  technical_ids_only_in_traceability_annex: true
+  traceability_preserved: true
+
+input_contract:
+  required:
+    - command_id
+    - documentation_id
+    - feature_ref
+    - source_refs
+    - evidence_refs
+    - provenance
+  conditional:
+    architecture_view_refs: required_when_architecture_evidence_available
+    architecture_element_refs: required_when_architecture_evidence_available
+    technical_decision_refs: required_when_decision_evidence_available
+    verification_scenario_refs: required_when_verification_evidence_available
+    test_scenario_refs: required_when_test_evidence_available
+    diagram_artifact_refs: required_when_diagram_derivation_available
+
+normalization:
+  source: canonical_technical_documentation
+  operations:
+    - resolve_references
+    - preserve_provenance
+    - group_by_documentation_section
+    - resolve_display_labels
+    - map_machine_statuses_to_labels_in_report_language
+    - assign_short_readable_ids_and_keep_mapping_to_technical_refs
+    - validate_required_sections
+    - validate_traceability
+    - validate_permission_notice
+  forbidden:
+    - infer_missing_architecture_element
+    - infer_missing_design_element
+    - create_new_finding
+    - create_new_architecture_decision_record
+    - invent_rationale_when_undocumented
+    - invent_test_scenario
+    - recalculate_any_decision
+    - alter_source_evidence
+
+rendering:
+  renderer: documentation-composer
+  output_contract: outputs/technical-documentation-report.yaml
+  language: report_language   # from workflow input, default fr
+  status_icons: required
+  machine_values: hidden_in_body
+  short_ids: "AE-nn architecture elements, AV-nn architecture views, AD-nn architecture decisions, D-nn design elements, T-nn test scenarios, Q-nn open questions, L-nn known limitations"
+  technical_ids: annex_only   # canonical ids, execution_id, stage ids appear only in the Traceability annex
+  source_quotes: preserve_only_when_already_provided_and_authorized
+  target_format: >-
+    Confluence-ready structured Markdown. This pipeline produces the document
+    content only; it never publishes to Confluence or any external system.
+
+common_sections:
+  required:
+    - Resultat_SPECTRUM_Documentation
+    - Resume_executif
+    - Perimetre_et_exigences
+    - Architecture
+    - Conception_logicielle
+    - Verification_et_tests
+    - Limites_connues
+    - Questions_ouvertes
+    - Sources_consultees
+    - Execution
+    - Permission_securite
+    - Annexe_tracabilite
+  conditional:
+    - Vues_architecture
+    - Decisions_techniques
+    - Documentation_cycle_de_vie
+    - Diagrammes
+
+validation:
+  before_render:
+    - all_required_inputs_resolved_or_explicitly_unavailable
+    - every_architecture_element_has_evidence_or_explicit_uncertain_status
+    - every_architecture_decision_record_has_rationale_status
+    - every_displayed_test_has_requirement_or_observed_behavior_basis_or_is_marked_not_derivable
+  after_render:
+    - output_body_is_entirely_in_report_language
+    - no_machine_status_is_exposed
+    - no_technical_identifier_in_body_outside_the_traceability_annex
+    - every_short_id_in_body_resolves_in_the_traceability_annex
+    - execution_section_lists_profile_agents_not_applicable_stages_and_failures
+    - no_numeric_quality_score_is_added
+    - no_readiness_or_decision_verdict_is_rendered
+    - every_architecture_element_remains_traceable
+    - permission_notice_is_present
+
+failure_behavior:
+  unresolved_reference: report_generation_blocked_with_reason
+  invalid_input: report_generation_blocked_with_reason
+  validation_failure: do_not_render_as_success
+
+security:
+  mode: read_only_by_default
+  rendering_does_not_authorize_mutation: true
+  external_write_requires_explicit_user_permission: true
+  no_automatic_confluence_publication: true

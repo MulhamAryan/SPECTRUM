@@ -71,7 +71,9 @@ Recommended:
 - `attributes`;
 - `architecture_model`;
 - `prior_findings`;
-- `context_evidence`.
+- `context_evidence`;
+- `implementation_artifacts` (post-implementation context, e.g. `/spectrum:document-feature`);
+- `test_scenario_refs` (post-implementation context, `Scenario` with `scenario_kind: test_case`).
 
 ## Preconditions
 
@@ -193,7 +195,13 @@ Use the official NRM matrix as contextual source evidence for activities such as
 
 The official matrix establishes activity-to-characteristic relationships. It does not define a SPECTRUM traceability algorithm or score.
 
-### 10. Separate missing evidence from missing relation
+### 10. Extend the chain to implementation and test evidence (post-implementation context only)
+
+When `implementation_artifacts` and/or `test_scenario_refs` are supplied (e.g. by `/spectrum:document-feature`, never by the ticket-analysis workflow, which does not supply this input), extend the established `requirement → implementation` relation with a further `implementation → test` link when a test scenario explicitly exercises the same requirement or observed behavior.
+
+This is an additive use of the same relationship vocabulary (`traces_to`, `verifies`) already defined in the canonical data model — no new relationship type is introduced. Do not infer this link from naming similarity between a requirement and a test title alone; the test's assertions or fixtures must observably relate to the requirement's established behavior.
+
+### 11. Separate missing evidence from missing relation
 
 Distinguish:
 
@@ -205,7 +213,7 @@ Distinguish:
 
 Do not equate an absent matrix with an absent relationship.
 
-### 11. Produce evidence-backed findings
+### 12. Produce evidence-backed findings
 
 Each finding must identify:
 
@@ -265,6 +273,7 @@ Use specific findings such as:
 - `relationship_applicability_unresolved`
 - `source_alignment_not_established`
 - `transformation_evidence_insufficient`
+- `implementation_test_trace_missing` (post-implementation context only)
 
 ## Evidence
 
@@ -288,6 +297,7 @@ Results can feed:
 - `verification-analysis` where traceability is needed to establish a verification target;
 - `validation-analysis` where traceability is needed to establish the validation chain;
 - `elicitation-gap` when source, parent, peer, or interface evidence is missing.
+- `test-documentation` when a post-implementation implementation → test link is established or found missing (post-implementation context only).
 
 Handoffs preserve evidence references and interpretation level.
 

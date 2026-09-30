@@ -1,0 +1,87 @@
+source:
+  id: iso-iec-ieee-15289-2019
+  title: "ISO/IEC/IEEE 15289:2019 — Systems and software engineering — Content of life-cycle information items (documentation)"
+  status: normative_reference
+  provenance: public_scope_statement_corroborated_by_multiple_public_listings
+  edition: 2019
+  publication: 2019-07-23
+  evidence_basis: >-
+    Direct fetch of the official ISO catalogue page (iso.org/standard/74909.html)
+    returned HTTP 403 in this session. The scope statement recorded below was
+    corroborated via public search-result snippets from independent listings
+    (IEEE Xplore, IEEE SA, ANSI/ITeh catalogue pages) that quote the same scope
+    text. This is a weaker evidence basis than direct OBP browsing.
+  note: >-
+    Structured SPECTRUM knowledge derived only from publicly visible scope
+    text. This file paraphrases and structures public information; it does not
+    reproduce the copyrighted standard.
+
+scope_and_purpose:
+  role_in_spectrum: foundational_reference
+  provenance: public_scope_statement
+  public_scope_points:
+    - specifies_purpose_and_content_of_all_identified_systems_and_software_life_cycle_and_service_management_information_items
+    - generic_document_types_used_to_identify_information_necessary_to_support_processes_required_by_iso_iec_ieee_12207_2017_and_iso_iec_ieee_15288_2015
+    - provides_a_mapping_of_iso_iec_ieee_15288_2015_and_iso_iec_ieee_12207_2017_clauses_with_a_set_of_information_items
+    - information_items_may_be_combined_or_subdivided_as_needed_for_project_or_organizational_purposes
+
+generic_document_types_confirmed_from_public_scope:
+  source_basis: public_scope_statement
+  values:
+    - description
+    - plan
+    - policy
+    - procedure
+    - report
+    - request
+    - specification
+  note: >-
+    These 7 generic document types were explicitly present in the publicly
+    indexed scope text retrieved this session. Their detailed per-type
+    required-content rules (the standard's actual normative payload) were not
+    accessible and are not fabricated here.
+
+normative_references:
+  - id: iso-iec-ieee-12207-2017
+    title: Systems and software engineering — Software life cycle processes
+    role: normative_reference_of_15289
+  - id: iso-iec-ieee-15288-2015
+    title: Systems and software engineering — System life cycle processes
+    role: normative_reference_of_15289
+
+architecture_mapping:
+  knowledge: true
+  rules: bounded_to_public_scope_statement_only
+  skills: informs_lifecycle-documentation
+  workflows: workflows/feature-documentation.yaml
+  agents: not_directly_defined_by_the_standard
+  data_model:
+    informed_by:
+      - technical_documentation
+      - documentation_section_structure
+  decision_logic: none
+  outputs: technical_documentation_layer
+  governance_provenance: required
+
+implementation_constraints:
+  - id: provenance_required
+    statement: >-
+      Every knowledge element derived from the standard must retain source
+      identity and an explicit evidence_basis.
+  - id: no_normative_invention
+    statement: >-
+      SPECTRUM must not present its own TechnicalDocumentation section list
+      (22 sections, see outputs/technical-documentation-report.yaml) as
+      required by ISO/IEC/IEEE 15289 — it is a SPECTRUM architecture choice
+      only informed by the generic document-type vocabulary above.
+  - id: no_copyright_reproduction
+    statement: Do not reproduce the copyrighted standard in the repository.
+  - id: per_type_content_not_verified
+    statement: >-
+      The standard's actual per-document-type required-content rules (its
+      core normative payload) are UNVERIFIED in this session and are not used
+      as a basis for any rule in rules/sources/iso-iec-ieee-15289-2019/rules.yaml.
+  - id: conformance_claim_control
+    statement: >-
+      Implementation of a generic document-type vocabulary must not be
+      represented as formal standard conformance.

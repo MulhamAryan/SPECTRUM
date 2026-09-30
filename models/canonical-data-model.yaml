@@ -1,5 +1,5 @@
 model: spectrum-canonical-data-model
-version: 1
+version: 2
 interpretation_level: spectrum_architecture
 purpose: >-
   Define the canonical objects exchanged across SPECTRUM analysis, preserving
@@ -101,7 +101,8 @@ entities:
   Scenario:
     purpose: Explicit usage, lifecycle, verification, or validation situation.
     required: [id, type]
-    fields: [id, type, actors_refs, entity_refs, conditions, expected_outcomes, source_refs, evidence_refs]
+    fields: [id, type, actors_refs, entity_refs, conditions, expected_outcomes, source_refs, evidence_refs, scenario_kind]
+    scenario_kind_values: [usage, lifecycle, verification, validation, test_case, unknown]
 
   Relationship:
     purpose: Typed relation between identified objects.
@@ -190,6 +191,52 @@ entities:
     required: [id, type]
     fields: [id, type, name, uri, artifact_kind, source_refs, content_hash, version]
 
+  Concern:
+    purpose: Stakeholder concern relevant to an architecture description (ISO/IEC/IEEE 42010 concept of concern).
+    required: [id, type, stakeholder_refs, statement]
+    fields: [id, type, stakeholder_refs, statement, target_refs, source_refs, evidence_refs]
+
+  ArchitectureElement:
+    purpose: Architecture- or design-level element (component, module, service, interface, data store, external system) identified from evidence.
+    required: [id, type, element_kind]
+    fields: [id, type, name, element_kind, granularity, interface_refs, relationship_refs, observation_refs, source_refs, evidence_refs, rationale]
+    element_kind_values: [component, module, service, interface, data_store, external_system, unknown]
+    granularity_values: [architecture, design]
+    boundary: >-
+      An element's existence and role are established through Observation and
+      Evidence references, not asserted independently of them. Granularity
+      `architecture` corresponds to ISO/IEC/IEEE 42010 architecture-description
+      concepts; `design` corresponds to IEEE 1016 software-design-description
+      concepts. The two are not separate entities to avoid a parallel model.
+
+  ArchitectureView:
+    purpose: Architecture view produced for one or more stakeholder concerns under an explicit viewpoint.
+    required: [id, type, viewpoint, element_refs]
+    fields: [id, type, viewpoint, concern_refs, stakeholder_refs, element_refs, relationship_refs, source_refs, evidence_refs, rationale]
+
+  ArchitectureDecisionRecord:
+    purpose: Architecture- or design-level decision and its rationale, distinct from the canonical policy Decision.
+    required: [id, type, target_refs, rationale_status]
+    fields: [id, type, target_refs, statement, rationale, rationale_status, alternatives_considered, source_refs, evidence_refs]
+    rationale_status_values: [explicitly_documented, inferred_from_implementation, unknown]
+    boundary: >-
+      ArchitectureDecisionRecord is not the canonical Decision object defined
+      below. It never triggers, feeds, or substitutes for ticket-readiness
+      decision semantics, and is never produced by the ticket-analysis workflow.
+
+  TechnicalDocumentation:
+    purpose: Evidence-backed technical documentation composed for a feature or ticket, structured for Confluence-ready rendering.
+    required: [id, type, feature_ref, status]
+    fields: [id, type, feature_ref, scope_statement, requirement_refs, architecture_view_refs, architecture_element_refs, technical_decision_refs, constraint_refs, security_observation_refs, verification_scenario_refs, test_scenario_refs, deployment_artifact_refs, diagram_artifact_refs, known_limitation_refs, open_question_refs, traceability_relationship_refs, evidence_refs, status, provenance]
+    status_values: [completed, partial, blocked, inconclusive]
+    boundary: >-
+      TechnicalDocumentation is a rendered composition of existing
+      evidence-backed canonical objects (Requirement, ArchitectureElement,
+      ArchitectureView, ArchitectureDecisionRecord, Constraint, Observation,
+      Finding, Scenario, Artifact, Relationship, Evidence). It introduces no new
+      decision semantics, produces no Decision, and is never itself evidence
+      for a readiness outcome.
+
 provenance:
   required_fields: [origin, recorded_at]
   fields:
@@ -225,6 +272,10 @@ reference_integrity:
     - independent_analysis_execution_ref_must_resolve
     - opinion_primary_ref_must_resolve
     - opinion_independent_ref_must_resolve
+    - concern_stakeholder_refs_must_resolve
+    - architecture_view_element_refs_must_resolve
+    - architecture_decision_record_target_must_resolve
+    - technical_documentation_feature_ref_must_resolve
 
 status_semantics:
   observation: >-
@@ -248,6 +299,14 @@ status_semantics:
     it is not itself the readiness outcome.
   decision: >-
     Applies explicit policy/workflow semantics to findings. It must not be inferred merely from a Skill status.
+  architecture_decision_record: >-
+    Describes a recorded architecture/design decision and its rationale
+    documentation status; it is not the canonical policy Decision and creates
+    no readiness outcome.
+  technical_documentation: >-
+    Describes a rendered composition of already-established evidence-backed
+    objects; it does not itself establish new facts beyond what its referenced
+    objects already establish.
 
 source_boundary:
   INCOSE: >-

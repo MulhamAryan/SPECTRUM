@@ -1,0 +1,76 @@
+source:
+  id: ieee-1016-2009
+  title: "IEEE 1016-2009"
+  authority: IEEE
+  role: conceptual_reference_only
+  provenance: official_ieee_standards_association_page
+  normative_status: inactive_reserved
+  evidence_boundary: public_abstract_fetched_this_session
+
+purpose:
+  statement: >-
+    Ce catalogue définit des contrôles SPECTRUM dérivés uniquement du résumé
+    public récupéré directement depuis standards.ieee.org dans cette session.
+    IEEE 1016-2009 est Inactive-Reserved : aucune règle ici n'autorise une
+    affirmation de conformité.
+  distinction:
+    normative_source: IEEE 1016-2009
+    derived_control: SPECTRUM interpretation intended for implementation
+
+rule_schema:
+  id: identifiant_stable
+  source_section: section_publiquement_verifiee_ou_resume_public
+  basis: fondement_source
+  classification: type_de_controle
+  applicability: contexte_d_application
+  check: controle_observable
+  finding: resultat_si_controle_echoue
+  adaptation: interpretation_specifique_a_spectrum
+
+rules:
+  - id: IEEE1016-R001
+    source_section: public_abstract
+    basis: sdd_covers_reverse_engineering_context
+    classification: derived_control
+    applicability: software_design_description_analysis
+    check: >-
+      Lorsqu'une description de conception est produite à partir d'une
+      implémentation existante (et non rédigée a priori), SPECTRUM doit
+      marquer cette description comme dérivée/reconstruite, jamais comme une
+      conception d'origine.
+    finding: reconstructed_design_presented_as_original
+    adaptation: >-
+      software-design-description utilise le statut granularity=design avec
+      une provenance explicite « reconstruit depuis l'implémentation ».
+
+  - id: IEEE1016-R002
+    source_section: public_abstract
+    basis: standard_is_inactive_reserved
+    classification: governance_control
+    applicability: SPECTRUM_conformance_claims
+    check: >-
+      Aucun skill, agent ou document rendu ne doit affirmer que SPECTRUM est
+      « conforme à IEEE 1016 ».
+    finding: conformance_claim_on_inactive_standard
+    adaptation: >-
+      Toute mention de IEEE 1016 rappelle son statut Inactive-Reserved et son
+      usage strictement conceptuel.
+
+exclusions:
+  - id: IEEE1016-X001
+    subject: design_entity_attribute_view_decision_relationship_detailed_semantics
+    statement: >-
+      Le modèle de contenu détaillé de la norme est largement connu dans la
+      littérature secondaire mais non vérifié dans cette session au-delà du
+      résumé public ; il ne fonde aucune règle ci-dessus.
+
+coverage:
+  status: bounded_public_source
+  standard_text_coverage: abstract_only
+  reason: >-
+    Seul le résumé public de la page IEEE SA a été récupéré dans cette
+    session ; le texte normatif complet n'est pas accessible.
+  review_requirement: >-
+    Ce catalogue reste conceptuel et ne doit jamais devenir une base de
+    conformité, quel que soit l'accès futur, tant que le statut reste
+    Inactive-Reserved.

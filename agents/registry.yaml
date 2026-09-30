@@ -186,3 +186,90 @@ agents:
       - new_findings_without_evidence
       - readiness_recalculation
       - external_mutation
+
+  # --- Agents dédiés à /spectrum:document-feature (workflows/feature-documentation.yaml) ---
+  # Indépendants de /spectrum:analyze-ticket : aucune de ces entrées n'est référencée par
+  # un stage de workflows/ticket-analysis.yaml, et aucun agent ci-dessus n'est référencé
+  # par un stage de workflows/feature-documentation.yaml.
+
+  architecture-analyst:
+    mission: Reconstruire et décrire l'architecture d'une implémentation existante, et en dériver des diagrammes.
+    stages: [reconstruct_and_describe_architecture]
+    required_skills:
+      - architecture-reconstruction
+      - architecture-description
+      - architecture-diagram
+    optional_skills: []
+    outputs:
+      - architecture_elements
+      - architecture_views
+      - architecture_decision_records
+      - diagrams
+      - findings
+      - evidence_refs
+    forbidden_decisions:
+      - global_readiness
+
+  design-documentation-analyst:
+    mission: Produire une description de conception logicielle récupérée depuis une implémentation existante.
+    stages: [describe_software_design]
+    required_skills:
+      - software-design-description
+    optional_skills: []
+    outputs:
+      - design_elements
+      - design_decisions
+      - findings
+      - evidence_refs
+    forbidden_decisions:
+      - global_readiness
+
+  test-documentation-analyst:
+    mission: Documenter les preuves de test réellement présentes et leur traçabilité vers les exigences et l'implémentation.
+    stages: [document_tests]
+    required_skills:
+      - test-documentation
+    optional_skills:
+      - verification-analysis
+      - validation-analysis
+    optional_skills_rule: only when the corresponding upstream verification/validation basis is missing
+    outputs:
+      - test_scenarios
+      - traceability_chain
+      - findings
+      - evidence_refs
+    forbidden_decisions:
+      - global_readiness
+      - test_execution_without_permission
+
+  lifecycle-documentation-analyst:
+    mission: Consolider par référence les résultats amont en documentation technique canonique, sans réanalyse.
+    stages: [structure_lifecycle_documentation]
+    consumes_outputs_of:
+      - architecture-analyst
+      - design-documentation-analyst
+      - test-documentation-analyst
+    required_skills:
+      - lifecycle-documentation
+    optional_skills:
+      - requirement-relationship-traceability
+    outputs:
+      - technical_documentation
+      - findings
+      - evidence_refs
+    forbidden_decisions:
+      - global_readiness
+
+  documentation-composer:
+    mission: Transformer la documentation technique consolidée en document utilisateur français, traçable, prêt pour Confluence.
+    stages: [compose_technical_documentation]
+    required_skills: []
+    optional_skills: []
+    outputs:
+      - user_document
+    forbidden_decisions:
+      - global_readiness
+      - new_findings_without_evidence
+      - readiness_recalculation
+      - external_mutation
+      - automatic_confluence_publication

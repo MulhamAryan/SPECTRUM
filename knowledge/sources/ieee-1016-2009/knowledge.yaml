@@ -1,0 +1,93 @@
+source:
+  id: ieee-1016-2009
+  title: "IEEE Standard for Information Technology — Systems Design — Software Design Descriptions"
+  status: inactive_reserved
+  provenance: official_ieee_standards_association_page
+  edition: 2009
+  evidence_basis: >-
+    Directly fetched from standards.ieee.org/ieee/1016/4502/ in this session.
+    The IEEE Standards Association page itself states the current status as
+    "Inactive-Reserved Standard".
+  current_status_note: >-
+    IEEE lists this standard as Inactive-Reserved. SPECTRUM MUST NOT present
+    itself, any skill, or any generated document as "conformant to IEEE 1016"
+    — it is used strictly as a conceptual reference for software design
+    description content, not as an active standard SPECTRUM conforms to.
+  note: >-
+    Structured SPECTRUM knowledge derived only from the publicly fetched
+    abstract/scope text. This file paraphrases and structures public
+    information; it does not reproduce the copyrighted standard.
+
+scope_and_purpose:
+  role_in_spectrum: conceptual_reference_only
+  status_boundary: inactive_reserved_never_conformance_target
+  provenance: public_abstract_fetched_this_session
+  public_scope_points:
+    - describes_software_designs_and_establishes_information_content_and_organization_of_a_software_design_description_SDD
+    - covers_design_documentation_for_various_software_types_and_contexts_including_traditional_development_and_reverse_engineering
+    - applies_across_commercial_scientific_and_military_applications_without_restriction_based_on_size_or_complexity
+    - permits_diverse_media_formats_and_design_languages_while_establishing_selection_requirements_for_those_languages
+
+concepts_confirmed_from_public_abstract:
+  - id: software_design_description
+    abbreviation: SDD
+    evidence_basis: public_abstract_fetched_this_session
+  - id: reverse_engineering_derived_design_description
+    evidence_basis: public_abstract_fetched_this_session
+    note: >-
+      The abstract explicitly includes reverse engineering as a covered
+      context — directly relevant to SPECTRUM's architecture-reconstruction
+      and software-design-description skills, which recover design
+      descriptions from an existing implementation rather than author them
+      from scratch.
+
+concepts_widely_publicly_known_but_unverified_this_session:
+  status: UNVERIFIED
+  note: >-
+    IEEE 1016's detailed content model (design entities, design attributes,
+    design views, design decisions/rationale, design relationships) is widely
+    documented in public secondary literature. No direct fetch of the
+    standard's own clause text (beyond the abstract) was possible in this
+    session. These concepts are therefore NOT treated as a verified basis for
+    any rule in rules/sources/ieee-1016-2009/rules.yaml.
+  candidate_concepts_pending_verification:
+    - design_entity
+    - design_attribute
+    - design_view
+    - design_decision
+    - design_rationale
+    - design_relationship
+
+architecture_mapping:
+  knowledge: true
+  rules: bounded_to_public_abstract_only
+  skills: informs_software-design-description_and_architecture-reconstruction
+  workflows: workflows/feature-documentation.yaml
+  agents: not_directly_defined_by_the_standard
+  data_model:
+    informed_by:
+      - architecture_element_granularity_design
+      - architecture_decision_record
+  decision_logic: none
+  outputs: technical_documentation_layer
+  governance_provenance: required
+
+implementation_constraints:
+  - id: inactive_status_must_be_disclosed
+    statement: >-
+      Every reference to IEEE 1016 in a skill, agent, or rendered document must
+      disclose its Inactive-Reserved status and must never claim conformance.
+  - id: provenance_required
+    statement: >-
+      Every knowledge element derived from the standard must retain source
+      identity and an explicit evidence_basis.
+  - id: no_normative_invention
+    statement: >-
+      SPECTRUM must not present a product interpretation as an IEEE
+      requirement.
+  - id: no_copyright_reproduction
+    statement: Do not reproduce the copyrighted standard in the repository.
+  - id: conformance_claim_control
+    statement: >-
+      SPECTRUM never claims conformance to an inactive-reserved standard;
+      it uses it strictly as a conceptual reference, always disclosed.

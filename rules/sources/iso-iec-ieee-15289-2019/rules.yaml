@@ -1,0 +1,79 @@
+source:
+  id: iso-iec-ieee-15289-2019
+  title: "ISO/IEC/IEEE 15289:2019"
+  authority: ISO/IEC/IEEE
+  role: normative_reference
+  provenance: public_scope_statement_corroborated_by_multiple_public_listings
+  normative_status: published_standard
+  evidence_boundary: public_scope_statement_only
+
+purpose:
+  statement: >-
+    Ce catalogue définit des contrôles SPECTRUM dérivés uniquement de l'énoncé
+    de portée publiquement vérifié de l'ISO/IEC/IEEE 15289:2019. Le contenu
+    normatif réel (règles de contenu requis par type de document) n'est pas
+    accessible dans cette session et ne fonde aucune règle ci-dessous.
+  distinction:
+    normative_source: ISO/IEC/IEEE 15289:2019
+    derived_control: SPECTRUM interpretation intended for implementation
+
+rule_schema:
+  id: identifiant_stable
+  source_section: section_publiquement_verifiee_ou_portee_publique
+  basis: fondement_source
+  classification: type_de_controle
+  applicability: contexte_d_application
+  check: controle_observable
+  finding: resultat_si_controle_echoue
+  adaptation: interpretation_specifique_a_spectrum
+
+rules:
+  - id: ISO15289-R001
+    source_section: public_scope_statement
+    basis: generic_document_type_vocabulary
+    classification: derived_control
+    applicability: lifecycle_documentation_structuring
+    check: >-
+      Lorsqu'une section de documentation technique est produite, SPECTRUM
+      doit pouvoir la rattacher à l'un des 7 types génériques publiquement
+      confirmés (description, plan, policy, procedure, report, request,
+      specification) ou déclarer explicitement qu'aucun ne s'applique.
+    finding: document_type_unclassified
+    adaptation: >-
+      Ce rattachement est informatif (aide à la structuration), pas une
+      obligation normative vérifiée.
+
+  - id: ISO15289-R002
+    source_section: public_scope_statement
+    basis: information_items_may_be_combined_or_subdivided
+    classification: derived_control
+    applicability: technical_documentation_composition
+    check: >-
+      SPECTRUM ne doit pas imposer une découpe de sections rigide comme seule
+      structure valide ; la norme elle-même autorise la combinaison ou la
+      subdivision des éléments d'information selon le contexte du projet.
+    finding: rigid_section_structure_presented_as_mandatory
+    adaptation: >-
+      La structure à 22 sections de outputs/technical-documentation-report.yaml
+      est une convention SPECTRUM ; une section sans contenu établi indique
+      "Aucun changement pertinent détecté" plutôt que d'être supprimée ou
+      inventée.
+
+exclusions:
+  - id: ISO15289-X001
+    subject: per_document_type_required_content
+    statement: >-
+      Le contenu normatif réel (quel champ est obligatoire pour quel type de
+      document) n'est pas vérifié dans cette session et ne fonde aucune règle.
+
+coverage:
+  status: bounded_public_source
+  standard_text_coverage: not_exhaustive
+  reason: >-
+    Le fetch direct de la page ISO a échoué (HTTP 403) dans cette session ;
+    seul l'énoncé de portée, corroboré par des sources secondaires publiques
+    indépendantes, est disponible.
+  review_requirement: >-
+    Si un accès direct à la norme devient disponible pour SPECTRUM, ce
+    catalogue doit être ré-audité avant toute affirmation de couverture
+    supplémentaire.

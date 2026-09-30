@@ -1,0 +1,100 @@
+source:
+  id: iso-iec-ieee-29119-3-2021
+  title: "ISO/IEC/IEEE 29119-3:2021 — Software and systems engineering — Software testing — Part 3: Test documentation"
+  status: normative_reference
+  provenance: public_scope_statement_corroborated_by_multiple_public_listings
+  edition: 2021
+  publication: 2021
+  evidence_basis: >-
+    Direct fetch of the official ISO catalogue page (iso.org/standard/79429.html)
+    returned HTTP 403 in this session. The scope statement recorded below was
+    corroborated via public search-result snippets from independent listings
+    (SIS, ANSI, BSI/BSI Knowledge, Wikipedia's ISO/IEC 29119 article) that
+    quote or closely paraphrase the same scope text. This is a weaker evidence
+    basis than direct OBP browsing.
+  note: >-
+    Structured SPECTRUM knowledge derived only from publicly visible scope
+    text. This file paraphrases and structures public information; it does not
+    reproduce the copyrighted standard.
+
+scope_and_purpose:
+  role_in_spectrum: foundational_reference
+  provenance: public_scope_statement
+  public_scope_points:
+    - specifies_software_test_documentation_templates_usable_by_any_organization_project_or_testing_activity
+    - describes_test_documentation_that_is_an_output_of_the_processes_specified_in_iso_iec_ieee_29119_2
+    - applicable_to_testing_in_all_software_development_lifecycle_models
+    - supports_dynamic_testing_functional_and_non_functional_testing_manual_and_automated_testing_scripted_and_unscripted_testing
+  intended_audience_confirmed_from_public_scope:
+    - testers
+    - test_managers
+    - developers
+    - project_managers
+
+normative_references:
+  - id: iso-iec-ieee-29119-2
+    title: "Software and systems engineering — Software testing — Part 2: Test processes"
+    role: normative_reference_of_29119_3
+
+named_document_templates_pending_verification:
+  status: UNVERIFIED
+  note: >-
+    ISO/IEC/IEEE 29119-3 is widely publicly cited (secondary sources, training
+    curricula) as defining specific named test-documentation templates (e.g.
+    a test plan, test design specification, test case specification, test
+    procedure, test status/completion report, incident report). No direct
+    fetch of the standard's own template list was possible in this session
+    (403 on the ISO catalogue page; independent listings did not reproduce
+    the template names verbatim). These candidate names are recorded only so
+    a future session with verified access can complete the extraction; they
+    are NOT used as a basis for any rule in
+    rules/sources/iso-iec-ieee-29119-3-2021/rules.yaml and must not be
+    presented as confirmed standard content.
+  candidate_templates_pending_verification:
+    - test_policy
+    - test_strategy
+    - test_plan
+    - test_design_specification
+    - test_case_specification
+    - test_procedure_or_script
+    - test_data_requirements
+    - test_environment_requirements
+    - test_status_report
+    - test_completion_report
+    - incident_report
+
+architecture_mapping:
+  knowledge: true
+  rules: bounded_to_public_scope_statement_only
+  skills: informs_test-documentation
+  workflows: workflows/feature-documentation.yaml
+  agents: not_directly_defined_by_the_standard
+  data_model:
+    informed_by:
+      - scenario_kind_test_case
+      - test_scenario_refs_on_technical_documentation
+  decision_logic: none
+  outputs: technical_documentation_layer
+  governance_provenance: required
+
+implementation_constraints:
+  - id: provenance_required
+    statement: >-
+      Every knowledge element derived from the standard must retain source
+      identity and an explicit evidence_basis.
+  - id: no_normative_invention
+    statement: >-
+      SPECTRUM must not present its own test-documentation section structure
+      as the standard's named templates unless and until those templates are
+      independently verified against accessible normative text.
+  - id: no_copyright_reproduction
+    statement: Do not reproduce the copyrighted standard in the repository.
+  - id: no_test_fabrication
+    statement: >-
+      Test scenarios, expected results, and coverage claims must never be
+      invented; absence of test evidence is reported as absence, never filled
+      with a plausible-looking test case.
+  - id: conformance_claim_control
+    statement: >-
+      Implementation of a generic test-documentation structure must not be
+      represented as formal standard conformance.

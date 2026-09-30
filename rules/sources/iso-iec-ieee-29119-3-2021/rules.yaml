@@ -1,0 +1,79 @@
+source:
+  id: iso-iec-ieee-29119-3-2021
+  title: "ISO/IEC/IEEE 29119-3:2021"
+  authority: ISO/IEC/IEEE
+  role: normative_reference
+  provenance: public_scope_statement_corroborated_by_multiple_public_listings
+  normative_status: published_standard
+  evidence_boundary: public_scope_statement_only
+
+purpose:
+  statement: >-
+    Ce catalogue définit des contrôles SPECTRUM dérivés uniquement de l'énoncé
+    de portée publiquement vérifié de l'ISO/IEC/IEEE 29119-3:2021. Les noms de
+    templates spécifiques largement cités dans la littérature secondaire ne
+    sont pas vérifiés dans cette session et ne fondent aucune règle.
+  distinction:
+    normative_source: ISO/IEC/IEEE 29119-3:2021
+    derived_control: SPECTRUM interpretation intended for implementation
+
+rule_schema:
+  id: identifiant_stable
+  source_section: section_publiquement_verifiee_ou_portee_publique
+  basis: fondement_source
+  classification: type_de_controle
+  applicability: contexte_d_application
+  check: controle_observable
+  finding: resultat_si_controle_echoue
+  adaptation: interpretation_specifique_a_spectrum
+
+rules:
+  - id: ISO29119-3-R001
+    source_section: public_scope_statement
+    basis: test_documentation_is_an_output_of_test_processes
+    classification: derived_control
+    applicability: test_documentation_analysis
+    check: >-
+      SPECTRUM doit documenter un test uniquement comme le reflet de tests
+      réellement présents dans le dépôt (unitaires, intégration, API, E2E,
+      régression) et jamais comme un cas de test synthétisé pour compléter une
+      section.
+    finding: invented_test_case_or_expected_result
+    adaptation: >-
+      Une section de documentation sans test identifié indique explicitement
+      l'absence de preuve plutôt qu'un cas de test plausible.
+
+  - id: ISO29119-3-R002
+    source_section: public_scope_statement
+    basis: applicable_to_all_sdlc_models_and_testing_styles
+    classification: derived_control
+    applicability: test_documentation_scope
+    check: >-
+      SPECTRUM ne doit pas restreindre implicitement la documentation de test
+      à un seul style (ex. uniquement manuel, ou uniquement automatisé) quand
+      les preuves couvrent plusieurs styles.
+    finding: test_documentation_scope_artificially_narrowed
+    adaptation: >-
+      test-documentation couvre manuel/automatisé, scripté/non scripté,
+      fonctionnel/non fonctionnel selon ce que les preuves établissent.
+
+exclusions:
+  - id: ISO29119-3-X001
+    subject: named_document_templates
+    statement: >-
+      Les noms de templates (test plan, test case specification, incident
+      report, etc.) largement cités publiquement ne sont pas vérifiés dans
+      cette session et ne fondent aucune règle. Voir knowledge.yaml,
+      named_document_templates_pending_verification.
+
+coverage:
+  status: bounded_public_source
+  standard_text_coverage: not_exhaustive
+  reason: >-
+    Le fetch direct de la page ISO a échoué (HTTP 403) dans cette session ;
+    seul l'énoncé de portée, corroboré par des sources secondaires publiques
+    indépendantes, est disponible.
+  review_requirement: >-
+    Si un accès direct à la norme devient disponible pour SPECTRUM, ce
+    catalogue doit être ré-audité avant toute affirmation de couverture
+    supplémentaire.

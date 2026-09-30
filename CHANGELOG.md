@@ -2,6 +2,16 @@
 
 Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : SemVer.
 
+## [0.6.0] — 2026-09-30
+
+### Ajouté
+- `/spectrum:document-feature <ticket>` : documentation technique post-implémentation, prête pour Confluence, via un pipeline **indépendant** de `/spectrum:analyze-ticket` — `workflows/feature-documentation.yaml`, 5 agents dédiés (`architecture-analyst`, `design-documentation-analyst`, `test-documentation-analyst`, `lifecycle-documentation-analyst`, `documentation-composer`), `models/documentation-pipeline.yaml`, `outputs/technical-documentation-report.yaml`. Aucune modification de `workflows/ticket-analysis.yaml`, de ses agents ou de son registre.
+- 6 nouveaux skills : `architecture-description`, `architecture-reconstruction`, `software-design-description`, `lifecycle-documentation`, `test-documentation`, `architecture-diagram`, dérivés respectivement d'ISO/IEC/IEEE 42010:2022, IEEE 1016-2009 (*Inactive-Reserved*, référence conceptuelle uniquement), ISO/IEC/IEEE 15289:2019 et ISO/IEC/IEEE 29119-3:2021. `requirement-relationship-traceability` étendu (additif) pour la chaîne exigence → implémentation → test en contexte post-implémentation.
+- Sources normatives `knowledge/sources/` + `rules/sources/` pour les 4 nouvelles normes, avec `evidence_basis` explicite par élément (fetch direct ISO bloqué HTTP 403 dans cette session pour 3 des 4 ; corroboré par sources secondaires publiques indépendantes ; IEEE 1016 fetché directement).
+- Nouvelles entités canoniques (`models/canonical-data-model.yaml` v2) : `Concern`, `ArchitectureElement`, `ArchitectureView`, `ArchitectureDecisionRecord`, `TechnicalDocumentation` ; extension additive de `Scenario.scenario_kind`.
+- `scripts/validate.py` généralisé pour valider tout fichier `workflows/*.yaml` (au lieu du seul `ticket-analysis.yaml` en dur) ; l'obligation de `readiness_policy_ref` par profil ne s'applique qu'aux workflows qui produisent réellement une `Decision`.
+- `evaluation/cases/feature-documentation-workflow.yaml` + `evaluation/contracts/feature-documentation-workflow.yaml` (12 cas, 16 invariants, 10 contrôles négatifs) — invariants structurels couverts par `validate.py` ; invariants comportementaux **non encore** adossés à des tickets `examples/` (dette explicite, voir le rapport de livraison).
+
 ## [0.5.1] — 2026-09-30
 
 ### Corrigé
