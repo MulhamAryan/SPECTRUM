@@ -37,4 +37,6 @@ Minimum evaluation cases:
 - directionality_error;
 - absent_artifact_without_applicability_basis;
 - textual_similarity_false_positive;
-- correctness_not_inferred_from_link_presence.
+- correctness_not_inferred_from_link_presence;
+- implementation_to_test_link_established_from_observable_behavior_match (post-implementation context);
+- implementation_to_test_link_not_inferred_from_naming_similarity_alone (post-implementation context).

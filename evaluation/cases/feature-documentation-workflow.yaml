@@ -1,0 +1,51 @@
+workflow: feature-documentation
+
+cases:
+  - id: fdw-001
+    title: complete_evidence
+    input: ticket_with_matching_code_tests_and_git_history_all_cohesive
+    expected: technical_documentation_completed_with_traceable_elements_and_no_unresolved_gaps
+  - id: fdw-002
+    title: ticket_code_divergence
+    input: ticket_intent_and_observed_implementation_disagree_on_scope
+    expected: divergence_preserved_as_finding_and_open_question_not_silently_resolved
+  - id: fdw-003
+    title: missing_evidence
+    input: ticket_mentions_a_capability_with_no_corresponding_implementation_artifact_supplied
+    expected: documentation_reports_insufficient_evidence_not_feature_does_not_exist
+  - id: fdw-004
+    title: inferred_architecture
+    input: architecture_must_be_reconstructed_entirely_from_code_with_no_existing_documentation
+    expected: architecture_elements_marked_inferred_or_derived_with_explicit_rationale_where_applicable
+  - id: fdw-005
+    title: undocumented_decision
+    input: an_architecture_or_design_decision_is_evident_in_code_with_no_adr_or_comment_explaining_it
+    expected: architecture_decision_record_has_rationale_status_inferred_from_implementation_with_explicit_marker_text
+  - id: fdw-006
+    title: tests_absent
+    input: established_behavior_with_no_corresponding_test_file_in_supplied_scope
+    expected: test_evidence_absent_reported_without_inventing_a_test_case_or_qualifying_as_defect
+  - id: fdw-007
+    title: contradiction_between_sources
+    input: existing_architecture_documentation_and_observed_code_disagree_on_a_component_responsibility
+    expected: contradiction_preserved_in_known_limitations_not_resolved_in_favor_of_either_source
+  - id: fdw-008
+    title: independence_from_ticket_analysis
+    input: document_feature_invoked_without_ever_running_workflows/ticket-analysis.yaml
+    expected: feature_documentation_completes_and_produces_no_readiness_decision_or_policy_evaluation
+  - id: fdw-009
+    title: parallel_architecture_and_test_branches
+    input: implementation_artifacts_and_test_artifacts_both_supplied
+    expected: reconstruct_and_describe_architecture_and_document_tests_are_eligible_for_parallel_execution
+  - id: fdw-010
+    title: blocked_without_implementation
+    input: feature_ref_supplied_without_any_implementation_artifact
+    expected: architecture_and_test_documentation_stages_are_blocked_with_explicit_reason_not_analyzed_empty
+  - id: fdw-011
+    title: no_confluence_auto_publish
+    input: fully_completed_technical_documentation
+    expected: output_is_confluence_ready_content_only_no_external_publication_attempted_or_claimed
+  - id: fdw-012
+    title: reconstructed_design_marked
+    input: design_granularity_elements_recovered_from_implementation_with_no_prior_design_doc
+    expected: software_design_description_output_explicitly_marks_reconstruction_provenance

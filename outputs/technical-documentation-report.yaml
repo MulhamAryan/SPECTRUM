@@ -1,0 +1,125 @@
+report:
+  id: technical-documentation-report
+  version: 1
+  language: report_language (default fr)
+  identifiers:
+    body: short readable ids — AE-nn (architecture element), AV-nn (architecture view), AD-nn (architecture decision), D-nn (design element), T-nn (test scenario), Q-nn (open question), L-nn (known limitation)
+    annex: technical refs (canonical object ids, EV-, OBS-, execution_id, stage) mapped from short ids
+    rule: an element without evidence in the annex is not rendered as established
+  purpose: >-
+    Define the minimum Confluence-ready technical document produced by
+    /spectrum:document-feature after post-implementation analysis. Independent
+    of outputs/ticket-analysis-report.yaml: this contract never renders a
+    readiness verdict and is never produced by /spectrum:analyze-ticket.
+
+sections:
+  overview:
+    required: true
+    fields:
+      feature: identified feature/ticket reference
+      scope_statement: concise statement of what was analyzed
+      documentation_status: completed | partial | blocked | inconclusive
+    rule: overview never states a readiness verdict.
+
+  scope_and_requirements:
+    required: true
+    fields:
+      requirement_refs: established requirements/behavior relevant to the documented feature
+      unresolved_requirement_context: gaps explicitly carried over from source evidence
+    rule: requirements are consolidated by reference from upstream results, never re-derived here.
+
+  architecture:
+    required: true
+    fields:
+      architecture_elements: id, name, element_kind, granularity, status (observed|derived|inferred|unknown)
+      architecture_views: id, viewpoint, concerns, elements
+      relationships: from, to, relation_type, status
+    rules:
+      - every_element_has_evidence_or_explicit_uncertain_status
+      - no_element_without_a_view_or_direct_evidence_reference
+
+  architecture_decisions:
+    required: false
+    fields:
+      id: stable local decision identifier
+      statement: concise decision statement
+      rationale: exact text when explicitly documented
+      rationale_status: explicitly_documented | inferred_from_implementation | unknown
+    rules:
+      - inferred_rationale_always_carries_the_explicit_marker
+      - no_fabricated_rationale
+
+  software_design:
+    required: true
+    fields:
+      design_elements: id, name, element_kind, interfaces, dependencies
+      design_constraints: expression, source
+    rule: design elements reconstructed from implementation are marked as reconstructed, never presented as original design.
+
+  diagrams:
+    required: false
+    fields:
+      diagram_refs: artifact id, format, represented element/relationship refs
+    rule: a diagram never introduces an element or relationship absent from the underlying model.
+
+  verification_and_tests:
+    required: true
+    fields:
+      test_scenarios: id, type (unit|integration|api|e2e|regression), traceability_chain
+      test_evidence_absent_for: established behaviors without an identified test
+    rules:
+      - tests_are_derived_not_invented
+      - absence_of_test_not_qualified_as_defect_without_dedicated_analysis
+
+  known_limitations:
+    required: true
+    fields:
+      id: stable local limitation identifier
+      statement: concise limitation statement
+      basis: unresolved gap, contradiction, or unassessed scope this limitation stems from
+    rule: every limitation traces to a finding, gap, or explicit unassessed scope.
+
+  open_questions:
+    required: true
+    fields:
+      question: concise decision question
+      owner: product | analyst | developer | unknown
+      related_refs: element, decision, or finding references
+    rule: questions must be actionable and traceable.
+
+  sources_consulted:
+    required: true
+    fields:
+      source_refs: exact sources used across all upstream skills
+
+  execution:
+    required: true
+    fields:
+      profile: standard
+      agents_invoked: list with status per agent
+      stages_not_applicable: list with the reason (condition not met)
+      failures: list of failed stages/agents with reason — never omitted
+      blocked_actions: write or external-publication actions blocked by the read-only guard, if any
+    rule: the reader must be able to see what actually ran; a failure hidden here is a contract violation.
+
+  traceability_annex:
+    required: true
+    fields:
+      short_id: AE-nn | AV-nn | AD-nn | D-nn | T-nn | Q-nn | L-nn
+      technical_refs: canonical object ids, execution_id, stage, skill
+      evidence_excerpt: exact excerpt with source and location
+    rule: every short id used in the body appears here once.
+
+traceability:
+  short_id_to_technical_ref: required
+  architecture_element_to_evidence: required
+  design_element_to_evidence: required
+  test_scenario_to_requirement_or_observed_behavior: required
+  limitation_to_finding_or_gap: required
+  question_to_related_reference: required
+
+non_goals:
+  - no readiness verdict or score
+  - no invented architecture element, design element, decision rationale, or test case
+  - no replacement of the canonical TechnicalDocumentation, Evidence, or Finding models
+  - no automatic publication to Confluence or any external system

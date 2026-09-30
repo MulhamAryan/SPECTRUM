@@ -1,0 +1,102 @@
+source:
+  id: iso-iec-ieee-42010-2022
+  title: "ISO/IEC/IEEE 42010:2022"
+  authority: ISO/IEC/IEEE
+  role: normative_reference
+  provenance: public_scope_statement_corroborated_by_multiple_public_listings
+  normative_status: published_standard
+  evidence_boundary: public_scope_statement_only
+
+purpose:
+  statement: >-
+    Ce catalogue définit des contrôles SPECTRUM dérivés uniquement de l'énoncé
+    de portée publiquement vérifié de l'ISO/IEC/IEEE 42010:2022. Une règle de
+    ce fichier est un contrôle produit dérivé et ne constitue pas une citation
+    littérale ni une reproduction du texte intégral de la norme. La base de
+    preuve ici est plus étroite que pour ISO 29148 (pas d'accès direct à la
+    table des matières OBP dans cette session) ; aucune règle n'est dérivée
+    des concepts largement connus publiquement (stakeholder, concern, view,
+    viewpoint, rationale) car ils ne sont pas vérifiés dans cette session.
+  distinction:
+    normative_source: ISO/IEC/IEEE 42010:2022
+    derived_control: SPECTRUM interpretation intended for implementation
+
+rule_schema:
+  id: identifiant_stable
+  source_section: section_publiquement_verifiee_ou_portee_publique
+  basis: fondement_source
+  classification: type_de_controle
+  applicability: contexte_d_application
+  check: controle_observable
+  finding: resultat_si_controle_echoue
+  adaptation: interpretation_specifique_a_spectrum
+
+rules:
+  - id: ISO42010-R001
+    source_section: public_scope_statement
+    basis: architecture_description_vs_entity_architecture_distinction
+    classification: derived_control
+    applicability: architecture_description_analysis
+    check: >-
+      SPECTRUM doit distinguer explicitement l'architecture réelle d'une
+      entité (le système tel qu'implémenté) de la description d'architecture
+      (AD) que SPECTRUM produit à partir des preuves disponibles.
+    finding: architecture_description_conflated_with_entity_architecture
+    adaptation: >-
+      Une ArchitectureElement/ArchitectureView SPECTRUM est une description
+      dérivée de preuves, jamais présentée comme l'architecture elle-même.
+
+  - id: ISO42010-R002
+    source_section: public_scope_statement
+    basis: conformance_scope_for_AD_ADF_ADL_viewpoint_model_kind
+    classification: governance_control
+    applicability: SPECTRUM_conformance_claims
+    check: >-
+      Toute affirmation de conformité de SPECTRUM à la norme doit préciser son
+      périmètre exact (AD, ADF, ADL, viewpoint, ou model kind) ; une simple
+      implémentation de contrôles sélectionnés ne suffit pas à elle seule à
+      établir une conformité formelle.
+    finding: unsupported_conformance_claim
+    adaptation: >-
+      SPECTRUM ne revendique aujourd'hui aucune conformité formelle à cette
+      norme ; elle l'utilise comme référence conceptuelle.
+
+  - id: ISO42010-R003
+    source_section: public_scope_statement
+    basis: standard_does_not_specify_process_method_notation_or_format
+    classification: derived_control
+    applicability: architecture_reconstruction_analysis
+    check: >-
+      SPECTRUM ne doit pas présenter un format, une notation ou un outil
+      spécifique (ex. Mermaid) comme prescrit par la norme.
+    finding: notation_incorrectly_attributed_to_standard
+    adaptation: >-
+      Le choix de format de rendu (ex. diagrammes Mermaid) est une décision
+      d'implémentation SPECTRUM, documentée comme telle dans architecture-diagram.
+
+exclusions:
+  - id: ISO42010-X001
+    subject: stakeholder_concern_view_viewpoint_rationale_detailed_semantics
+    statement: >-
+      Ces concepts, bien que largement connus publiquement dans la littérature
+      secondaire, ne sont pas vérifiés dans cette session et ne fondent aucune
+      règle ci-dessus. Voir knowledge.yaml,
+      concepts_widely_publicly_known_but_unverified_this_session.
+  - id: ISO42010-X002
+    subject: spectrum_canonical_entities
+    statement: >-
+      Concern, ArchitectureElement, ArchitectureView et
+      ArchitectureDecisionRecord sont des entités canoniques SPECTRUM, pas des
+      catégories définies nommément par la norme.
+
+coverage:
+  status: bounded_public_source
+  standard_text_coverage: not_exhaustive
+  reason: >-
+    Le fetch direct de la page ISO a échoué (HTTP 403) dans cette session ;
+    seul l'énoncé de portée, corroboré par des sources secondaires publiques
+    indépendantes, est disponible.
+  review_requirement: >-
+    Si un accès direct à la norme devient disponible pour SPECTRUM, ce
+    catalogue doit être ré-audité avant toute affirmation de couverture
+    supplémentaire.

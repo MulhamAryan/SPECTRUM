@@ -163,16 +163,41 @@ def check_registry(skills: set[str], agents: set[str]) -> dict:
 
 
 # --------------------------------------------------------------------------- #
-# 4. Workflow graph
+# 4. Workflow graph(s)
 # --------------------------------------------------------------------------- #
 def check_workflow(skills: set[str], registry: dict) -> tuple[dict, set[str]]:
-    wf_path = ROOT / "workflows" / "ticket-analysis.yaml"
+    """Validate every workflows/*.yaml file independently and aggregate the
+    skills/agents they reach, so orphan detection and the "unused registry
+    agent" warning cover all workflows, not just ticket-analysis.yaml."""
+    all_wf: dict[str, dict] = {}
+    all_used_skills: set[str] = set()
+    all_used_agents: set[str] = set()
+    for wf_path in sorted((ROOT / "workflows").glob("*.yaml")):
+        wf, used_skills, used_agents = _validate_workflow_file(wf_path, skills, registry)
+        all_wf[wf_path.name] = wf
+        all_used_skills |= used_skills
+        all_used_agents |= used_agents
+
+    # registry agents unused by any workflow (checked once, across all files)
+    for agent in registry:
+        if agent not in all_used_agents:
+            warn(f"registry agent '{agent}' is not used by any workflow stage")
+
+    # no other file may define phases (checked once — independent of which workflow file)
+    orch = load_yaml(ROOT / "models" / "agent-orchestration.yaml") or {}
+    if "phases" in orch:
+        err("models/agent-orchestration.yaml defines 'phases' — the graph must live only in a workflow file")
+
+    return all_wf, all_used_skills
+
+
+def _validate_workflow_file(wf_path: Path, skills: set[str], registry: dict) -> tuple[dict, set[str], set[str]]:
     wf = load_yaml(wf_path) or {}
     meta = wf.get("workflow", {})
     if not meta.get("id") or not meta.get("version"):
         err("workflow: missing id or version", "TAW-001")
     covered("TAW-001")
-    if "ticket" not in (wf.get("inputs", {}).get("required") or []):
+    if meta.get("id") == "ticket-analysis" and "ticket" not in (wf.get("inputs", {}).get("required") or []):
         err("workflow: 'ticket' must be a required input", "TAW-001")
 
     stages = wf.get("stages", [])
@@ -210,7 +235,7 @@ def check_workflow(skills: set[str], registry: dict) -> tuple[dict, set[str]]:
                     err(f"workflow stage '{sid}': registry entry for '{agent}' does not list this stage")
         if "skills" in s and "engine" in s:
             err(f"workflow stage '{sid}': declares both skills and engine", "TAW-004")
-        if "skills" not in s and "engine" not in s and agent != "orchestrator" and sid not in ("qa", "compose_report", "ingest"):
+        if "skills" not in s and "engine" not in s and agent != "orchestrator" and sid not in ("qa", "compose_report", "ingest", "compose_technical_documentation"):
             err(f"workflow stage '{sid}': neither skills nor engine", "TAW-004")
         for sk in s.get("skills", []) or []:
             if sk not in skills:
@@ -293,15 +318,17 @@ def check_workflow(skills: set[str], registry: dict) -> tuple[dict, set[str]]:
     covered("TAW-005")
 
     # profiles
+    has_decision_stage = any("Decision" in (s.get("produces") or []) for s in stages)
     profiles = wf.get("profiles", {})
     if "default" not in profiles or profiles["default"] not in profiles:
         err("workflow: profiles.default must name an existing profile")
     for name, prof in profiles.items():
         if name == "default":
             continue
-        pol = prof.get("readiness_policy_ref")
-        if not pol or not (ROOT / pol).exists():
-            err(f"workflow profile '{name}': readiness policy '{pol}' not found", "TAW-013")
+        if has_decision_stage:
+            pol = prof.get("readiness_policy_ref")
+            if not pol or not (ROOT / pol).exists():
+                err(f"workflow profile '{name}': readiness policy '{pol}' not found", "TAW-013")
         st = prof.get("stages")
         if isinstance(st, list):
             for x in st:
@@ -314,16 +341,7 @@ def check_workflow(skills: set[str], registry: dict) -> tuple[dict, set[str]]:
                 err(f"workflow profile '{name}': unknown excluded stage '{x}'")
     covered("TAW-013")
 
-    # no other file may define phases
-    orch = load_yaml(ROOT / "models" / "agent-orchestration.yaml") or {}
-    if "phases" in orch:
-        err("models/agent-orchestration.yaml defines 'phases' — the graph must live only in the workflow")
-
-    # registry agents unused by workflow
-    for agent in registry:
-        if agent not in used_agents:
-            warn(f"registry agent '{agent}' is not used by any workflow stage")
-    return wf, used_skills
+    return wf, used_skills, used_agents
 
 
 # --------------------------------------------------------------------------- #
@@ -372,6 +390,7 @@ def check_misc() -> None:
         except Exception as exc:  # noqa: BLE001
             err(f"agent result schema: invalid JSON: {exc}")
     load_yaml(ROOT / "outputs" / "ticket-analysis-report.yaml")
+    load_yaml(ROOT / "outputs" / "technical-documentation-report.yaml")
     hooks = ROOT / "hooks" / "hooks.json"
     if not hooks.exists():
         err("missing hooks/hooks.json (read-only guard)")

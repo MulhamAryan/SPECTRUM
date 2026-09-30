@@ -1,0 +1,199 @@
+workflow:
+  id: feature-documentation
+  version: 1
+  interpretation_level: spectrum_workflow
+  purpose: >-
+    Orchestrate post-implementation technical-documentation generation for a
+    feature or ticket: architecture reconstruction and description, software
+    design description, test documentation, lifecycle documentation
+    consolidation, and Confluence-ready document composition.
+  authority: >-
+    This file is the SINGLE SOURCE OF TRUTH for the feature-documentation
+    execution graph. It is INDEPENDENT of workflows/ticket-analysis.yaml: it
+    does not modify, extend, or compete with that graph, is never invoked by
+    /spectrum:analyze-ticket or any review-* command, and produces no
+    Decision. Shared foundations (Evidence Model, Canonical Data Model,
+    provenance, traceability) are reused; the execution graph, stages, and
+    agents below are specific to this workflow.
+  executor: >-
+    The graph is executed by the orchestrator, i.e. the slash command itself
+    in the main Claude Code conversation, following
+    core/orchestration-procedure.md. Sub-agents cannot spawn sub-agents, so
+    there is no supervisor agent.
+
+inputs:
+  required:
+    - feature_ref
+  optional:
+    - implementation_artifacts
+    - existing_documentation
+    - report_language
+  provenance: required
+
+profiles:
+  default: standard
+  standard:
+    description: Full documentation coverage — architecture, design, tests, lifecycle consolidation, composition.
+    stages: all
+
+stages:
+  - id: ingest
+    phase: ingest
+    agent: orchestrator
+    purpose: establish feature reference, implementation artifacts, existing documentation, and provenance inputs
+    produces: [Ticket, Artifact, Evidence]
+    failure_behavior: preserve_inputs_and_stop_dependent_stages
+
+  - id: reconstruct_and_describe_architecture
+    phase: architecture
+    agent: architecture-analyst
+    purpose: reconstruct architecture elements and relationships from the supplied implementation, qualify them into concerns/views/decisions, and derive diagrams
+    depends_on: [ingest]
+    skills: [architecture-reconstruction, architecture-description, architecture-diagram]
+    produces: [ArchitectureElement, ArchitectureView, Concern, ArchitectureDecisionRecord, Relationship, Artifact, Observation, Finding]
+
+  - id: describe_software_design
+    phase: design
+    agent: design-documentation-analyst
+    purpose: describe design-granularity elements, interfaces, data, dependencies, interactions, constraints, and design decisions recovered from the implementation
+    depends_on: [reconstruct_and_describe_architecture]
+    skills: [software-design-description]
+    produces: [ArchitectureElement, ArchitectureDecisionRecord, Constraint, Observation, Finding]
+
+  - id: document_tests
+    phase: verification
+    agent: test-documentation-analyst
+    purpose: document tests actually present in the repository and their traceability to established requirements/behavior and implementation
+    depends_on: [ingest]
+    skills: [test-documentation]
+    produces: [Scenario, Relationship, Observation, Finding]
+
+  - id: structure_lifecycle_documentation
+    phase: consolidation
+    agent: lifecycle-documentation-analyst
+    purpose: consolidate upstream architecture, design, and test-documentation results by reference into the canonical TechnicalDocumentation object, without re-analysis
+    depends_on:
+      - describe_software_design
+      - document_tests
+    skills: [lifecycle-documentation]
+    produces: [TechnicalDocumentation]
+
+  - id: compose_technical_documentation
+    phase: report
+    agent: documentation-composer
+    purpose: transform TechnicalDocumentation into the Confluence-ready user-facing document defined by outputs/technical-documentation-report.yaml
+    depends_on: [structure_lifecycle_documentation]
+    produces: [UserDocument]
+
+execution_model:
+  orchestration: dependency_graph
+  executor: orchestrator_in_main_conversation_using_Task
+  parallelizable_groups:
+    - [reconstruct_and_describe_architecture, document_tests]
+  conditional_stages:
+    rule: >-
+      A stage with a `when` condition that is not satisfied is recorded with
+      status not_applicable. None of this workflow's stages currently declare
+      a `when` condition; all run whenever their dependencies resolve.
+  rules:
+    - dependencies_must_resolve_before_execution
+    - independent_stages_may_execute_in_parallel
+    - architecture_reconstruction_runs_before_software_design_description
+    - test_documentation_runs_independently_of_the_architecture_branch
+    - stage_failure_does_not_erase_prior_outputs
+    - blocked_dependency_propagates_blocked_or_partial_state
+    - every_stage_records_execution_and_provenance
+    - no_stage_invents_missing_project_facts
+    - every_agent_invocation_returns_a_result_conforming_to_models/agent-execution-result.schema.json
+    - no_stage_produces_Decision
+    - this_workflow_never_invokes_or_is_invoked_by_workflows/ticket-analysis.yaml
+
+state_semantics:
+  workflow_status:
+    - not_started
+    - running
+    - completed
+    - partial
+    - blocked
+    - failed
+  rules:
+    - workflow_status_is_execution_state_not_a_readiness_outcome
+    - this_workflow_produces_no_readiness_or_policy_decision
+
+handoffs:
+  required:
+    - ingest_to_architecture_reconstruction
+    - ingest_to_test_documentation
+    - architecture_reconstruction_to_software_design_description
+    - software_design_description_to_lifecycle_documentation
+    - test_documentation_to_lifecycle_documentation
+    - lifecycle_documentation_to_compose_technical_documentation
+  rule: >-
+    Each handoff identifies producer, consumer, input references, provenance,
+    and any coverage, contradiction, failure, or uncertainty limitations.
+
+failure_paths:
+  missing_feature_ref: blocked
+  missing_implementation_artifacts: partial_or_blocked_with_reason
+  unavailable_skill: blocked_or_partial_with_reason
+  skill_failure: continue_independent_stages_and_preserve_failure
+  agent_result_not_conforming_to_schema: treat_as_failed_and_record_raw_output
+  architecture_failure: continue_with_preserved_inputs_and_mark_architecture_coverage_partial
+  design_failure: continue_with_preserved_inputs_and_mark_design_coverage_partial
+  test_documentation_failure: continue_with_preserved_inputs_and_mark_test_coverage_partial
+  lifecycle_consolidation_failure: technical_documentation_blocked_or_partial_without_erasing_prior_outputs
+  composition_failure: no_document_rendered_without_fabricated_content
+
+outputs:
+  primary:
+    - TechnicalDocumentation
+    - UserDocument
+  supporting:
+    - ArchitectureElement
+    - ArchitectureView
+    - Concern
+    - ArchitectureDecisionRecord
+    - Relationship
+    - Scenario
+    - Constraint
+    - Observation
+    - Finding
+    - Evidence
+    - Artifact
+  traceability: required
+
+boundaries:
+  Skills: >-
+    Skills perform scoped analysis and produce observations/findings; they do
+    not orchestrate the workflow.
+  ArchitectureReconstruction: >-
+    Reconstructs elements and relationships strictly from supplied
+    implementation evidence; never infers runtime behavior not observable in
+    the evidence.
+  ArchitectureDescription: >-
+    Qualifies reconstructed elements into concerns, views, and architecture
+    decision records; never invents a stakeholder, concern, view, or
+    rationale.
+  ArchitectureDiagram: >-
+    Renders a derived representation of the already-validated architecture
+    model; never a source of truth and never adds a relationship for visual
+    completeness.
+  SoftwareDesignDescription: >-
+    Describes design-granularity elements recovered from implementation;
+    always marks reconstructed design as such (IEEE 1016 is Inactive-Reserved
+    and used as a conceptual reference only, never a conformance target).
+  TestDocumentation: >-
+    Documents only tests actually present in the repository; absence of test
+    evidence is reported as absence, never invented and never automatically
+    qualified as a defect.
+  LifecycleDocumentation: >-
+    Consolidates upstream results by reference into TechnicalDocumentation;
+    never re-analyzes code, tests, or architecture, and never resolves a
+    cross-source contradiction silently.
+  DocumentationComposer: >-
+    Renders the existing TechnicalDocumentation; creates no finding, decision,
+    test, or rationale during render, and never publishes automatically to
+    Confluence or any external system.
+  TicketAnalysisWorkflow: >-
+    workflows/ticket-analysis.yaml and this workflow are independent graphs.
+    Neither modifies, injects into, or is invoked by the other.

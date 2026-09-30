@@ -55,6 +55,12 @@ Revue des frontières de sécurité et des permissions :
 /spectrum:review-security <chemin-du-ticket-ou-texte>
 ```
 
+Documentation technique post-implémentation, prête pour Confluence :
+
+```text
+/spectrum:document-feature <chemin-du-ticket-ou-texte> [--implementation=chemin] [--lang=fr]
+```
+
 ## Fonctionnement
 
 La commande d'analyse complète orchestre les compétences et agents spécialisés disponibles, puis consolide les preuves, constats et éléments de décision dans un rapport utilisateur en français.
@@ -62,6 +68,10 @@ La commande d'analyse complète orchestre les compétences et agents spécialis�
 Les capacités internes couvrent l'analyse des exigences (INCOSE GtWR v4), la vérification et validation, les règles métier, l'analyse adversariale, la comparaison entre artefacts, l'analyse des écarts entre spécification et implémentation, l'analyse indépendante, le raisonnement multi-sources, la revue QA et la préparation au développement.
 
 La branche ISO/IEC/IEEE 29148 n'est **pas** active dans le plugin : elle est conservée dans `experimental/` (voir son README) tant que son utilité n'est pas démontrée sur des tickets réels.
+
+### Documentation technique post-implémentation
+
+`/spectrum:document-feature` est un pipeline **indépendant** de `/spectrum:analyze-ticket` : son propre graphe (`workflows/feature-documentation.yaml`), ses propres agents (`architecture-analyst`, `design-documentation-analyst`, `test-documentation-analyst`, `lifecycle-documentation-analyst`, `documentation-composer`) et son propre contrat de rendu (`outputs/technical-documentation-report.yaml`). Il documente une fonctionnalité déjà implémentée — architecture reconstruite et décrite (ISO/IEC/IEEE 42010), conception logicielle récupérée (IEEE 1016, norme *Inactive-Reserved*, référence conceptuelle uniquement), tests réellement présents (ISO/IEC/IEEE 29119-3) et documentation de cycle de vie (ISO/IEC/IEEE 15289) — et ne produit jamais de décision de préparation. Aucune modification de `/spectrum:analyze-ticket`, de son workflow, de ses agents ou de ses skills n'a été nécessaire ; seules les fondations partagées (Evidence Model, Canonical Data Model) sont réutilisées. Il ne publie jamais automatiquement vers Confluence ; il produit un contenu prêt à y être collé.
 
 ## Agents
 
