@@ -2,7 +2,7 @@
 # Self-test for scripts/spectrum-guard.py. Exit 0 = all assertions pass.
 set -u
 cd "$(dirname "$0")/.."
-G="python3 scripts/spectrum-guard.py"
+G="node scripts/spectrum-guard.js"
 SID="selftest-$$"
 fail=0
 assert() { local want=$1 got=$2 msg=$3; if [ "$want" != "$got" ]; then echo "FAIL: $msg (want exit $want, got $got)"; fail=1; else echo "ok:   $msg"; fi; }
