@@ -15,7 +15,7 @@ Hardening release issue de l'audit du 30/09/2026 (branche `fix/hardening-plan`).
 - Les 5 commandes de revue invoquaient « le superviseur » sans rien charger ; elles exécutent maintenant un sous-ensemble explicite du graphe.
 
 ### Ajouté
-- `hooks/hooks.json` + `scripts/spectrum-guard.py` : lecture seule **mécanique** pendant toute commande `/spectrum:` (Write/Edit, Bash à effet d'écriture, outils MCP de mutation bloqués). Auto-test `scripts/test-guard.sh`.
+- `hooks/hooks.json` + `scripts/spectrum-guard.js` : lecture seule **mécanique** pendant toute commande `/spectrum:` (Write/Edit, Bash à effet d'écriture, outils MCP de mutation bloqués). Auto-test `scripts/test-guard.sh`. Garde-fou en Node : c'est le seul script exécuté sur le poste de chaque utilisateur du plugin, et Node est la seule dépendance garantie par Claude Code (`python3` absent sur Windows, `python` absent sur macOS).
 - `scripts/validate.py` : invariants structurels exécutables (manifestes, frontmatter, registre ↔ workflow, DAG, skills autorisés, ordre des stages, isolation, groupes parallèles, profils, orphelins, politiques, schéma, hooks). CI `.github/workflows/validate.yml`.
 - `models/agent-execution-result.schema.json` : format de retour obligatoire de chaque agent, vérifié par l'orchestrateur.
 - `core/agent-brief.md` : remplace le chargement registre + contrat dans chaque agent.

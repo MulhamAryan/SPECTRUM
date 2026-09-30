@@ -31,6 +31,8 @@ python3 scripts/sync-version.py --check
 
 La CI rejoue les trois. Un commit qui casse le validateur n'est pas mergé.
 
+Le garde-fou (`scripts/spectrum-guard.js`) est écrit en Node parce que c'est le seul script exécuté sur le poste de chaque utilisateur du plugin, et Node est la seule dépendance garantie par Claude Code (`python3` absent sur Windows, `python` absent sur macOS).
+
 ## Ajouter ou modifier un stage
 
 1. Modifier `workflows/ticket-analysis.yaml` (stage, `agent`, `phase`, `depends_on`, `skills`/`engine`, `produces`, éventuel `when`).

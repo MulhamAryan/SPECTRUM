@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/spectrum-guard.py\" user-prompt-submit"
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/spectrum-guard.js\" user-prompt-submit"
           }
         ]
       }
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/spectrum-guard.py\" pre-tool-use"
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/spectrum-guard.js\" pre-tool-use"
           }
         ]
       }
@@ -26,7 +26,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/spectrum-guard.py\" stop"
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/spectrum-guard.js\" stop"
           }
         ]
       }
