@@ -2,6 +2,11 @@
 
 Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : SemVer.
 
+## [0.6.1] — 2026-10-01
+
+### Corrigé
+- `/spectrum:document-feature` : retour utilisateur réel après un premier run (trop d'inventaire mécanique, identifiants AE-/AD-/L- illisibles, sections méta « Sources consultées »/« Permission et sécurité » sans valeur, double énumération architecture/conception). Le document rendu est désormais en **prose narrative** : plus d'identifiants courts synthétiques ni d'annexe de traçabilité dans le corps, plus de sections méta sur le fonctionnement du pipeline, l'inventaire exhaustif passe en annexe repliable optionnelle. `software-design-description` n'ajoute que ce qu'`architecture-reconstruction`/`architecture-description` n'a pas déjà établi (fin de la duplication, gain de temps d'exécution). `outputs/technical-documentation-report.yaml` (v2) et `models/documentation-pipeline.yaml` (v2) réécrits en conséquence ; `narrative_relevant` ajouté (additif) à `ArchitectureElement`.
+
 ## [0.6.0] — 2026-09-30
 
 ### Ajouté

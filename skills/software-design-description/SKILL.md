@@ -49,9 +49,13 @@ Recommended:
 
 ## Procedure
 
-### 1. Confirmer les composants et modules
+### 0. Ne pas redécrire ce qu'architecture-description a déjà établi
 
-Pour chaque élément de granularité `design` : préserver son identité, son rôle observé, et les interfaces qu'il expose ou consomme (`element_kind: interface` comme élément séparé, relié par `interfaces_with`).
+Ce Skill n'énumère **jamais** à nouveau la liste des éléments déjà produite par `architecture-reconstruction`/`architecture-description`. Pour chaque élément de granularité `design`, vérifier d'abord s'il apporte une information **nouvelle** (signature exacte d'interface, type de donnée échangé, contrainte, décision) par rapport à ce qui est déjà couvert au niveau architecture. Si un élément n'apporte rien de nouveau à ce niveau de détail, ne pas produire d'entrée de conception pour lui — la duplication entre les deux niveaux est un défaut à éviter, pas une preuve de rigueur.
+
+### 1. Confirmer les composants et modules qui apportent une information nouvelle
+
+Pour chaque élément retenu à l'étape 0 : préserver son identité, son rôle observé, et les interfaces qu'il expose ou consomme (`element_kind: interface` comme élément séparé, relié par `interfaces_with`).
 
 ### 2. Documenter les données échangées
 
@@ -120,6 +124,7 @@ Ce Skill ne fait pas :
 - inventer un champ, une interface ou une contrainte non observée ;
 - affirmer une conformité IEEE 1016 ;
 - dupliquer l'analyse de dépendance déjà faite par `architecture-reconstruction` ;
+- redécrire un élément déjà couvert au niveau architecture sans information nouvelle ;
 - juger la qualité de la conception.
 
 ## Référence

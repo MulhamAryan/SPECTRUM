@@ -50,7 +50,9 @@ Cette commande ne publie jamais automatiquement vers Confluence ou tout autre sy
 
 ## Sortie obligatoire
 
-Le document est rendu par `documentation-composer` selon `outputs/technical-documentation-report.yaml`, dans la langue `report_language`, avec au minimum : aperçu, périmètre et exigences établies, architecture (éléments, vues, décisions), conception logicielle, diagrammes, vérification et tests, limites connues, questions ouvertes, sources consultées, exécution, permission/sécurité, annexe traçabilité.
+Le document est rendu par `documentation-composer` selon `outputs/technical-documentation-report.yaml`, dans la langue `report_language`. C'est une **page de documentation en prose**, pas un rapport de constats : résumé, architecture (racontée, pas tabulée), décisions techniques et points d'attention réels, vérification et tests, limites connues, questions ouvertes — avec, en option, une annexe repliable pour qui veut le catalogue exhaustif.
+
+Aucun identifiant court synthétique (AE-/AV-/AD-/D-/T-/Q-/L-), aucune annexe de traçabilité, aucune section « Sources consultées » ou « Permission et sécurité » dans le corps — ce sont des détails de fonctionnement du pipeline, pas du contenu sur la fonctionnalité. Un élément n'est nommé dans le corps que s'il éclaire une vue, une décision, un point d'attention ou une limite ; le reste va dans l'annexe optionnelle, jamais en remplissage du corps.
 
 Une section sans contenu établi indique explicitement « Aucun changement pertinent détecté » ou « Preuve insuffisante » — jamais un remplissage inventé.
 

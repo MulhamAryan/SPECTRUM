@@ -65,7 +65,11 @@ Une section sans contenu établi porte la mention explicite « Aucun changement 
 
 Si deux sources amont se contredisent (ex. documentation existante vs. code observé), préserver la contradiction dans `known_limitations`/`open_questions` — ne jamais la résoudre silencieusement en faveur de l'une.
 
-### 5. Ne jamais figer une structure Confluence rigide
+### 5. Distinguer ce qui mérite le corps du document de ce qui relève du catalogue
+
+Pour chaque `ArchitectureElement`/relation consolidé, déterminer s'il est référencé par une `ArchitectureView`, une `ArchitectureDecisionRecord`, un `Finding`, ou une limite connue. Marquer ceux qui le sont comme `narrative_relevant: true` ; les autres restent disponibles pour l'annexe de catalogue mais ne sont pas remontés comme contenu central. Ce marquage guide `documentation-composer` ; il ne supprime aucune donnée, il hiérarchise sa présentation.
+
+### 6. Ne jamais figer une structure Confluence rigide
 
 La combinaison ou la subdivision des sections reste possible selon le contexte du projet (ISO15289-R002) ; la structure de `outputs/technical-documentation-report.yaml` est une convention de rendu SPECTRUM, pas une exigence normative.
 
@@ -96,7 +100,7 @@ Ce Skill ne crée pas de nouvelle `Evidence` ; il propage les `evidence_refs` de
 
 ## Output
 
-Produire un objet `TechnicalDocumentation` (entité canonique) avec tous ses champs `*_refs` renseignés par référence, `status`, et `provenance`.
+Produire un objet `TechnicalDocumentation` (entité canonique) avec tous ses champs `*_refs` renseignés par référence, `status`, `provenance`, et le marquage `narrative_relevant` par élément (étape 5).
 
 ## Exit conditions
 

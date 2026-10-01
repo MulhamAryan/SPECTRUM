@@ -1,125 +1,112 @@
 report:
   id: technical-documentation-report
-  version: 1
+  version: 2
   language: report_language (default fr)
-  identifiers:
-    body: short readable ids — AE-nn (architecture element), AV-nn (architecture view), AD-nn (architecture decision), D-nn (design element), T-nn (test scenario), Q-nn (open question), L-nn (known limitation)
-    annex: technical refs (canonical object ids, EV-, OBS-, execution_id, stage) mapped from short ids
-    rule: an element without evidence in the annex is not rendered as established
   purpose: >-
-    Define the minimum Confluence-ready technical document produced by
-    /spectrum:document-feature after post-implementation analysis. Independent
-    of outputs/ticket-analysis-report.yaml: this contract never renders a
+    Define the Confluence-ready technical document produced by
+    /spectrum:document-feature after post-implementation analysis.
+    Narrative-first: the body reads like a normal technical documentation
+    page written by a person, explaining what was implemented and why.
+    Exhaustive per-element inventories are optional, collapsed annex
+    content — never the primary presentation. Independent of
+    outputs/ticket-analysis-report.yaml: this contract never renders a
     readiness verdict and is never produced by /spectrum:analyze-ticket.
 
-sections:
-  overview:
-    required: true
-    fields:
-      feature: identified feature/ticket reference
-      scope_statement: concise statement of what was analyzed
-      documentation_status: completed | partial | blocked | inconclusive
-    rule: overview never states a readiness verdict.
+presentation:
+  identifiers_in_body: none
+  rule: >-
+    Elements, decisions, and limitations are named in prose by their real
+    identifier (class/component/file/endpoint name) — never by a synthetic
+    short-id scheme (no AE-/AV-/AD-/D-/T-/Q-/L- codes) and never backed by a
+    separate traceability-annex mapping table. Evidence references
+    (canonical object ids, execution_id, stage, evidence excerpts) remain
+    attached to the underlying TechnicalDocumentation object for audit
+    purposes but are not rendered in the document body or as a visible annex
+    table.
+  narrative_vs_catalogue: >-
+    An element, relationship, or design detail is named in the body only
+    when it is referenced by a view, a decision, an attention point, a
+    limitation, or is otherwise necessary to understand the feature's shape.
+    Everything else that was established but does not meet this bar is
+    available only in the optional appendix_inventory section — it is never
+    padding in the main sections. architecture-analyst/design-documentation-analyst
+    establish the full technical inventory as data; this presentation layer,
+    informed by TechnicalDocumentation.*.narrative_relevant, decides what
+    surfaces in prose.
 
-  scope_and_requirements:
+sections:
+  summary:
     required: true
-    fields:
-      requirement_refs: established requirements/behavior relevant to the documented feature
-      unresolved_requirement_context: gaps explicitly carried over from source evidence
-    rule: requirements are consolidated by reference from upstream results, never re-derived here.
+    purpose: >-
+      What the feature does, for whom, and what was actually analyzed
+      (ticket-driven or reconstructed from implementation alone).
+    rule: 3-6 sentences, prose. No per-element listing here.
 
   architecture:
     required: true
-    fields:
-      architecture_elements: id, name, element_kind, granularity, status (observed|derived|inferred|unknown)
-      architecture_views: id, viewpoint, concerns, elements
-      relationships: from, to, relation_type, status
-    rules:
-      - every_element_has_evidence_or_explicit_uncertain_status
-      - no_element_without_a_view_or_direct_evidence_reference
+    purpose: >-
+      Narrative description of how the feature is structured end to end —
+      the components involved, how they call each other, and why that shape
+      exists — written as prose/short paragraphs organized around the
+      established views, not a per-element table.
+    rule: >-
+      Name only elements that matter to understanding the design (narrative_relevant).
+      Mark explicitly, in prose, anything whose status is derived/inferred/unknown
+      rather than directly observed.
 
-  architecture_decisions:
+  technical_decisions:
     required: false
-    fields:
-      id: stable local decision identifier
-      statement: concise decision statement
-      rationale: exact text when explicitly documented
-      rationale_status: explicitly_documented | inferred_from_implementation | unknown
-    rules:
-      - inferred_rationale_always_carries_the_explicit_marker
-      - no_fabricated_rationale
+    purpose: real, evidence-backed architecture/design decisions and their rationale.
+    rule: >-
+      no_fabricated_rationale; a decision without an explicitly documented
+      rationale says so in plain language ("justification déduite de
+      l'implémentation, aucune justification explicite trouvée"), never a
+      fabricated-sounding rationale.
 
-  software_design:
-    required: true
-    fields:
-      design_elements: id, name, element_kind, interfaces, dependencies
-      design_constraints: expression, source
-    rule: design elements reconstructed from implementation are marked as reconstructed, never presented as original design.
-
-  diagrams:
+  attention_points:
     required: false
-    fields:
-      diagram_refs: artifact id, format, represented element/relationship refs
-    rule: a diagram never introduces an element or relationship absent from the underlying model.
+    purpose: >-
+      Contradictions, risks, or unresolved divergences between what the
+      project declares (rules, existing documentation, ticket intent) and
+      what was actually observed in the implementation. This is the
+      analytically significant content of the document and should read as
+      such, not be buried among routine facts.
+    rule: every point here is evidence-backed, never invented or exaggerated.
 
   verification_and_tests:
     required: true
-    fields:
-      test_scenarios: id, type (unit|integration|api|e2e|regression), traceability_chain
-      test_evidence_absent_for: established behaviors without an identified test
-    rules:
-      - tests_are_derived_not_invented
-      - absence_of_test_not_qualified_as_defect_without_dedicated_analysis
+    purpose: >-
+      What test evidence exists for the feature, in prose, or an explicit
+      statement that none was found.
+    rule: >-
+      tests_are_derived_not_invented; absence of test evidence is reported
+      as absence, never qualified as a defect without a dedicated analysis.
 
   known_limitations:
     required: true
-    fields:
-      id: stable local limitation identifier
-      statement: concise limitation statement
-      basis: unresolved gap, contradiction, or unassessed scope this limitation stems from
+    purpose: gaps, unresolved scope, or unverifiable claims, as a short list.
     rule: every limitation traces to a finding, gap, or explicit unassessed scope.
 
   open_questions:
-    required: true
-    fields:
-      question: concise decision question
-      owner: product | analyst | developer | unknown
-      related_refs: element, decision, or finding references
-    rule: questions must be actionable and traceable.
+    required: false
+    purpose: actionable questions for the project team, each tied to an attention point or limitation above.
+    rule: questions must be actionable; no question without a concrete owner or related point.
 
-  sources_consulted:
-    required: true
-    fields:
-      source_refs: exact sources used across all upstream skills
-
-  execution:
-    required: true
-    fields:
-      profile: standard
-      agents_invoked: list with status per agent
-      stages_not_applicable: list with the reason (condition not met)
-      failures: list of failed stages/agents with reason — never omitted
-      blocked_actions: write or external-publication actions blocked by the read-only guard, if any
-    rule: the reader must be able to see what actually ran; a failure hidden here is a contract violation.
-
-  traceability_annex:
-    required: true
-    fields:
-      short_id: AE-nn | AV-nn | AD-nn | D-nn | T-nn | Q-nn | L-nn
-      technical_refs: canonical object ids, execution_id, stage, skill
-      evidence_excerpt: exact excerpt with source and location
-    rule: every short id used in the body appears here once.
-
-traceability:
-  short_id_to_technical_ref: required
-  architecture_element_to_evidence: required
-  design_element_to_evidence: required
-  test_scenario_to_requirement_or_observed_behavior: required
-  limitation_to_finding_or_gap: required
-  question_to_related_reference: required
+  appendix_inventory:
+    required: false
+    presentation: collapsed_or_clearly_separated_from_body
+    purpose: >-
+      Full per-element/per-file catalogue for readers who want it (e.g. a
+      collapsible "Annexe — inventaire technique" block). Never required
+      reading to understand the feature; never duplicated into the main
+      sections above.
 
 non_goals:
   - no readiness verdict or score
+  - no synthetic short-id scheme or traceability-annex table in the rendered document
+  - no "Sources consultées" section listing raw file paths or describing the pipeline's own internal consolidation process
+  - no "Permission et sécurité" boilerplate section — a blocked write/publication action, if one actually occurred, is a single sentence placed where relevant, not a dedicated section
   - no invented architecture element, design element, decision rationale, or test case
+  - no duplicate re-listing of the same elements across the architecture and design sections — design content adds only what architecture did not already establish
   - no replacement of the canonical TechnicalDocumentation, Evidence, or Finding models
   - no automatic publication to Confluence or any external system

@@ -26,12 +26,12 @@ Assembler uniquement les résultats déjà produits par `architecture-analyst`, 
 ## Pipeline obligatoire
 
 1. Vérifier et normaliser les références.
-2. Préserver la provenance, les preuves, les constats et les incertitudes.
-3. Appliquer les libellés français et les indicateurs visuels SPECTRUM.
-4. Générer uniquement les sections applicables définies par `outputs/technical-documentation-report.yaml`.
-5. Vérifier toutes les relations de traçabilité.
-6. Attribuer des identifiants courts lisibles (AE-nn, AV-nn, AD-nn, D-nn, T-nn, Q-nn, L-nn) dans le corps et reporter chaque correspondance vers les références techniques dans l'annexe Traçabilité ; aucune valeur machine dans le corps.
-7. Vérifier la mention de sécurité et l'absence de toute proposition de publication automatique.
+2. Préserver la provenance, les preuves, les constats et les incertitudes — en interne, jamais exposées comme identifiants dans le texte.
+3. Sélectionner, pour chaque section narrative, uniquement les éléments marqués `narrative_relevant` (référencés par une vue, une décision, un point d'attention ou une limite) ; tout le reste va dans `appendix_inventory`, jamais dans le corps.
+4. Rédiger en prose, en français, en nommant chaque élément par son identifiant réel (nom de classe/composant/fichier/endpoint) — jamais par un code court synthétique (pas de AE-/AV-/AD-/D-/T-/Q-/L-) ni par une annexe de correspondance technique.
+5. Générer uniquement les sections applicables définies par `outputs/technical-documentation-report.yaml` ; ne jamais inclure de section « Sources consultées » ou « Permission et sécurité ».
+6. Vérifier que chaque affirmation du corps reste rattachable à une preuve amont, sans exposer cette preuve comme un identifiant visible.
+7. S'il y a eu un blocage d'écriture ou de publication réel, l'indiquer en une phrase à l'endroit pertinent — jamais une section dédiée.
 8. Retourner le document uniquement après validation du pipeline.
 
 ## Entrées attendues
@@ -46,8 +46,9 @@ Assembler uniquement les résultats déjà produits par `architecture-analyst`, 
 - Ne jamais créer un finding, une décision, un test, un élément d'architecture ou une justification pendant le rendu.
 - Ne jamais transformer une incertitude en fait.
 - Ne jamais supprimer silencieusement un résultat amont.
-- Ne jamais afficher un statut ou une référence technique machine dans le corps ; ces références n'apparaissent que dans l'annexe Traçabilité.
-- Toujours rendre la section Exécution : profil, agents, stages non applicables, échecs.
+- Ne jamais afficher un statut, une référence technique machine, ou un identifiant court synthétique dans le corps ; pas d'annexe de correspondance technique.
+- Ne jamais redécrire dans le corps un élément déjà couvert à un niveau précédent (ex. un élément de conception qui répète un élément d'architecture déjà nommé).
+- Ne jamais inclure de section « Sources consultées » (chemins de fichiers bruts) ni « Permission et sécurité » (bandeau de garde-fou) — ce sont des détails de fonctionnement du pipeline, pas du contenu sur la fonctionnalité documentée.
 - Rendre le document dans `report_language` (défaut : français).
 - Ne jamais créer un format parallèle à celui de `models/documentation-pipeline.yaml`.
 - Ne jamais publier automatiquement vers Confluence ou tout autre système externe ; produire uniquement un contenu « prêt pour Confluence ».
