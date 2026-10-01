@@ -199,7 +199,7 @@ entities:
   ArchitectureElement:
     purpose: Architecture- or design-level element (component, module, service, interface, data store, external system) identified from evidence.
     required: [id, type, element_kind]
-    fields: [id, type, name, element_kind, granularity, interface_refs, relationship_refs, observation_refs, source_refs, evidence_refs, rationale]
+    fields: [id, type, name, element_kind, granularity, interface_refs, relationship_refs, observation_refs, source_refs, evidence_refs, rationale, narrative_relevant]
     element_kind_values: [component, module, service, interface, data_store, external_system, unknown]
     granularity_values: [architecture, design]
     boundary: >-

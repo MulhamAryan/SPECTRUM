@@ -1,4 +1,4 @@
-version: 1
+version: 2
 name: spectrum-documentation-pipeline
 purpose: >-
   Define the single reporting pipeline used by /spectrum:document-feature. This
@@ -21,9 +21,10 @@ principles:
   no_reanalysis_during_render: true
   no_architecture_invention_during_render: true
   user_output_in_report_language: true   # default fr, set by --lang
-  readable_short_ids_in_body: true        # AE-01, AV-01, AD-01, D-01, T-01, Q-01 — human-readable, stable within one document
-  technical_ids_only_in_traceability_annex: true
-  traceability_preserved: true
+  narrative_first: true                  # prose document, not an element-by-element table
+  no_synthetic_short_ids: true           # elements are named by their real identifier, never AE-/AV-/AD-/D-/T-/Q-/L- codes
+  no_traceability_annex_table: true      # evidence stays attached to the underlying TechnicalDocumentation object, not rendered as a body-to-ref mapping
+  traceability_preserved_internally: true
 
 input_contract:
   required:
@@ -46,13 +47,12 @@ normalization:
   operations:
     - resolve_references
     - preserve_provenance
-    - group_by_documentation_section
-    - resolve_display_labels
-    - map_machine_statuses_to_labels_in_report_language
-    - assign_short_readable_ids_and_keep_mapping_to_technical_refs
+    - select_narrative_relevant_elements_for_body_rest_goes_to_appendix
+    - deduplicate_elements_already_described_at_a_previous_level
+    - resolve_display_labels_to_real_identifiers
+    - map_machine_statuses_to_plain_language_in_report_language
     - validate_required_sections
-    - validate_traceability
-    - validate_permission_notice
+    - validate_every_body_statement_remains_evidence_attributable_internally
   forbidden:
     - infer_missing_architecture_element
     - infer_missing_design_element
@@ -62,39 +62,33 @@ normalization:
     - invent_test_scenario
     - recalculate_any_decision
     - alter_source_evidence
+    - restate_an_element_already_covered_at_a_previous_documentation_level
 
 rendering:
   renderer: documentation-composer
   output_contract: outputs/technical-documentation-report.yaml
   language: report_language   # from workflow input, default fr
-  status_icons: required
   machine_values: hidden_in_body
-  short_ids: "AE-nn architecture elements, AV-nn architecture views, AD-nn architecture decisions, D-nn design elements, T-nn test scenarios, Q-nn open questions, L-nn known limitations"
-  technical_ids: annex_only   # canonical ids, execution_id, stage ids appear only in the Traceability annex
+  identifiers_in_body: real_identifiers_only   # class/component/file/endpoint name — no synthetic short-id scheme
+  technical_ids: internal_only   # canonical ids, execution_id, stage ids never rendered in the document
   source_quotes: preserve_only_when_already_provided_and_authorized
   target_format: >-
-    Confluence-ready structured Markdown. This pipeline produces the document
-    content only; it never publishes to Confluence or any external system.
+    Confluence-ready structured Markdown, written as prose a person would
+    write. This pipeline produces the document content only; it never
+    publishes to Confluence or any external system.
 
 common_sections:
   required:
-    - Resultat_SPECTRUM_Documentation
-    - Resume_executif
-    - Perimetre_et_exigences
+    - Resume
     - Architecture
-    - Conception_logicielle
     - Verification_et_tests
     - Limites_connues
-    - Questions_ouvertes
-    - Sources_consultees
-    - Execution
-    - Permission_securite
-    - Annexe_tracabilite
   conditional:
-    - Vues_architecture
     - Decisions_techniques
-    - Documentation_cycle_de_vie
+    - Points_attention
+    - Questions_ouvertes
     - Diagrammes
+    - Annexe_inventaire   # collapsed/optional, never the primary content
 
 validation:
   before_render:
@@ -105,13 +99,12 @@ validation:
   after_render:
     - output_body_is_entirely_in_report_language
     - no_machine_status_is_exposed
-    - no_technical_identifier_in_body_outside_the_traceability_annex
-    - every_short_id_in_body_resolves_in_the_traceability_annex
-    - execution_section_lists_profile_agents_not_applicable_stages_and_failures
+    - no_synthetic_short_id_or_traceability_annex_in_body
+    - no_sources_consultees_or_permission_securite_section
+    - body_does_not_repeat_appendix_inventory_content
     - no_numeric_quality_score_is_added
     - no_readiness_or_decision_verdict_is_rendered
-    - every_architecture_element_remains_traceable
-    - permission_notice_is_present
+    - every_body_statement_remains_internally_evidence_attributable
 
 failure_behavior:
   unresolved_reference: report_generation_blocked_with_reason
@@ -123,3 +116,4 @@ security:
   rendering_does_not_authorize_mutation: true
   external_write_requires_explicit_user_permission: true
   no_automatic_confluence_publication: true
+  blocked_action_disclosure: single_sentence_where_relevant_not_a_dedicated_section
